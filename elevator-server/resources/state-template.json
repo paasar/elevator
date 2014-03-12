@@ -4,16 +4,20 @@
                 "current-floor": 1
               },
   "floors": [
-             {
-               "number": 0,
-               "waiting": 0,
-               "impatient": 0
-             }
+              {
+                "number": 0,
+                "waiting": 0,
+                "impatient": 0
+              }
             ],
-  "requests": [{"current-floor": 0,
-               "direction": "down"}],
+  "requests": [
+                {
+                  "current-floor": 0,
+                  "direction": "down"
+                }
+              ],
   "tally": {
                "happy": 0,
                "unhappy": 0
-             }
+           }
 }
