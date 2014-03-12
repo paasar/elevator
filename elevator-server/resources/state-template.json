@@ -1,7 +1,7 @@
 {
   "elevator": {
                 "requests": [],
-                "floor": 1
+                "current-floor": 1
               },
   "floors": [
              {
@@ -10,7 +10,8 @@
                "impatient": 0
              }
             ],
-  "requests": [],
+  "requests": [{"current-floor": 0,
+               "direction": "down"}],
   "tally": {
                "happy": 0,
                "unhappy": 0

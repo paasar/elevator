@@ -1,26 +1,17 @@
 (ns elevator-server.core
-  (:use compojure.core)
+  (:use compojure.core
+        elevator-server.data)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
-            [cheshire.core :as json]))
-
-(def template-content
-  (json/parse-string (slurp "resources/state-template.json") true))
-
-(defn create-floor [floor-number]
-  (let [floor-template (first (template-content :floors))]
-    (assoc-in floor-template [:number] floor-number)))
-
-(defn create-floors [number-of-floors]
-  (map #(create-floor %) (range 1 (inc number-of-floors))))
-
-(defn create-new-state-data []
-    (assoc-in template-content [:floors] (create-floors 9)))
+            [elevator-server.scheduler :as scheduler]))
 
 (defroutes app-routes
-  (GET "/" [] (str (create-new-state-data)))
+  (GET "/" [] (str (get-state)))
   (route/resources "/")
   (route/not-found "Not Found"))
 
 (def app
-  (handler/site app-routes))
+  (do
+    (set-state (create-new-state-data))
+    (scheduler/start-update-job)
+    (handler/site app-routes)))
