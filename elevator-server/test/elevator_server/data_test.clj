@@ -17,4 +17,9 @@
     (let [nine-floors (create-floors 9)
           seven-floors (create-floors 7)]
       (is (= (count nine-floors) 9))
-      (is (= (count seven-floors) 7)))))
+      (is (= (count seven-floors) 7))))
+
+  (testing "create new state"
+    (let [new-state (create-new-state-data)]
+      (is (= (:from-requests new-state) []))
+      (is (= (count (:floors new-state)) default-number-of-floors)))))

@@ -7,6 +7,8 @@
 
 (defn set-state [new-state] (reset! state new-state))
 
+(def default-number-of-floors 9)
+
 (def template-content
   (json/parse-string (slurp "resources/state-template.json") true))
 
@@ -17,8 +19,16 @@
 (defn create-floors [number-of-floors]
   (map #(create-floor %) (range 1 (inc number-of-floors))))
 
+(defn set-default-floors [content]
+  (assoc-in content [:floors] (create-floors default-number-of-floors)))
+
+(defn clear-from-requests [content]
+  (assoc-in content [:from-requests] []))
+
 (defn create-new-state-data []
-  (assoc-in template-content [:floors] (create-floors 9)))
+  (-> template-content
+      set-default-floors
+      clear-from-requests))
 
 ;TODO sane functionality
 (defn add-first-floor-request [cur-state]
