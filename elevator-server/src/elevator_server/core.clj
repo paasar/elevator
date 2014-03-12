@@ -1,10 +1,11 @@
 (ns elevator-server.core
   (:use compojure.core)
   (:require [compojure.handler :as handler]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [cheshire.core :as json]))
 
 (defroutes app-routes
-  (GET "/" [] (str "Hello World" " " (prn-str (map #(* % %) (range 10)))))
+  (GET "/" [] (str (json/parse-string (slurp "resources/state.json") true)))
   (route/resources "/")
   (route/not-found "Not Found"))
 

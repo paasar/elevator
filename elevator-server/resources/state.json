@@ -2,12 +2,12 @@
   "elevator": {
                 "requests": [],
                 "floor": 1
-              }
+              },
   "floors": [
              {
                "number": 1,
                "waiting": 0,
-               "impatient", 0
+               "impatient": 0
              }
             ],
   "requests": [],
