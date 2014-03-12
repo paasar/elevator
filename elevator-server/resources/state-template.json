@@ -1,6 +1,6 @@
 {
   "elevator": {
-                "requests": [],
+                "to-requests": [],
                 "current-floor": 1
               },
   "floors": [
@@ -10,7 +10,7 @@
                 "impatient": 0
               }
             ],
-  "requests": [
+  "from-requests": [
                 {
                   "current-floor": 0,
                   "direction": "down"

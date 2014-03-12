@@ -20,6 +20,9 @@
 (defn create-new-state-data []
   (assoc-in template-content [:floors] (create-floors 9)))
 
+;TODO sane functionality
 (defn add-first-floor-request [cur-state]
-  (assoc-in cur-state [:requests] (conj (:requests cur-state) {:current-floor 1
-                                                               :direction "up"})))
+  (assoc-in cur-state
+            [:from-requests]
+            (conj (:from-requests cur-state) {:current-floor 1
+                                              :direction "up"})))
