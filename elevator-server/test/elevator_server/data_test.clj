@@ -2,16 +2,17 @@
   (:require [clojure.test :refer :all]
             [elevator-server.data :refer :all]))
 
+(defn check-empty-floor [floor number]
+  (is (= (:number floor) number))
+  (is (= (:waiting floor) 0))
+  (is (= (:impatient floor) 0)))
+
 (deftest data-handling
   (testing "floor creation"
     (let [fifth-floor (create-floor 5)
           sixth-floor (create-floor 6)]
-      (is (= (:number fifth-floor) 5))
-      (is (= (:waiting fifth-floor) 0))
-      (is (= (:impatient fifth-floor) 0))
-      (is (= (:number sixth-floor) 6))
-      (is (= (:waiting sixth-floor) 0))
-      (is (= (:impatient sixth-floor) 0))))
+      (check-empty-floor fifth-floor 5)
+      (check-empty-floor sixth-floor 6)))
 
   (testing "floors creation"
     (let [nine-floors (create-floors 9)
