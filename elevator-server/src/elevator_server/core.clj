@@ -3,10 +3,11 @@
         elevator-server.data)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
-            [elevator-server.scheduler :as scheduler]))
+            [elevator-server.scheduler :as scheduler]
+            [cheshire.core :refer [generate-string]]))
 
 (defroutes app-routes
-  (GET "/" [] (str (get-state)))
+  (GET "/" [] (generate-string (get-state)))
   (route/resources "/")
   (route/not-found "Not Found"))
 
