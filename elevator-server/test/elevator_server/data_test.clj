@@ -7,13 +7,6 @@
   (is (= (:number floor) number))
   (is (= (:waiting floor) [])))
 
-(defn set-up-state-for-transformation [internal-state]
-  (-> internal-state
-    (assoc-in [:elevator :to-requests] [3 2])))
-
-(def expected-public-data
-  (json/parse-string (slurp "resources/test/public-state.json") true))
-
 (deftest floor-creation
   (testing "floor creation"
     (let [fifth-floor (create-floor 5)
@@ -38,6 +31,15 @@
       (is (not (= from to)))
       (is (and (> from 0) (< from (inc floors))))
       (is (and (> to 0) (< to (inc floors)))))))
+
+(defn set-up-state-for-transformation [internal-state]
+  (-> internal-state
+    (assoc-in [:elevator :to-requests] [3 2])
+    (add-next-request {:from 5 :to 3})
+    (assoc :floors [{:number 1 :waiting [1 3]}])))
+
+(def expected-public-data
+  (json/parse-string (slurp "resources/test/public-state.json") true))
 
 (deftest state-manipulation
   (testing "create new state"

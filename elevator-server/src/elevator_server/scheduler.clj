@@ -11,7 +11,7 @@
 (defjob update-job [ctx]
   (dosync
     ;(poll-for-actions)
-    (set-internal-state (add-next-request (get-internal-state)))))
+    (set-internal-state (add-next-request (get-internal-state) (generate-request)))))
 
 (defn start-update-job []
   (qs/initialize)

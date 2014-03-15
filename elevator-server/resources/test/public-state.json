@@ -7,8 +7,8 @@
   "floors":
     [
       {
-        "number": 0,
-        "waiting": 0,
+        "number": 1,
+        "waiting": 2,
         "impatient": 0
       }
     ],

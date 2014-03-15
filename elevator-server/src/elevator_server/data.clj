@@ -6,16 +6,13 @@
 
 (def total-number-of-requests 5)
 
+(def impatience-start 5)
+
 (def state (atom {}))
 
 (defn get-internal-state [] @state)
 
 (defn set-internal-state [new-state] (reset! state new-state))
-
-(defn transform-state-to-public [internal-state]
-  (-> internal-state
-    (dissoc :client :tally)
-    (dissoc-in [:elevator :state])))
 
 (defn generate-request [highest-floor]
   (let [current-floor (inc (rand-int highest-floor))
@@ -46,9 +43,27 @@
 
 (defn transform-floor-to-public [internal-floor impatientence-start]
   (let [waiting (:waiting internal-floor)]
-  {:number (:number internal-floor)
-   :waiting (get-normal-waiters waiting impatientence-start)
-   :impatient (get-impatient-waiters waiting impatientence-start)}))
+    {:number (:number internal-floor)
+     :waiting (get-normal-waiters waiting impatientence-start)
+     :impatient (get-impatient-waiters waiting impatientence-start)}))
+
+(defn get-direction [request]
+  (let [from (:from request)
+        to (:to request)]
+    (if (< from to)
+      "up"
+      "down")))
+
+(defn transform-from-request-to-public [request]
+  {:current-floor (:from request)
+   :direction (get-direction request)})
+
+(defn transform-state-to-public [internal-state]
+  (-> internal-state
+    (dissoc :client :tally)
+    (dissoc-in [:elevator :state])
+    (update-in [:from-requests] #(map transform-from-request-to-public %))
+    (update-in [:floors] #(map (fn [floor] (transform-floor-to-public floor impatience-start)) %))))
 
 (defn clear-from-requests [content]
   (assoc-in content [:from-requests] []))
@@ -58,7 +73,7 @@
       set-default-floors
       clear-from-requests))
 
-(defn add-next-request [cur-state]
+(defn add-next-request [cur-state next-request]
   (assoc-in cur-state
             [:from-requests]
-            (conj (:from-requests cur-state) (generate-request))))
+            (conj (:from-requests cur-state) next-request)))
