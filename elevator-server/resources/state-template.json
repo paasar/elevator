@@ -15,15 +15,14 @@
     [
       {
         "number": 0,
-        "waiting": 0,
-        "impatient": 0
+        "waiting": []
       }
     ],
   "from-requests":
     [
       {
-        "from": 0,
-        "to": 1
+        "from": 1,
+        "to": 2
       }
     ],
   "tally":

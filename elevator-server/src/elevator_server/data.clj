@@ -1,5 +1,6 @@
 (ns elevator-server.data
-  (:require [cheshire.core :as json]))
+  (:require [cheshire.core :as json]
+            [clojure.core.incubator :refer [dissoc-in]]))
 
 (def number-of-floors 5)
 
@@ -10,6 +11,11 @@
 (defn get-internal-state [] @state)
 
 (defn set-internal-state [new-state] (reset! state new-state))
+
+(defn transform-state-to-public [internal-state]
+  (-> internal-state
+    (dissoc :client :tally)
+    (dissoc-in [:elevator :state])))
 
 (defn generate-request [highest-floor]
   (let [current-floor (inc (rand-int highest-floor))
@@ -32,6 +38,18 @@
 (defn set-default-floors [content]
   (assoc-in content [:floors] (create-floors number-of-floors)))
 
+(defn get-normal-waiters [waiting impatience-start]
+  (count (filter #(< % impatience-start) waiting)))
+
+(defn get-impatient-waiters [waiting impatience-start]
+  (count (filter #(>= % impatience-start) waiting)))
+
+(defn transform-floor-to-public [internal-floor impatientence-start]
+  (let [waiting (:waiting internal-floor)]
+  {:number (:number internal-floor)
+   :waiting (get-normal-waiters waiting impatientence-start)
+   :impatient (get-impatient-waiters waiting impatientence-start)}))
+
 (defn clear-from-requests [content]
   (assoc-in content [:from-requests] []))
 
@@ -41,5 +59,6 @@
       clear-from-requests))
 
 (defn add-next-request [cur-state]
-  (assoc-in cur-state [:from-requests]
-           (conj (:from-requests cur-state) (generate-request))))
+  (assoc-in cur-state
+            [:from-requests]
+            (conj (:from-requests cur-state) (generate-request))))

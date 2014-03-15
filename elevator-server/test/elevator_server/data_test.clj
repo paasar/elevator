@@ -5,13 +5,16 @@
 
 (defn check-empty-floor [floor number]
   (is (= (:number floor) number))
-  (is (= (:waiting floor) 0))
-  (is (= (:impatient floor) 0)))
+  (is (= (:waiting floor) [])))
+
+(defn set-up-state-for-transformation [internal-state]
+  (-> internal-state
+    (assoc-in [:elevator :to-requests] [3 2])))
 
 (def expected-public-data
   (json/parse-string (slurp "resources/test/public-state.json") true))
 
-(deftest data-handling
+(deftest floor-creation
   (testing "floor creation"
     (let [fifth-floor (create-floor 5)
           sixth-floor (create-floor 6)]
@@ -22,13 +25,9 @@
     (let [nine-floors (create-floors 9)
           seven-floors (create-floors 7)]
       (is (= (count nine-floors) 9))
-      (is (= (count seven-floors) 7))))
+      (is (= (count seven-floors) 7)))))
 
-  (testing "create new state"
-    (let [new-state (create-new-state-data)]
-      (is (= (:from-requests new-state) []))
-      (is (= (count (:floors new-state)) number-of-floors))))
-
+(deftest floor-manipulation
   (testing "generate request"
     (let [floors 5
           generated-request (generate-request floors)
@@ -40,7 +39,21 @@
       (is (and (> from 0) (< from (inc floors))))
       (is (and (> to 0) (< to (inc floors)))))))
 
-;  (testing "transform state into public form"
-;    (let [public-data (transform-state-to-public (create-new-state-data))]
-;      (is (= public-data expected-filtered-data))))
-;  )
+(deftest state-manipulation
+  (testing "create new state"
+    (let [new-state (create-new-state-data)]
+      (is (= (:from-requests new-state) []))
+      (is (= (count (:floors new-state)) number-of-floors))))
+
+  (testing "transform floor to public"
+    (let [public-1 (transform-floor-to-public {:number 1, :waiting [1 5]} 3)
+          public-2 (transform-floor-to-public {:number 3, :waiting [2 1 5 6 7]} 4)
+          public-3 (transform-floor-to-public {:number 2, :waiting []} 4)]
+      (is (= {:number 1 :waiting 1 :impatient 1} public-1))
+      (is (= {:number 3 :waiting 2 :impatient 3} public-2))
+      (is (= {:number 2 :waiting 0 :impatient 0} public-3))))
+
+  (testing "transform state into public form"
+    (let [internal-state (set-up-state-for-transformation (create-new-state-data))
+          public-data (transform-state-to-public internal-state)]
+      (is (= public-data expected-public-data)))))
