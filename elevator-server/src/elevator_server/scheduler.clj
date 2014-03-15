@@ -10,8 +10,8 @@
 
 (defjob update-job [ctx]
   (dosync
-    (check-time)
-    (set-state (add-first-floor-request (get-state)))))
+    ;(poll-for-actions)
+    (set-internal-state (add-next-request (get-internal-state)))))
 
 (defn start-update-job []
   (qs/initialize)

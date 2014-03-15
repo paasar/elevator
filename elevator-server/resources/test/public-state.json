@@ -1,0 +1,22 @@
+{
+  "elevator":
+    {
+      "to-requests": [3,2],
+      "current-floor": 1
+    },
+  "floors":
+    [
+      {
+        "number": 0,
+        "waiting": 0,
+        "impatient": 0
+      }
+    ],
+  "from-requests":
+    [
+      {
+        "current-floor": 5,
+        "direction": "down"
+      }
+    ]
+}

@@ -7,12 +7,12 @@
             [cheshire.core :refer [generate-string]]))
 
 (defroutes app-routes
-  (GET "/" [] (generate-string (get-state)))
+  (GET "/" [] (generate-string (get-internal-state)))
   (route/resources "/")
   (route/not-found "Not Found"))
 
 (def app
   (do
-    (set-state (create-new-state-data))
+    (set-internal-state (create-new-state-data))
     (scheduler/start-update-job)
     (handler/site app-routes)))
