@@ -8,7 +8,7 @@
 
 (def impatience-start 5)
 
-(def state (atom {}))
+(def state (atom []))
 
 (defn get-internal-state [] @state)
 
@@ -65,15 +65,15 @@
     (update-in [:from-requests] #(map transform-from-request-to-public %))
     (update-in [:floors] #(map (fn [floor] (transform-floor-to-public floor impatience-start)) %))))
 
-(defn clear-from-requests [content]
-  (assoc-in content [:from-requests] []))
+(defn clear-from-requests [state-data]
+  (assoc-in state-data [:from-requests] []))
 
 (defn create-new-state-data []
   (-> template-content
       set-default-floors
       clear-from-requests))
 
-(defn add-next-request [cur-state next-request]
-  (assoc-in cur-state
+(defn add-next-request [state-data next-request]
+  (assoc-in state-data
             [:from-requests]
-            (conj (:from-requests cur-state) next-request)))
+            (conj (:from-requests state-data) next-request)))

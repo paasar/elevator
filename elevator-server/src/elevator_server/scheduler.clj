@@ -12,8 +12,8 @@
   (do
     ;(poll-for-actions)
     ;(println "state:" (get-internal-state))
-    (set-internal-state (add-next-request (get-internal-state)
-                                          (generate-request number-of-floors)))))
+    (set-internal-state (map #(add-next-request % (generate-request number-of-floors))
+                             (get-internal-state)))))
 
 (defn start-update-job []
   (qs/initialize)

@@ -14,6 +14,6 @@
 
 (def app
   (do
-    (set-internal-state (create-new-state-data))
+    (set-internal-state (vector (create-new-state-data)));TODO in final product state data is created when player is added
     (scheduler/start-update-job)
     (handler/site app-routes)))
