@@ -7,7 +7,8 @@
             [cheshire.core :refer [generate-string]]))
 
 (defroutes app-routes
-  (GET "/" [] (generate-string (get-internal-state)))
+  (GET "/private/state" [] (generate-string (get-internal-state)))
+  (GET "/state" [] (generate-string (transform-state-to-public (get-internal-state))))
   (route/resources "/")
   (route/not-found "Not Found"))
 

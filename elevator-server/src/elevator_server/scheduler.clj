@@ -9,9 +9,11 @@
 
 
 (defjob update-job [ctx]
-  (dosync
+  (do
     ;(poll-for-actions)
-    (set-internal-state (add-next-request (get-internal-state) (generate-request)))))
+    ;(println "state:" (get-internal-state))
+    (set-internal-state (add-next-request (get-internal-state)
+                                          (generate-request number-of-floors)))))
 
 (defn start-update-job []
   (qs/initialize)

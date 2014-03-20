@@ -58,4 +58,9 @@
   (testing "transform state into public form"
     (let [internal-state (set-up-state-for-transformation (create-new-state-data))
           public-data (transform-state-to-public internal-state)]
-      (is (= public-data expected-public-data)))))
+      (is (= public-data expected-public-data))))
+
+  (testing "add new request"
+    (let [request {:from 2 :to 3}
+          state-with-request (add-next-request (create-new-state-data) request)]
+      (is (= request (first (:from-requests state-with-request)))))))
