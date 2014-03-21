@@ -12,5 +12,10 @@
         "direction": "down",
         "impatient": false
       }
-    ]
+    ],
+  "tally":
+    {
+      "happy": 0,
+      "unhappy": 0
+    }
 }

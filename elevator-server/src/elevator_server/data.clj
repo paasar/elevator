@@ -46,8 +46,9 @@
 
 (defn transform-state-to-public [state-data]
   (-> state-data
-    (dissoc :client :tally)
+    (dissoc :client)
     (dissoc-in [:elevator :state])
+    (dissoc-in [:elevator :going-to])
     (update-in [:from-requests] #(map transform-from-request-to-public %))))
 
 (defn transform-internal-state-to-public [internal-state]

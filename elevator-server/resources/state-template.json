@@ -9,6 +9,7 @@
     {
       "to-requests": [],
       "current-floor": 1,
+      "going-to": 1,
       "state": "waiting"
     },
   "floors": 1,
