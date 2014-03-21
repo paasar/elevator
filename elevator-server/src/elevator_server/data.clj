@@ -58,12 +58,15 @@
   {:current-floor (:from request)
    :direction (get-direction request)})
 
-(defn transform-state-to-public [internal-state]
-  (-> internal-state
+(defn transform-state-to-public [state-data]
+  (-> state-data
     (dissoc :client :tally)
     (dissoc-in [:elevator :state])
     (update-in [:from-requests] #(map transform-from-request-to-public %))
     (update-in [:floors] #(map (fn [floor] (transform-floor-to-public floor impatience-start)) %))))
+
+(defn transform-internal-state-to-public [internal-state]
+  (map transform-state-to-public internal-state))
 
 (defn clear-from-requests [state-data]
   (assoc-in state-data [:from-requests] []))

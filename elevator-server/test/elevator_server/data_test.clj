@@ -32,8 +32,8 @@
       (is (and (> from 0) (< from (inc floors))))
       (is (and (> to 0) (< to (inc floors)))))))
 
-(defn set-up-state-for-transformation [internal-state]
-  (-> internal-state
+(defn set-up-state-for-transformation [internal-state-data]
+  (-> internal-state-data
     (assoc-in [:elevator :to-requests] [3 2])
     (add-next-request {:from 5 :to 3})
     (assoc :floors [{:number 1 :waiting [1 3]}])))
@@ -55,12 +55,19 @@
       (is (= {:number 3 :waiting 2 :impatient 3} public-2))
       (is (= {:number 2 :waiting 0 :impatient 0} public-3))))
 
-  (testing "transform state into public form"
-    (let [internal-state (set-up-state-for-transformation (create-new-state-data))
-          public-data (transform-state-to-public internal-state)]
+  (testing "transform single state data into public form"
+    (let [internal-state-data (set-up-state-for-transformation (create-new-state-data))
+          public-data (transform-state-to-public internal-state-data)]
       (is (= public-data expected-public-data))))
 
   (testing "add new request"
     (let [request {:from 2 :to 3}
           state-with-request (add-next-request (create-new-state-data) request)]
-      (is (= request (first (:from-requests state-with-request)))))))
+      (is (= request (first (:from-requests state-with-request))))))
+
+  (testing "transform full internal state to public"
+    (let [internal-state (vector (set-up-state-for-transformation (create-new-state-data))
+                                 (set-up-state-for-transformation (create-new-state-data)))
+          public-state (transform-internal-state-to-public internal-state)
+          expected-result (vector expected-public-data expected-public-data)]
+      (is (= public-state expected-result)))))
