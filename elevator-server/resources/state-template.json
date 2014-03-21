@@ -11,18 +11,13 @@
       "current-floor": 1,
       "state": "waiting"
     },
-  "floors":
-    [
-      {
-        "number": 0,
-        "waiting": []
-      }
-    ],
+  "floors": 1,
   "from-requests":
     [
       {
         "from": 1,
-        "to": 2
+        "to": 2,
+        "waited": 0
       }
     ],
   "tally":

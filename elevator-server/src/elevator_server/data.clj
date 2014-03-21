@@ -20,32 +20,14 @@
         possible-floors (vec (disj (set (range 1 highest-floor-exclusive))
                                    current-floor))]
     {:from current-floor
-     :to (rand-nth possible-floors)}))
+     :to (rand-nth possible-floors)
+     :waited 0}))
 
-(def template-content
+(def state-template
   (json/parse-string (slurp "resources/state-template.json") true))
 
-(defn create-floor [floor-number]
-  (let [floor-template (first (template-content :floors))]
-    (assoc-in floor-template [:number] floor-number)))
-
-(defn create-floors [highest-floor]
-  (map #(create-floor %) (range 1 (inc highest-floor))))
-
-(defn set-default-floors [content]
-  (assoc-in content [:floors] (create-floors number-of-floors)))
-
-(defn get-normal-waiters [waiting impatience-start]
-  (count (filter #(< % impatience-start) waiting)))
-
-(defn get-impatient-waiters [waiting impatience-start]
-  (count (filter #(>= % impatience-start) waiting)))
-
-(defn transform-floor-to-public [internal-floor impatientence-start]
-  (let [waiting (:waiting internal-floor)]
-    {:number (:number internal-floor)
-     :waiting (get-normal-waiters waiting impatientence-start)
-     :impatient (get-impatient-waiters waiting impatientence-start)}))
+(defn set-floor-amount [state-data]
+  (assoc-in state-data [:floors] number-of-floors))
 
 (defn get-direction [request]
   (let [from (:from request)
@@ -54,16 +36,19 @@
       "up"
       "down")))
 
+(defn is-impatient? [waited]
+  (>= waited impatience-start))
+
 (defn transform-from-request-to-public [request]
   {:current-floor (:from request)
-   :direction (get-direction request)})
+   :direction (get-direction request)
+   :impatient (is-impatient? (:waited request))})
 
 (defn transform-state-to-public [state-data]
   (-> state-data
     (dissoc :client :tally)
     (dissoc-in [:elevator :state])
-    (update-in [:from-requests] #(map transform-from-request-to-public %))
-    (update-in [:floors] #(map (fn [floor] (transform-floor-to-public floor impatience-start)) %))))
+    (update-in [:from-requests] #(map transform-from-request-to-public %))))
 
 (defn transform-internal-state-to-public [internal-state]
   (map transform-state-to-public internal-state))
@@ -72,8 +57,8 @@
   (assoc-in state-data [:from-requests] []))
 
 (defn create-new-state-data []
-  (-> template-content
-      set-default-floors
+  (-> state-template
+      set-floor-amount
       clear-from-requests))
 
 (defn add-next-request [state-data next-request]

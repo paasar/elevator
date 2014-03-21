@@ -4,19 +4,13 @@
       "to-requests": [3,2],
       "current-floor": 1
     },
-  "floors":
-    [
-      {
-        "number": 1,
-        "waiting": 2,
-        "impatient": 0
-      }
-    ],
+  "floors": 5,
   "from-requests":
     [
       {
         "current-floor": 5,
-        "direction": "down"
+        "direction": "down",
+        "impatient": false
       }
     ]
 }
