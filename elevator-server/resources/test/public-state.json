@@ -1,4 +1,7 @@
 {
+  "client": {
+      "name": "team-1"
+  },
   "elevator":
     {
       "to-requests": [3,2],
