@@ -15,14 +15,18 @@
       (is (and (> from 0) (< from (inc floors))))
       (is (and (> to 0) (< to (inc floors)))))))
 
+(def patient-request {:from 5 :to 3 :waited 1})
+(def impatient-request {:from 5 :to 3 :waited 6})
+
 (defn set-up-state-for-transformation [internal-state-data]
   (-> internal-state-data
     (assoc-in [:elevator :to-requests] [3 2])
-    (add-next-request {:from 5 :to 3 :waited 1})
+    (add-next-request patient-request)
     (assoc :floors 5)))
 
 (def expected-public-data
   (json/parse-string (slurp "resources/test/public-state.json") true))
+
 
 (deftest state-manipulation
   (testing "create new state"
@@ -45,4 +49,12 @@
                                  (set-up-state-for-transformation (create-new-state-data)))
           public-state (transform-internal-state-to-public internal-state)
           expected-result (vector expected-public-data expected-public-data)]
-      (is (= public-state expected-result)))))
+      (is (= public-state expected-result))))
+
+  (testing "transform patient request"
+    (let [transformed-state (transform-from-request-to-public patient-request)]
+      (is (= {:floor 5 :direction "down" :impatient false} transformed-state))))
+
+  (testing "transform impatient request"
+    (let [transformed-state (transform-from-request-to-public impatient-request)]
+      (is (= {:floor 5 :direction "down" :impatient true} transformed-state)))))

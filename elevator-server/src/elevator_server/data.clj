@@ -40,7 +40,7 @@
   (>= waited impatience-start))
 
 (defn transform-from-request-to-public [request]
-  {:current-floor (:from request)
+  {:floor (:from request)
    :direction (get-direction request)
    :impatient (is-impatient? (:waited request))})
 
