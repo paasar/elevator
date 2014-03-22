@@ -58,8 +58,8 @@
     (dissoc-in [:elevator :going-to])
     (update-in [:from-requests] #(map transform-from-request-to-public %))))
 
-(defn transform-game-state-to-public [internal-game-state]
-  (map transform-player-state-to-public internal-game-state))
+(defn transform-game-state-to-public [state]
+  (map transform-player-state-to-public state))
 
 (defn clear-from-requests [player-state]
   (assoc-in player-state [:from-requests] []))
@@ -74,3 +74,17 @@
   (assoc-in player-state
             [:from-requests]
             (conj (:from-requests player-state) next-request)))
+
+(defn increment-wait-time [from-request]
+  (update-in from-request [:waited] inc))
+
+(defn increment-wait-times [player-state]
+  (update-in player-state [:from-requests] #(map increment-wait-time %)))
+
+(defn advance-player-state [player-state]
+  (-> player-state
+    (increment-wait-times)
+    (add-next-request (generate-request number-of-floors))))
+
+(defn advance-game-state [state]
+  (map advance-player-state state))

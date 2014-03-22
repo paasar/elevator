@@ -12,8 +12,7 @@
   (do
     ;(poll-for-actions)
     ;(println "state:" (get-internal-state))
-    (set-game-state (map #(add-next-request % (generate-request number-of-floors))
-                             (get-game-state)))))
+    (set-game-state (advance-game-state (get-game-state)))))
 
 (defn start-update-job []
   (qs/initialize)
