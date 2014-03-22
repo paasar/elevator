@@ -10,11 +10,12 @@
 
 (def impatience-start 5)
 
-(def state (atom []))
+;game-state is vector of player-states
+(def game-state (atom []))
 
-(defn get-internal-state [] @state)
+(defn get-game-state [] @game-state)
 
-(defn set-internal-state [new-state] (reset! state new-state))
+(defn set-game-state [new-state] (reset! game-state new-state))
 
 (defn generate-request [highest-floor]
   (let [current-floor (inc (rand-int highest-floor))
@@ -25,14 +26,14 @@
      :to (rand-nth possible-floors)
      :waited 0}))
 
-(def state-template
-  (json/parse-string (slurp "resources/state-template.json") true))
+(def player-state-template
+  (json/parse-string (slurp "resources/player-state-template.json") true))
 
-(defn set-floor-amount [state-data]
-  (assoc-in state-data [:floors] number-of-floors))
+(defn set-floor-amount [player-state]
+  (assoc-in player-state [:floors] number-of-floors))
 
-(defn set-elevator-capacity [state-data]
-  (assoc-in state-data [:elevator :capacity] capacity))
+(defn set-elevator-capacity [player-state]
+  (assoc-in player-state [:elevator :capacity] capacity))
 
 (defn get-direction [request]
   (let [from (:from request)
@@ -49,27 +50,27 @@
    :direction (get-direction request)
    :impatient (is-impatient? (:waited request))})
 
-(defn transform-state-to-public [state-data]
-  (-> state-data
+(defn transform-player-state-to-public [player-state]
+  (-> player-state
     (dissoc-in [:client :ip])
     (dissoc-in [:client :port])
     (dissoc-in [:elevator :state])
     (dissoc-in [:elevator :going-to])
     (update-in [:from-requests] #(map transform-from-request-to-public %))))
 
-(defn transform-internal-state-to-public [internal-state]
-  (map transform-state-to-public internal-state))
+(defn transform-game-state-to-public [internal-game-state]
+  (map transform-player-state-to-public internal-game-state))
 
-(defn clear-from-requests [state-data]
-  (assoc-in state-data [:from-requests] []))
+(defn clear-from-requests [player-state]
+  (assoc-in player-state [:from-requests] []))
 
-(defn create-new-state-data []
-  (-> state-template
+(defn create-new-player-state []
+  (-> player-state-template
       set-floor-amount
       set-elevator-capacity
       clear-from-requests))
 
-(defn add-next-request [state-data next-request]
-  (assoc-in state-data
+(defn add-next-request [player-state next-request]
+  (assoc-in player-state
             [:from-requests]
-            (conj (:from-requests state-data) next-request)))
+            (conj (:from-requests player-state) next-request)))

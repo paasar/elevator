@@ -18,38 +18,37 @@
 (def patient-request {:from 5 :to 3 :waited 1})
 (def impatient-request {:from 5 :to 3 :waited 6})
 
-(defn set-up-state-for-transformation [internal-state-data]
-  (-> internal-state-data
+(defn set-up-player-state-for-transformation [player-state]
+  (-> player-state
     (assoc-in [:elevator :to-requests] [3 2])
     (add-next-request patient-request)
     (assoc :floors 5)))
 
-(def expected-public-data
-  (json/parse-string (slurp "resources/test/public-state.json") true))
-
+(def expected-public-player-state
+  (json/parse-string (slurp "resources/test/public-player-state.json") true))
 
 (deftest state-manipulation
-  (testing "create new state"
-    (let [new-state (create-new-state-data)]
+  (testing "create new player state"
+    (let [new-state (create-new-player-state)]
       (is (= (:from-requests new-state) []))
       (is (= (:floors new-state) number-of-floors))))
 
-  (testing "transform single state data into public form"
-    (let [internal-state-data (set-up-state-for-transformation (create-new-state-data))
-          public-data (transform-state-to-public internal-state-data)]
-      (is (= public-data expected-public-data))))
+  (testing "transform single player state into public form"
+    (let [game-state (set-up-player-state-for-transformation (create-new-player-state))
+          public-data (transform-player-state-to-public game-state)]
+      (is (= public-data expected-public-player-state))))
 
   (testing "add new request"
     (let [request {:from 2 :to 3}
-          state-with-request (add-next-request (create-new-state-data) request)]
+          state-with-request (add-next-request (create-new-player-state) request)]
       (is (= request (first (:from-requests state-with-request))))))
 
-  (testing "transform full internal state to public"
-    (let [internal-state (vector (set-up-state-for-transformation (create-new-state-data))
-                                 (set-up-state-for-transformation (create-new-state-data)))
-          public-state (transform-internal-state-to-public internal-state)
-          expected-result (vector expected-public-data expected-public-data)]
-      (is (= public-state expected-result))))
+  (testing "transform full internal game state to public"
+    (let [player-state (set-up-player-state-for-transformation (create-new-player-state))
+          internal-game-state (vector player-state player-state)
+          public-game-state (transform-game-state-to-public internal-game-state)
+          expected-result (vector expected-public-player-state expected-public-player-state)]
+      (is (= public-game-state expected-result))))
 
   (testing "transform patient request"
     (let [transformed-state (transform-from-request-to-public patient-request)]
