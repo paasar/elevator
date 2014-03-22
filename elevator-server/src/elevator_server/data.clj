@@ -4,6 +4,8 @@
 
 (def number-of-floors 5)
 
+(def capacity number-of-floors)
+
 (def total-number-of-requests 5)
 
 (def impatience-start 5)
@@ -28,6 +30,9 @@
 
 (defn set-floor-amount [state-data]
   (assoc-in state-data [:floors] number-of-floors))
+
+(defn set-elevator-capacity [state-data]
+  (assoc-in state-data [:elevator :capacity] capacity))
 
 (defn get-direction [request]
   (let [from (:from request)
@@ -61,6 +66,7 @@
 (defn create-new-state-data []
   (-> state-template
       set-floor-amount
+      set-elevator-capacity
       clear-from-requests))
 
 (defn add-next-request [state-data next-request]

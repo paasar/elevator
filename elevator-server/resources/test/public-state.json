@@ -5,7 +5,8 @@
   "elevator":
     {
       "to-requests": [3,2],
-      "current-floor": 1
+      "current-floor": 1,
+      "capacity": 5
     },
   "floors": 5,
   "from-requests":

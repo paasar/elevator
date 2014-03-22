@@ -10,7 +10,8 @@
       "to-requests": [],
       "current-floor": 1,
       "going-to": 1,
-      "state": "waiting"
+      "state": "waiting",
+      "capacity": 1
     },
   "floors": 1,
   "from-requests":
