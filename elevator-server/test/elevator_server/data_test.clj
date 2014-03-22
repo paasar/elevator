@@ -12,8 +12,8 @@
       (is (not (nil? from)))
       (is (not (nil? to)))
       (is (not (= from to)))
-      (is (and (> from 0) (< from (inc floors))))
-      (is (and (> to 0) (< to (inc floors)))))))
+      (is (and (> from 0) (<= from floors)))
+      (is (and (> to 0) (<= to floors))))))
 
 (def patient-request {:from 5 :to 3 :waited 1})
 (def impatient-request {:from 5 :to 3 :waited 6})
