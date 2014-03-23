@@ -60,12 +60,22 @@
 
   (testing "increment wait time"
     (let [result (increment-wait-time patient-request)]
-      (is (= {:from 5 :to 3 :waited 2} result))))
+      (is (= {:from 5 :to 3 :waited 2} result)))))
 
+(defn count-test-requests [player-state]
+  (count (filter #(= (:from %) 'test) (:from-requests player-state))))
+
+(deftest waiting-and-tally
   (testing "waited too long"
     (let [start-player-state (add-next-request (create-new-player-state)
                                                {:from 'test :to 3 :waited (- max-wait-time 2)})
           state-after-first-step (advance-player-state start-player-state)
           state-after-second-step (advance-player-state state-after-first-step)]
       (is (= 2 (count (:from-requests state-after-first-step))))
-      (is (= 2 (count (:from-requests state-after-second-step)))))))
+      (is (= 2 (count (:from-requests state-after-second-step))))
+      (is (= 0 (count-test-requests state-after-second-step)))))
+
+;  (testing "unhappy tally is incremented"
+;    (let [start-player-state (add-next-request (create-new-player-state)
+;                                               {:from 'test :to 3 :waited max-wait-time})]))
+                                                )
