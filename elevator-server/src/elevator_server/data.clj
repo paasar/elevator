@@ -10,6 +10,8 @@
 
 (def impatience-start 5)
 
+(def max-wait-time (* 2 impatience-start))
+
 ;game-state is vector of player-states
 (def game-state (atom []))
 
@@ -81,9 +83,16 @@
 (defn increment-wait-times [player-state]
   (update-in player-state [:from-requests] #(map increment-wait-time %)))
 
+(defn filter-out-requests-that-have-waited-too-long [from-requests]
+  (filter #(< (:waited %) max-wait-time) from-requests))
+
+(defn remove-requests-that-have-waited-too-long [player-state]
+  (update-in player-state [:from-requests] #(filter-out-requests-that-have-waited-too-long %)))
+
 (defn advance-player-state [player-state]
   (-> player-state
     (increment-wait-times)
+    (remove-requests-that-have-waited-too-long)
     (add-next-request (generate-request number-of-floors))))
 
 (defn advance-game-state [state]
