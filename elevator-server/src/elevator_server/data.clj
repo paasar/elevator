@@ -83,16 +83,18 @@
 (defn increment-wait-times [player-state]
   (update-in player-state [:from-requests] #(map increment-wait-time %)))
 
-(defn filter-out-requests-that-have-waited-too-long [from-requests]
-  (filter #(< (:waited %) max-wait-time) from-requests))
-
-(defn remove-requests-that-have-waited-too-long [player-state]
-  (update-in player-state [:from-requests] #(filter-out-requests-that-have-waited-too-long %)))
+(defn remove-requests-that-have-waited-too-long-and-update-unhappy-tally [player-state]
+  (let [request-groups (group-by #(< (:waited %) max-wait-time) (:from-requests player-state))
+        happy-group (get request-groups true)
+        unhappy-group (get request-groups false)]
+    (-> player-state
+      (assoc :from-requests happy-group)
+      (update-in [:tally :unhappy] + (count unhappy-group)))))
 
 (defn advance-player-state [player-state]
   (-> player-state
     (increment-wait-times)
-    (remove-requests-that-have-waited-too-long)
+    (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
     (add-next-request (generate-request number-of-floors))))
 
 (defn advance-game-state [state]

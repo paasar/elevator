@@ -75,7 +75,8 @@
       (is (= 2 (count (:from-requests state-after-second-step))))
       (is (= 0 (count-test-requests state-after-second-step)))))
 
-;  (testing "unhappy tally is incremented"
-;    (let [start-player-state (add-next-request (create-new-player-state)
-;                                               {:from 'test :to 3 :waited max-wait-time})]))
-                                                )
+  (testing "unhappy tally is incremented"
+    (let [start-player-state (add-next-request (create-new-player-state)
+                                               {:from 'test :to 3 :waited max-wait-time})
+          state-after-step (advance-player-state start-player-state)]
+      (is (= 1 (get-in state-after-step [:tally :unhappy]))))))
