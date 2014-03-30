@@ -1,7 +1,8 @@
-(ns elevator.logic)
+(ns elevator.logic
+  (require [cheshire.core :as json]))
 
 (defn format-response [floor-to-go]
-  (str floor-to-go))
+  (json/generate-string {:go-to floor-to-go}))
 
 (defn one-up-from-top-to-bottom [state]
   (let [current-floor (get-in state [:elevator :current-floor])
