@@ -1,19 +1,11 @@
 (ns elevator.handler
-  (:use compojure.core)
+  (:use compojure.core
+        elevator.logic)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
             [cheshire.core :as json]))
 
 (def default-message "I'm a little elevator. Please POST state here to get where I want to go.")
-
-(defn decide-floor-to-go [state]
-  (do
-    ;(println (str "-> " state))
-    (let [current-floor (get-in state [:elevator :current-floor])
-          top-floor (get state :floors)]
-      (if (= current-floor top-floor)
-        (str 1)
-        (str (inc current-floor))))));TODO can we return pure integer?
 
 (defroutes app-routes
   (GET "/" [] default-message)
