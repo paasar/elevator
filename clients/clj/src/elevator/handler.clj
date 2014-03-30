@@ -9,8 +9,11 @@
 (defn decide-floor-to-go [state]
   (do
     ;(println (str "-> " state))
-    (let [current-floor (get-in state [:elevator :current-floor])]
-      (str current-floor))));TODO can we return pure integer?
+    (let [current-floor (get-in state [:elevator :current-floor])
+          top-floor (get state :floors)]
+      (if (= current-floor top-floor)
+        (str 1)
+        (str (inc current-floor))))));TODO can we return pure integer?
 
 (defroutes app-routes
   (GET "/" [] default-message)

@@ -14,8 +14,21 @@
     (let [response (app (request :get "/invalid"))]
       (is (= (:status response) 404)))))
 
+(defn create-test-status [current-floor]
+  {:elevator {:current-floor current-floor}
+   :floors 3})
+
+(defn create-post-request [current-floor]
+  (-> (request :post "/")
+      (body (json/generate-string (create-test-status current-floor)))))
+
 (deftest test-app-post
-  (testing "main-post"
-    (let [response (app (-> (request :post "/")
-                            (body (json/generate-string {:elevator {:current-floor 1}}))))]
+  (testing "from one to two"
+    (let [response (app (create-post-request 1))]
+      (is (= (:body response) (str 2)))));TODO can we return pure integer?
+  (testing "from two to top"
+    (let [response (app (create-post-request 2))]
+      (is (= (:body response) (str 3)))));TODO can we return pure integer?
+  (testing "from top to bottom"
+    (let [response (app (create-post-request 3))]
       (is (= (:body response) (str 1))))));TODO can we return pure integer?
