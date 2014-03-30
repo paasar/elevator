@@ -5,7 +5,7 @@
                  [compojure "1.1.6"]
                  [cheshire "5.3.1"]]
   :plugins [[lein-ring "0.8.10"]]
-  :ring {:handler elevator.handler/app}
+  :ring {:handler elevator.handler/app :port 3333}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring-mock "0.1.5"]]}})
