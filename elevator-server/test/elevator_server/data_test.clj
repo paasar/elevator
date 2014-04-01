@@ -80,3 +80,19 @@
                                                {:from 'test :to 3 :waited max-wait-time})
           state-after-step (advance-player-state start-player-state)]
       (is (= 1 (get-in state-after-step [:tally :unhappy]))))))
+
+(deftest elevator-states
+  (testing "same floor gives waiting"
+    (is (= :waiting (get-ascending-or-descending-or-waiting 1 1))))
+  (testing "higher target floor gives ascending"
+    (is (= :ascending (get-ascending-or-descending-or-waiting 1 2))))
+  (testing "lower target floor gives waiting"
+    (is (= :descending (get-ascending-or-descending-or-waiting 2 1))))
+
+  (testing "setting elevator to go up"
+    (let [before-state (create-new-player-state)
+          after-state (set-new-target-floor before-state 2)
+          elevator (get after-state :elevator)]
+      (is (= 1 (:current-floor elevator)))
+      (is (= 2 (:going-to elevator)))
+      (is (= :ascending (:state elevator))))))

@@ -91,6 +91,20 @@
       (assoc :from-requests happy-group)
       (update-in [:tally :unhappy] + (count unhappy-group)))))
 
+(defn get-ascending-or-descending-or-waiting [current-floor target-floor]
+  (cond
+    (= target-floor current-floor) :waiting
+    (> target-floor current-floor) :ascending
+    :else :descending))
+
+(defn set-new-target-floor [player-state target-floor]
+  (let [current-floor (get-in player-state [:elevator :current-floor])]
+    (-> player-state
+      (assoc-in [:elevator :going-to]
+                target-floor)
+      (assoc-in [:elevator :state]
+                (get-ascending-or-descending-or-waiting current-floor target-floor)))))
+
 (defn advance-player-state [player-state]
   (-> player-state
     (increment-wait-times)
