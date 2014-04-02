@@ -39,8 +39,23 @@
       (is (= 3 (:current-floor elevator)))
       (is (= :waiting (:state elevator)))))
 
-  ;(testing "move elevator up, reaching target, riders")
-  ;(testing "move elevator up, reaching target, no riders, newcomers")
+  (testing "move elevator up, reaching target, riders"
+    (let [before-state (-> (create-state-with-defined-elevator :ascending 1 2)
+                         (assoc-in [:elevator :to-requests] [2]))
+          after-state (update-elevator-state before-state)
+          elevator (:elevator after-state)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= :disembarking (:state elevator)))
+      (is (= [2] (:to-requests elevator)))))
+
+  (testing "move elevator up, reaching target, no riders, newcomers"
+    (let [before-state (-> (create-state-with-defined-elevator :ascending 1 2)
+                         (assoc :from-requests [{:from 2 :to 1}]))
+          after-state (update-elevator-state before-state)
+          elevator (:elevator after-state)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= :embarking (:state elevator)))
+      (is (= [] (:to-requests elevator)))))
 
   (testing "move elevator down, not reaching target"
     (let [before-state (create-state-with-defined-elevator :descending 3 1)
@@ -56,8 +71,23 @@
       (is (= 1 (:current-floor elevator)))
       (is (= :waiting (:state elevator)))))
 
-  ;(testing "move elevator down, reaching target, riders")
-  ;(testing "move elevator down, reaching target, no riders, newcomers")
+  (testing "move elevator down, reaching target, riders"
+    (let [before-state (-> (create-state-with-defined-elevator :descending 3 2)
+                         (assoc-in [:elevator :to-requests] [2]))
+          after-state (update-elevator-state before-state)
+          elevator (:elevator after-state)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= :disembarking (:state elevator)))
+      (is (= [2] (:to-requests elevator)))))
+
+  (testing "move elevator down, reaching target, no riders, newcomers"
+    (let [before-state (-> (create-state-with-defined-elevator :descending 3 2)
+                         (assoc :from-requests [{:from 2 :to 1}]))
+          after-state (update-elevator-state before-state)
+          elevator (:elevator after-state)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= :embarking (:state elevator)))
+      (is (= [] (:to-requests elevator)))))
 
   (testing "move waiting elevator does nothing"
     (let [before-state (create-state-with-defined-elevator :waiting 1 1)
