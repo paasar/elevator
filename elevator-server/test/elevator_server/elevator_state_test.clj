@@ -11,11 +11,11 @@
 
 (deftest elevator-states
   (testing "same floor gives waiting"
-    (is (= :waiting (get-ascending-or-descending-or-waiting 1 1 false false))))
+    (is (= :waiting (get-next-elevator-state 1 1 false false))))
   (testing "higher target floor gives ascending"
-    (is (= :ascending (get-ascending-or-descending-or-waiting 1 2 false false))))
+    (is (= :ascending (get-next-elevator-state 1 2 false false))))
   (testing "lower target floor gives waiting"
-    (is (= :descending (get-ascending-or-descending-or-waiting 2 1 false false))))
+    (is (= :descending (get-next-elevator-state 2 1 false false))))
 
   (testing "setting elevator to go up"
     (let [before-update (data/create-new-player-state)

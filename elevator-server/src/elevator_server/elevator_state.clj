@@ -1,6 +1,6 @@
 (ns elevator-server.elevator-state)
 
-(defn get-elevator-state [current-floor target-floor has-riders has-newcomers]
+(defn get-next-elevator-state [current-floor target-floor has-riders has-newcomers]
   (cond
     (= target-floor current-floor)
       (cond
@@ -17,11 +17,13 @@
   (assoc-in player-state [:elevator :current-floor] current-floor))
 
 (defn set-elevator-state [player-state target-floor]
-  (let [current-floor (get-in player-state [:elevator :current-floor])
-        has-riders (not (empty? (get-in player-state [:elevator :to-requests])))
-        has-newcomers (not (empty? (:from-requests player-state)))]
-    (assoc-in player-state [:elevator :state]
-      (get-elevator-state current-floor target-floor has-riders has-newcomers))))
+  (let [elevator (:elevator player-state)
+        current-floor (:current-floor elevator)
+        has-riders (not (empty? (:to-requests elevator)))
+        has-newcomers (not (empty? (:from-requests player-state)))
+        old-state (:state elevator)
+        new-state (get-next-elevator-state current-floor target-floor has-riders has-newcomers)]
+    (assoc-in player-state [:elevator :state] new-state)))
 
 (defn set-new-target-floor [player-state target-floor]
   (-> player-state
