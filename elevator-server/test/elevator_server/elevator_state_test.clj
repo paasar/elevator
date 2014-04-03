@@ -94,8 +94,36 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 1 (:current-floor elevator)))
-      (is (= :waiting (:state elevator))))))
+      (is (= :waiting (:state elevator)))))
 
-;(testing "elevator disembarking to embarking")
-;(testing "elevator disembarking to waiting (no newcomers)")
-;(testing "elevator embarking to waiting"))
+  (testing "elevator disembarking to embarking"
+    (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
+                           (assoc-in [:elevator :to-requests] [2])
+                           (assoc :from-requests [{:from 2 :to 1}]))
+          after-update (update-elevator-state before-update)
+          elevator (:elevator after-update)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= :embarking (:state elevator)))
+      (is (empty? (:to-requests elevator)))
+      (is (= 1 (count (:from-requests after-update))))
+      (is (= 1 (get-in after-update [:tally :happy])))))
+
+  (testing "elevator disembarking to waiting (no newcomers)"
+    (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
+                          (assoc-in [:elevator :to-requests] [2]))
+          after-update (update-elevator-state before-update)
+          elevator (:elevator after-update)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= :waiting (:state elevator)))
+      (is (empty? (:to-requests elevator)))
+      (is (= 1 (get-in after-update [:tally :happy])))))
+
+  (testing "elevator embarking to waiting"
+    (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
+                          (assoc :from-requests [{:from 2 :to 1}]))
+          after-update (update-elevator-state before-update)
+          elevator (:elevator after-update)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= :waiting (:state elevator)))
+      (is (= 1 (count (:to-requests elevator))))
+      (is (empty? (:from-requests after-update))))))
