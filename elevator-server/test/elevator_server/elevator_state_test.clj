@@ -101,7 +101,7 @@
   (testing "elevator disembarking to embarking"
     (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
                             (assoc-in [:elevator :to-requests] [2])
-                            (assoc :from-requests [{:from 2 :to 1}]))
+                            (assoc :from-requests [{:from 3 :to 1}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))

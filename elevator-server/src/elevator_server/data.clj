@@ -19,6 +19,11 @@
 
 (defn set-game-state [new-state] (reset! game-state new-state))
 
+(defn empty-if-nil [val]
+  (if (nil? val)
+    []
+    val))
+
 (defn generate-request [highest-floor]
   (let [current-floor (inc (rand-int highest-floor))
         highest-floor-exclusive (inc highest-floor)
@@ -85,8 +90,8 @@
 
 (defn remove-requests-that-have-waited-too-long-and-update-unhappy-tally [player-state]
   (let [request-groups (group-by #(< (:waited %) max-wait-time) (:from-requests player-state))
-        happy-group (get request-groups true)
-        unhappy-group (get request-groups false)]
+        happy-group (empty-if-nil (get request-groups true))
+        unhappy-group (empty-if-nil (get request-groups false))]
     (-> player-state
       (assoc :from-requests happy-group)
       (update-in [:tally :unhappy] + (count unhappy-group)))))

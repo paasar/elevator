@@ -1,4 +1,5 @@
-(ns elevator-server.elevator-state)
+(ns elevator-server.elevator-state
+  (:require [elevator-server.data :refer [empty-if-nil]]))
 
 (defn get-next-elevator-state [current-floor target-floor current-state has-riders has-newcomers]
   (cond
@@ -25,11 +26,11 @@
 
 (defn disembark [player-state current-floor]
   (let [rider-groups (group-by #(= current-floor %) (get-in player-state [:elevator :to-requests]))
-        leavers (get rider-groups true)
-        stayers (get rider-groups false)]
+        leavers (empty-if-nil (get rider-groups true))
+        stayers (empty-if-nil (get rider-groups false))]
     (-> player-state
-      (assoc-in [:elevator :to-requests] stayers))
-      (update-in [:tally :happy] + (count leavers))))
+      (assoc-in [:elevator :to-requests] stayers)
+      (update-in [:tally :happy] + (count leavers)))))
 
 (defn embark [player-state current-floor]
   (let [request-groups (group-by #(= current-floor (:from %)) (get-in player-state [:from-requests]))
@@ -41,7 +42,7 @@
 
 (defn disembark-embark [player-state current-state current-floor]
   (cond
-    (= current-state :disemarking)
+    (= current-state :disembarking)
       (disembark player-state current-floor)
     (or (= current-state :embarking) (= current-state :waiting))
       (embark player-state current-floor)
