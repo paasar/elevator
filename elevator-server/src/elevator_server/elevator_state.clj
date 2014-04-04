@@ -1,11 +1,18 @@
 (ns elevator-server.elevator-state)
 
-(defn get-next-elevator-state [current-floor target-floor has-riders has-newcomers]
+(defn get-next-elevator-state [current-floor target-floor current-state has-riders has-newcomers]
   (cond
     (= target-floor current-floor)
       (cond
-        has-riders :disembarking
-        has-newcomers :embarking
+        (= :disembarking current-state)
+         (if has-newcomers
+           :embarking
+           :waiting)
+        (= (or (:ascending current-state) (= :descending current-state)))
+          (cond
+            has-riders :disembarking
+            has-newcomers :embarking
+            :else :waiting)
         :else :waiting)
     (> target-floor current-floor) :ascending
     :else :descending))
@@ -32,11 +39,11 @@
       (update-in [:elevator :to-requests] into embarkers)
       (assoc :from-requests in-other-floors))))
 
-(defn disembark-embark [player-state old-state current-floor]
+(defn disembark-embark [player-state current-state current-floor]
   (cond
-    (= old-state :disemarking)
+    (= current-state :disemarking)
       (disembark player-state current-floor)
-    (or (= old-state :embarking) (= old-state :waiting))
+    (or (= current-state :embarking) (= current-state :waiting))
       (embark player-state current-floor)
     :else player-state))
 
@@ -46,9 +53,9 @@
         has-riders (not (empty? (:to-requests elevator)))
         has-newcomers (not (empty? (:from-requests player-state)))
         old-state (:state elevator)
-        updated-state (get-next-elevator-state current-floor target-floor has-riders has-newcomers)]
+        new-state (get-next-elevator-state current-floor target-floor old-state has-riders has-newcomers)]
     (-> player-state
-      (assoc-in [:elevator :state] updated-state)
+      (assoc-in [:elevator :state] new-state)
       (disembark-embark old-state current-floor))))
 
 (defn set-new-target-floor [player-state target-floor]
