@@ -41,7 +41,7 @@
 
   (testing "move elevator up, reaching target, riders"
     (let [before-update (-> (create-state-with-defined-elevator :ascending 1 2)
-                         (assoc-in [:elevator :to-requests] [2]))
+                            (assoc-in [:elevator :to-requests] [2]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
@@ -50,7 +50,7 @@
 
   (testing "move elevator up, reaching target, no riders, newcomers"
     (let [before-update (-> (create-state-with-defined-elevator :ascending 1 2)
-                         (assoc :from-requests [{:from 2 :to 1}]))
+                            (assoc :from-requests [{:from 2 :to 1}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
@@ -73,7 +73,7 @@
 
   (testing "move elevator down, reaching target, riders"
     (let [before-update (-> (create-state-with-defined-elevator :descending 3 2)
-                         (assoc-in [:elevator :to-requests] [2]))
+                            (assoc-in [:elevator :to-requests] [2]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
@@ -82,7 +82,7 @@
 
   (testing "move elevator down, reaching target, no riders, newcomers"
     (let [before-update (-> (create-state-with-defined-elevator :descending 3 2)
-                         (assoc :from-requests [{:from 2 :to 1}]))
+                            (assoc :from-requests [{:from 2 :to 1}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
@@ -98,8 +98,8 @@
 
   (testing "elevator disembarking to embarking"
     (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
-                           (assoc-in [:elevator :to-requests] [2])
-                           (assoc :from-requests [{:from 2 :to 1}]))
+                            (assoc-in [:elevator :to-requests] [2])
+                            (assoc :from-requests [{:from 2 :to 1}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
@@ -110,7 +110,7 @@
 
   (testing "elevator disembarking to waiting (no newcomers)"
     (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
-                          (assoc-in [:elevator :to-requests] [2]))
+                            (assoc-in [:elevator :to-requests] [2]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
@@ -120,10 +120,28 @@
 
   (testing "elevator embarking to waiting"
     (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
-                          (assoc :from-requests [{:from 2 :to 1}]))
+                            (assoc :from-requests [{:from 2 :to 1}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
       (is (= :waiting (:state elevator)))
       (is (= 1 (count (:to-requests elevator))))
-      (is (empty? (:from-requests after-update))))))
+      (is (empty? (:from-requests after-update)))))
+
+  (testing "disembarking leaves other people in elevator and doesn't affect other floor requests"
+    (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
+                            (assoc-in [:elevator :to-requests] [2 3])
+                            (assoc :from-requests [{:from 3 :to 1}]))
+          after-update (update-elevator-state before-update)
+          elevator (:elevator after-update)]
+      (is (= [3] (:to-requests elevator)))
+      (is (= 1 (count (:from-requests after-update))))))
+
+  (testing "embarking appends to elevator people and doesn't remove other floor requests")
+    (let [before-update (-> (create-state-with-defined-elevator :embarking 2 2)
+                          (assoc-in [:elevator :to-requests] [3])
+                          (assoc :from-requests [{:from 2 :to 1} {:from 3 :to 1}]))
+          after-update (update-elevator-state before-update)
+          elevator (:elevator after-update)]
+      (is (= [2 3] (:to-requests elevator)))
+      (is (= 1 (count (:from-requests after-update))))))
