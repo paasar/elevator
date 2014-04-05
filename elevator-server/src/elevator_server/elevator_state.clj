@@ -9,7 +9,7 @@
          (if has-newcomers
            :embarking
            :waiting)
-        (= (or (:ascending current-state) (= :descending current-state)))
+        (or (= :ascending current-state) (= :descending current-state))
           (cond
             has-riders :disembarking
             has-newcomers :embarking
@@ -34,10 +34,11 @@
 
 (defn embark [player-state current-floor]
   (let [request-groups (group-by #(= current-floor (:from %)) (get-in player-state [:from-requests]))
-        embarkers (get request-groups true)
-        in-other-floors (get request-groups false)]
+        embarkers (empty-if-nil (get request-groups true))
+        new-rider-targets (map :to embarkers)
+        in-other-floors (empty-if-nil (get request-groups false))]
     (-> player-state
-      (update-in [:elevator :to-requests] into embarkers)
+      (update-in [:elevator :to-requests] into new-rider-targets)
       (assoc :from-requests in-other-floors))))
 
 (defn disembark-embark [player-state current-state current-floor]

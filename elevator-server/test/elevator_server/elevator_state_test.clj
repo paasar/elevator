@@ -121,7 +121,7 @@
       (is (= 1 (get-in after-update [:tally :happy])))))
 
   (testing "elevator embarking to waiting"
-    (let [before-update (-> (create-state-with-defined-elevator :disembarking 2 2)
+    (let [before-update (-> (create-state-with-defined-elevator :embarking 2 2)
                             (assoc :from-requests [{:from 2 :to 1}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
@@ -142,8 +142,8 @@
   (testing "embarking appends to elevator people and doesn't remove other floor requests")
     (let [before-update (-> (create-state-with-defined-elevator :embarking 2 2)
                           (assoc-in [:elevator :to-requests] [3])
-                          (assoc :from-requests [{:from 2 :to 1} {:from 3 :to 1}]))
+                          (assoc :from-requests [{:from 2 :to 1} {:from 3 :to 4}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
-      (is (= [2 3] (:to-requests elevator)))
+      (is (= [3 1] (:to-requests elevator)))
       (is (= 1 (count (:from-requests after-update))))))
