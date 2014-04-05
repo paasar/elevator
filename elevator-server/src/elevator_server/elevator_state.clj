@@ -34,12 +34,17 @@
 
 (defn embark [player-state current-floor]
   (let [request-groups (group-by #(= current-floor (:from %)) (get-in player-state [:from-requests]))
+        elevator (:elevator player-state)
+        space-available (- (:capacity elevator) (count (:to-requests elevator)))
         embarkers (empty-if-nil (get request-groups true))
-        new-rider-targets (map :to embarkers)
-        in-other-floors (empty-if-nil (get request-groups false))]
+        embarkers-that-fit (take space-available embarkers)
+        embarkers-that-do-not-fit (drop space-available embarkers)
+        new-rider-targets (map :to embarkers-that-fit)
+        in-other-floors (empty-if-nil (get request-groups false))
+        new-requests (into in-other-floors embarkers-that-do-not-fit)]
     (-> player-state
       (update-in [:elevator :to-requests] into new-rider-targets)
-      (assoc :from-requests in-other-floors))))
+      (assoc :from-requests new-requests))))
 
 (defn disembark-embark [player-state current-state current-floor]
   (cond
