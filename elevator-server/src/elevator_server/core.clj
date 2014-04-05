@@ -1,22 +1,104 @@
 (ns elevator-server.core
-  (:use compojure.core
-        elevator-server.data)
-  (:require [compojure.handler :as handler]
-            [compojure.route :as route]
-            [elevator-server.scheduler :as scheduler]
-            [cheshire.core :refer [generate-string]]))
+  (:require [cheshire.core :as json]
+            [clojure.core.incubator :refer [dissoc-in]]))
 
-(defroutes app-routes
-  (GET "/state/internal" [] (generate-string (get-game-state)))
-  (GET "/state" [] (generate-string (transform-game-state-to-public (get-game-state))))
-  (GET "/" [] "TODO player creation form")
-  (GET "/game" [] "TODO game view")
-  (POST "/player" [post-data] "TODO create new player")
-  (route/resources "/")
-  (route/not-found "Not Found"))
+(def number-of-floors 5)
 
-(def app
-  (do
-    (set-game-state (vector (create-new-player-state)));TODO in final product state data is created when player is added
-    (scheduler/start-update-job)
-    (handler/site app-routes)))
+(def capacity number-of-floors)
+
+(def total-number-of-requests 5)
+
+(def impatience-start 5)
+
+(def max-wait-time (* 2 impatience-start))
+
+;game-state is vector of player-states
+(def game-state (atom []))
+
+(defn get-game-state [] @game-state)
+
+(defn set-game-state [new-state] (reset! game-state new-state))
+
+(defn empty-if-nil [val]
+  (if (nil? val)
+    []
+    val))
+
+(defn generate-request [highest-floor]
+  (let [current-floor (inc (rand-int highest-floor))
+        highest-floor-exclusive (inc highest-floor)
+        possible-floors (vec (disj (set (range 1 highest-floor-exclusive))
+                                   current-floor))]
+    {:from current-floor
+     :to (rand-nth possible-floors)
+     :waited 0}))
+
+(def player-state-template
+  (json/parse-string (slurp "resources/player-state-template.json") true))
+
+(defn set-floor-amount [player-state]
+  (assoc-in player-state [:floors] number-of-floors))
+
+(defn set-elevator-capacity [player-state]
+  (assoc-in player-state [:elevator :capacity] capacity))
+
+(defn get-direction [request]
+  (let [from (:from request)
+        to (:to request)]
+    (if (< from to)
+      "up"
+      "down")))
+
+(defn is-impatient? [waited]
+  (>= waited impatience-start))
+
+(defn transform-from-request-to-public [request]
+  {:floor (:from request)
+   :direction (get-direction request)
+   :impatient (is-impatient? (:waited request))})
+
+(defn transform-player-state-to-public [player-state]
+  (-> player-state
+    (dissoc-in [:client :ip])
+    (dissoc-in [:client :port])
+    (update-in [:from-requests] #(map transform-from-request-to-public %))))
+
+(defn transform-game-state-to-public [state]
+  (map transform-player-state-to-public state))
+
+(defn clear-from-requests [player-state]
+  (assoc-in player-state [:from-requests] []))
+
+(defn create-new-player-state []
+  (-> player-state-template
+      set-floor-amount
+      set-elevator-capacity
+      clear-from-requests))
+
+(defn add-next-request [player-state next-request]
+  (assoc-in player-state
+            [:from-requests]
+            (conj (:from-requests player-state) next-request)))
+
+(defn increment-wait-time [from-request]
+  (update-in from-request [:waited] inc))
+
+(defn increment-wait-times [player-state]
+  (update-in player-state [:from-requests] #(map increment-wait-time %)))
+
+(defn remove-requests-that-have-waited-too-long-and-update-unhappy-tally [player-state]
+  (let [request-groups (group-by #(< (:waited %) max-wait-time) (:from-requests player-state))
+        happy-group (empty-if-nil (get request-groups true))
+        unhappy-group (empty-if-nil (get request-groups false))]
+    (-> player-state
+      (assoc :from-requests happy-group)
+      (update-in [:tally :unhappy] + (count unhappy-group)))))
+
+(defn advance-player-state [player-state]
+  (-> player-state
+    (increment-wait-times)
+    (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
+    (add-next-request (generate-request number-of-floors))))
+
+(defn advance-game-state [state]
+  (map advance-player-state state))

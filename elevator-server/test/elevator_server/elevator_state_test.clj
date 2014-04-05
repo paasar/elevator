@@ -1,7 +1,7 @@
 (ns elevator-server.elevator-state-test
   (:require [clojure.test :refer :all]
             [elevator-server.elevator-state :refer :all]
-            [elevator-server.data :as data :refer [create-new-player-state]]))
+            [elevator-server.core :refer [create-new-player-state]]))
 
 (defn create-state-with-defined-elevator [state current-floor target-floor]
   (-> (create-new-player-state)
@@ -20,7 +20,7 @@
     (is (= :descending (get-next-elevator-state 2 1 :descending false false))))
 
   (testing "setting elevator to go up"
-    (let [before-update (data/create-new-player-state)
+    (let [before-update (create-new-player-state)
           after-update (set-new-target-floor before-update 2)
           elevator (:elevator after-update)]
       (is (= 1 (:current-floor elevator)))

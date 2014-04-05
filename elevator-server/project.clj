@@ -10,7 +10,7 @@
                  [clojurewerkz/quartzite "1.2.0"]
                  [clj-http "0.9.0"]]
   :plugins [[lein-ring "0.8.10"]]
-  :ring {:handler elevator-server.core/app}
+  :ring {:handler elevator-server.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring-mock "0.1.5"]]}})

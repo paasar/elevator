@@ -1,5 +1,5 @@
 (ns elevator-server.elevator-state
-  (:require [elevator-server.data :refer [empty-if-nil]]))
+  (:require [elevator-server.core :refer [empty-if-nil]]))
 
 (defn get-next-elevator-state [current-floor target-floor current-state has-riders has-newcomers]
   (cond

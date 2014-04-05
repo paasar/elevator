@@ -1,5 +1,5 @@
 (ns elevator-server.scheduler
-  (use elevator-server.data
+  (use elevator-server.core
        elevator-server.rest-client)
   (:require [clojurewerkz.quartzite.scheduler :as qs]
             [clojurewerkz.quartzite.triggers :as t]
