@@ -1,25 +1,24 @@
 {
-  "client": {
-      "name": "team-1"
-  },
-  "elevator":
-    {
-      "to-requests": [3,2],
-      "current-floor": 1,
-      "capacity": 5
+    "client": {
+        "name": "team-1"
     },
-  "floors": 5,
-  "from-requests":
-    [
-      {
-        "floor": 5,
-        "direction": "down",
-        "impatient": false
-      }
+    "elevator": {
+        "to-requests": [3, 2],
+        "current-floor": 1,
+        "going-to": 1,
+        "state": "waiting",
+        "capacity": 5
+    },
+    "floors": 5,
+    "from-requests": [
+        {
+            "floor": 5,
+            "direction": "down",
+            "impatient": false
+        }
     ],
-  "tally":
-    {
-      "happy": 0,
-      "unhappy": 0
+    "tally": {
+        "happy": 0,
+        "unhappy": 0
     }
 }
