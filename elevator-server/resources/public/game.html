@@ -1,0 +1,16 @@
+<html data-ng-app="renderApp">
+    <head>
+        <title>Elevators!</title>
+        <script src="lib/angular.min.js"></script>
+        <script src="lib/angular-resource.min.js"></script>
+        <script src="js/controllers.js"></script>
+        <script src="js/services.js"></script>
+    </head>
+    <body data-ng-controller="RenderController">
+        <div class="player-states">
+            <div class="player-state" data-ng-repeat="state in states">
+            {{state.client.name}}
+            </div>
+        </div>
+    </body>
+</html>

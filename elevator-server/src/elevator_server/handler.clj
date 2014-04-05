@@ -9,8 +9,7 @@
 (defroutes app-routes
   (GET "/state/internal" [] (generate-string (get-game-state)))
   (GET "/state" [] (generate-string (transform-game-state-to-public (get-game-state))))
-  (GET "/" [] "TODO player creation form")
-  (GET "/game" [] "TODO game view")
+  ;(GET "/" [] "TODO player creation form")
   (POST "/player" [post-data] "TODO create new player")
   (route/resources "/")
   (route/not-found "Not Found"))
