@@ -1,6 +1,8 @@
 (ns elevator-server.core
   (:require [cheshire.core :as json]
-            [clojure.core.incubator :refer [dissoc-in]]))
+            [clojure.core.incubator :refer [dissoc-in]]
+            [elevator-server.elevator-state :refer [update-elevator-state]]
+            [elevator-server.util :refer [empty-if-nil]]))
 
 (def number-of-floors 5)
 
@@ -18,11 +20,6 @@
 (defn get-game-state [] @game-state)
 
 (defn set-game-state [new-state] (reset! game-state new-state))
-
-(defn empty-if-nil [val]
-  (if (nil? val)
-    []
-    val))
 
 (defn generate-request [highest-floor]
   (let [current-floor (inc (rand-int highest-floor))
@@ -98,6 +95,7 @@
   (-> player-state
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
+    (update-elevator-state)
     (add-next-request (generate-request number-of-floors))))
 
 (defn advance-game-state [state]
