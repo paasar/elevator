@@ -25,7 +25,15 @@
           elevator (:elevator after-update)]
       (is (= 1 (:current-floor elevator)))
       (is (= 2 (:going-to elevator)))
-      (is (= :ascending (:state elevator))))))
+      (is (= :ascending (:state elevator)))))
+
+  (testing "setting elevator to go down"
+    (let [before-update (create-state-with-defined-elevator :waiting 2 2)
+          after-update (set-new-target-floor before-update 1)
+          elevator (:elevator after-update)]
+      (is (= 2 (:current-floor elevator)))
+      (is (= 1 (:going-to elevator)))
+      (is (= :descending (:state elevator))))))
 
 (deftest ascending
   (testing "move elevator up, not reaching target"
