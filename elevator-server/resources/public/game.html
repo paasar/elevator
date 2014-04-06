@@ -5,11 +5,28 @@
         <script src="lib/angular-resource.min.js"></script>
         <script src="js/controllers.js"></script>
         <script src="js/services.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/elevator.css"/>
     </head>
     <body data-ng-controller="RenderController">
         <div class="player-states">
             <div class="player-state" data-ng-repeat="state in states">
-            {{state.client.name}}
+                <div class="header">
+                    Team: {{state.client.name}}<br/>
+                    Happy: {{state.tally.happy}}<br/>
+                    Unhappy: {{state.tally.unhappy}}<br/>
+                </div>
+                <div class="elevator-and-floors">
+                    <div class="elevator-shaft">
+                        <div class="elevator">
+
+                        </div>
+                    </div>
+                    <div class="floors">
+                        <div class="floor">
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
