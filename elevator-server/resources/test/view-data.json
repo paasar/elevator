@@ -28,7 +28,9 @@
                 {"2": "off"},
                 {"1": "off"}
             ],
-            "elevator": ["free", "free", "free", 5, 4],
+            "elevator": {
+                "state": "waiting",
+                "riders": ["free", "free", "free", 5, 4]},
             "waiting-room": {
                 "up": "on",
                 "down": "off",
@@ -53,8 +55,8 @@
         }
     ],
     "tally": {
-        "happy": 0,
-        "unhappy": 0,
-        "overall": 0
+        "overall": 1,
+        "happy": 3,
+        "unhappy": 1
     }
 }

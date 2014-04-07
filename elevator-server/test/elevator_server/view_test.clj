@@ -5,7 +5,8 @@
             [cheshire.core :as json]))
 
 (defn create-player-state []
-  (-> (create-new-player-state)))
+  (-> (create-new-player-state)
+    (assoc :tally {:happy 3 :unhappy 1})))
 
 (def expected-data
   (json/parse-string (slurp "resources/test/view-data.json") true))
