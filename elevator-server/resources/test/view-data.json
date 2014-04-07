@@ -1,0 +1,60 @@
+{
+    "client": {
+        "name": "team-1"
+    },
+    "floors": [
+        {
+            "number": 5,
+            "waiting-room": {
+                "up": "off",
+                "down": "off",
+                "requests": []
+            }
+        },
+        {
+            "number": 4,
+            "waiting-room": {
+                "up": "off",
+                "down": "off",
+                "requests": []
+            }
+        },
+        {
+            "number": 3,
+            "control-panel": [
+                {"5": "on"},
+                {"4": "on"},
+                {"3": "off"},
+                {"2": "off"},
+                {"1": "off"}
+            ],
+            "elevator": ["free", "free", "free", 5, 4],
+            "waiting-room": {
+                "up": "on",
+                "down": "off",
+                "requests": ["patient", "impatient"]
+            }
+        },
+        {
+            "number": 2,
+            "waiting-room": {
+                "up": "off",
+                "down": "off",
+                "requests": []
+            }
+        },
+        {
+            "number": 1,
+            "waiting-room": {
+                "up": "off",
+                "down": "off",
+                "requests": ["patient"]
+            }
+        }
+    ],
+    "tally": {
+        "happy": 0,
+        "unhappy": 0,
+        "overall": 0
+    }
+}

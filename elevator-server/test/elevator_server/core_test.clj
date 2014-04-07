@@ -80,3 +80,8 @@
                                                {:from 'test :to 3 :waited max-wait-time})
           state-after-step (advance-player-state start-player-state)]
       (is (= 1 (get-in state-after-step [:tally :unhappy]))))))
+
+(deftest adding-requests
+  (testing "advancing state adds same request to all player states"
+    ;TODO
+    ))
