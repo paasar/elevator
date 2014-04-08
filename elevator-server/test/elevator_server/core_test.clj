@@ -73,6 +73,9 @@
           state-after-second-step (advance-player-state state-after-first-step)]
       (is (= 2 (count (:from-requests state-after-first-step))))
       (is (= 2 (count (:from-requests state-after-second-step))))
+      ;TODO wut?
+      ;expected: (= 2 (count (:from-requests state-after-second-step)))
+      ;actual: (not (= 2 1))
       (is (= 0 (count-test-requests state-after-second-step)))))
 
   (testing "unhappy tally is incremented"

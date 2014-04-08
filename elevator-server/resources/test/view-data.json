@@ -29,11 +29,11 @@
                 {"1": "off"}
             ],
             "elevator": {
-                "state": "waiting",
+                "state": "ascending",
                 "riders": ["free", "free", "free", 5, 4]},
             "waiting-room": {
-                "up": "on",
-                "down": "off",
+                "up": "off",
+                "down": "on",
                 "requests": ["patient", "impatient"]
             }
         },
@@ -48,7 +48,7 @@
         {
             "number": 1,
             "waiting-room": {
-                "up": "off",
+                "up": "on",
                 "down": "off",
                 "requests": ["patient"]
             }
