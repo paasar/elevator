@@ -8,12 +8,30 @@
         unhappy (:unhappy tally)]
   (assoc tally :overall (- happy (* happy-unhappy-ratio unhappy)))))
 
-(defn create-view-floor [number]
-  {:number number})
+(defn create-elevator-for-view [elevator]
+  (let [to-requests (:to-requests elevator)
+        capacity (:capacity elevator)]
+  {:state (:state elevator)
+   :riders (into to-requests (repeat (- capacity (count to-requests)) "free"))}))
+
+(defn add-elevator-if-same-floor [floor elevator]
+  (if (= (:number floor) (:current-floor elevator))
+    (assoc floor :elevator (create-elevator-for-view elevator))
+    floor))
+
+(defn add-counter-weight-if-correct-floor [floor floors elevator-floor]
+  (if (= (:number floor) (inc (- floors elevator-floor)))
+    (assoc floor :counter-weight true)
+    floor))
+
+(defn create-floor-for-view [number elevator requests floors]
+  (-> {:number number}
+      (add-elevator-if-same-floor elevator)
+      (add-counter-weight-if-correct-floor floors (:current-floor elevator))))
 
 (defn create-view-floors [elevator requests floors]
   (let [floor-numbers (range floors 0 -1)]
-    (vec (map #(create-view-floor %) floor-numbers))
+    (vec (map #(create-floor-for-view % elevator requests floors) floor-numbers))
   ))
 
 (defn transform-player-state-to-view-data [player-state]

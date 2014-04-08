@@ -4,23 +4,28 @@
     },
     "floors": [
         {
-            "number": 5,
             "waiting-room": {
                 "up": "off",
                 "down": "off",
                 "requests": []
-            }
+            },
+            "number": 5
         },
         {
-            "number": 4,
             "waiting-room": {
                 "up": "off",
                 "down": "off",
                 "requests": []
-            }
+            },
+            "number": 4
         },
         {
-            "number": 3,
+            "waiting-room": {
+                "up": "off",
+                "down": "on",
+                "requests": ["patient", "impatient"]
+            },
+            "counter-weight": true,
             "control-panel": [
                 {"5": "on"},
                 {"4": "on"},
@@ -30,28 +35,24 @@
             ],
             "elevator": {
                 "state": "ascending",
-                "riders": ["free", "free", "free", 5, 4]},
-            "waiting-room": {
-                "up": "off",
-                "down": "on",
-                "requests": ["patient", "impatient"]
-            }
+                "riders": [5, 4, "free", "free", "free"]},
+            "number": 3
         },
         {
-            "number": 2,
             "waiting-room": {
                 "up": "off",
                 "down": "off",
                 "requests": []
-            }
+            },
+            "number": 2
         },
         {
-            "number": 1,
             "waiting-room": {
                 "up": "on",
                 "down": "off",
                 "requests": ["patient"]
-            }
+            },
+            "number": 1
         }
     ],
     "tally": {
