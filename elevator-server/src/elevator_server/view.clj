@@ -1,5 +1,6 @@
 (ns elevator-server.view
-  (:require [clojure.core.incubator :refer [dissoc-in]]))
+  (:require [clojure.core.incubator :refer [dissoc-in]]
+            [elevator-server.util :refer [empty-if-nil]]))
 
 (def happy-unhappy-ratio 2)
 
@@ -17,9 +18,12 @@
 (defn floor-numbers [max-floor]
   (range max-floor 0 -1))
 
+(defn on-off [pred]
+  (if pred "on" "off"))
+
 (defn create-button [number riders]
   (let [button-on (some #(= number %) riders)]
-    {(keyword (str number)) (if button-on "on" "off")}))
+    {(keyword (str number)) (on-off button-on)}))
 
 (defn create-control-panel-for-view [riders max-floor]
   (vec (map #(create-button % riders) (floor-numbers max-floor))))
@@ -36,10 +40,24 @@
     (assoc floor :counter-weight true)
     floor))
 
+(defn create-waiting-room [current-floor requests]
+  (let [any-up (some #(< current-floor (:to %)) requests)
+        any-down (some #(> current-floor (:to %)) requests)]
+    {:up (on-off any-up)
+     :down (on-off any-down)}))
+
+(defn add-waiting-room [floor requests]
+  (let [current-floor (:number floor)
+        requests-in-this-floor (empty-if-nil (filter #(= current-floor (:from %)) requests))]
+    (if (empty? requests-in-this-floor)
+      floor
+      (assoc floor :waiting-room (create-waiting-room current-floor requests-in-this-floor)))))
+
 (defn create-floor-for-view [number elevator requests max-floor]
   (-> {:number number}
       (add-control-panel-and-elevator-if-same-floor elevator max-floor)
-      (add-counter-weight-if-correct-floor max-floor (:current-floor elevator))))
+      (add-counter-weight-if-correct-floor max-floor (:current-floor elevator))
+      (add-waiting-room requests)))
 
 (defn create-view-floors [elevator requests max-floor]
     (vec (map #(create-floor-for-view % elevator requests max-floor) (floor-numbers max-floor))))
