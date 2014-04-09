@@ -1,6 +1,7 @@
 (ns elevator-server.view
   (:require [clojure.core.incubator :refer [dissoc-in]]
-            [elevator-server.util :refer [empty-if-nil]]))
+            [elevator-server.util :refer [empty-if-nil]]
+            [elevator-server.core :refer [impatience-start]]))
 
 (def happy-unhappy-ratio 2)
 
@@ -40,18 +41,20 @@
     (assoc floor :counter-weight true)
     floor))
 
+(defn create-requests-for-view [requests]
+  (vec (map #(if (< (:waited %) impatience-start) "patient" "impatient") requests)))
+
 (defn create-waiting-room [current-floor requests]
   (let [any-up (some #(< current-floor (:to %)) requests)
         any-down (some #(> current-floor (:to %)) requests)]
     {:up (on-off any-up)
-     :down (on-off any-down)}))
+     :down (on-off any-down)
+     :requests (create-requests-for-view requests)}))
 
 (defn add-waiting-room [floor requests]
   (let [current-floor (:number floor)
         requests-in-this-floor (empty-if-nil (filter #(= current-floor (:from %)) requests))]
-    (if (empty? requests-in-this-floor)
-      floor
-      (assoc floor :waiting-room (create-waiting-room current-floor requests-in-this-floor)))))
+      (assoc floor :waiting-room (create-waiting-room current-floor requests-in-this-floor))))
 
 (defn create-floor-for-view [number elevator requests max-floor]
   (-> {:number number}
@@ -68,15 +71,10 @@
         max-floor (:floors player-state)
         requests (:from-requests player-state)
         tally (:tally player-state)]
-  (do
-    (println "tpstvd" client elevator requests tally)
     (-> {}
       (assoc :tally (add-overall-score tally))
       (assoc :floors (create-view-floors elevator requests max-floor))
-      (assoc :client {:name (:name client)})
-      ))
-  )
-)
+      (assoc :client {:name (:name client)}))))
 
 (defn transform-game-state-to-view-data [state]
   (map transform-player-state-to-view-data state))

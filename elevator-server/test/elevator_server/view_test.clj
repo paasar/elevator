@@ -26,4 +26,8 @@
   (testing "transform player state"
     (let [before-state (create-player-state)
           transformed-state (transform-player-state-to-view-data before-state)]
-      (is (= expected-data transformed-state)))))
+      ;Using stupid generate-string here because elevator keystring comparing trouble
+      ; eg. "ascending" vs. :ascending
+      ;TODO Create custom decoder?
+      (is (= (json/generate-string expected-data)
+             (json/generate-string transformed-state))))))
