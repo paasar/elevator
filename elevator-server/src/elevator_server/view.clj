@@ -24,7 +24,7 @@
 
 (defn create-button [number riders]
   (let [button-on (some #(= number %) riders)]
-    {(keyword (str number)) (on-off button-on)}))
+    {:number number :state (on-off button-on)}))
 
 (defn create-control-panel-for-view [riders max-floor]
   (vec (map #(create-button % riders) (floor-numbers max-floor))))
@@ -33,12 +33,12 @@
   (if (= (:number floor) (:current-floor elevator))
     (-> floor
         (assoc :elevator (create-elevator-for-view elevator))
-        (assoc :control-panel (create-control-panel-for-view (:to-requests elevator) max-floor)))
+        (assoc :controlPanel (create-control-panel-for-view (:to-requests elevator) max-floor)))
     floor))
 
 (defn add-counter-weight-if-correct-floor [floor max-floor elevator-floor]
   (if (= (:number floor) (inc (- max-floor elevator-floor)))
-    (assoc floor :counter-weight true)
+    (assoc floor :counterWeight true)
     floor))
 
 (defn create-requests-for-view [requests]
@@ -54,7 +54,7 @@
 (defn add-waiting-room [floor requests]
   (let [current-floor (:number floor)
         requests-in-this-floor (empty-if-nil (filter #(= current-floor (:from %)) requests))]
-      (assoc floor :waiting-room (create-waiting-room current-floor requests-in-this-floor))))
+      (assoc floor :waitingRoom (create-waiting-room current-floor requests-in-this-floor))))
 
 (defn create-floor-for-view [number elevator requests max-floor]
   (-> {:number number}

@@ -4,7 +4,7 @@
     },
     "floors": [
         {
-            "waiting-room": {
+            "waitingRoom": {
                 "up": "off",
                 "down": "off",
                 "requests": []
@@ -12,7 +12,7 @@
             "number": 5
         },
         {
-            "waiting-room": {
+            "waitingRoom": {
                 "up": "off",
                 "down": "off",
                 "requests": []
@@ -20,26 +20,42 @@
             "number": 4
         },
         {
-            "waiting-room": {
+            "waitingRoom": {
                 "up": "off",
                 "down": "on",
                 "requests": ["patient", "impatient"]
             },
-            "counter-weight": true,
-            "control-panel": [
-                {"5": "on"},
-                {"4": "on"},
-                {"3": "off"},
-                {"2": "off"},
-                {"1": "off"}
+            "counterWeight": true,
+            "controlPanel": [
+                {
+                    "number": 5,
+                    "state": "on"
+                },
+                {
+                    "number": 4,
+                    "state": "on"
+                },
+                {
+                    "number": 3,
+                    "state": "off"
+                },
+                {
+                    "number": 2,
+                    "state": "off"
+                },
+                {
+                    "number": 1,
+                    "state": "off"
+                }
             ],
             "elevator": {
                 "state": "ascending",
-                "riders": [5, 4, "free", "free", "free"]},
+                "riders": [5, 4, "free", "free", "free"]
+            },
             "number": 3
         },
         {
-            "waiting-room": {
+            "waitingRoom": {
                 "up": "off",
                 "down": "off",
                 "requests": []
@@ -47,7 +63,7 @@
             "number": 2
         },
         {
-            "waiting-room": {
+            "waitingRoom": {
                 "up": "on",
                 "down": "off",
                 "requests": ["patient"]

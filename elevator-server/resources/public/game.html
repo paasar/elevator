@@ -10,21 +10,44 @@
     <body data-ng-controller="RenderController">
         <div class="player-states">
             <div class="player-state" data-ng-repeat="state in states">
-                <div class="header">
-                    Team: {{state.client.name}}<br/>
-                    Happy: {{state.tally.happy}}<br/>
-                    Unhappy: {{state.tally.unhappy}}<br/>
+                <div class="header white-text">
+                    Team: {{state.client.name}} |
+                    Happy: {{state.tally.happy}} |
+                    Unhappy: {{state.tally.unhappy}} |
+                    Overall: {{state.tally.overall}}
                 </div>
                 <div class="elevator-and-floors">
-                    <div class="elevator-shaft">
-                        <div class="elevator">
+                    <div class="floor" data-ng-repeat="floor in state.floors">
+                        <div class="clearfix small"></div>
 
+                        <div class="control-panel-placeholder">
+                        <div class="control-panel" data-ng-if="floor.controlPanel">
+                            <div data-ng-repeat="button in floor.controlPanel">
+                                <div class="{{button.state}}">{{button.number}}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="floors">
-                        <div class="floor">
+                        </div>
 
+                        <div class="elevator-shaft">
+                            <div class="elevator {{floor.elevator.state}}" data-ng-if="floor.elevator">
+                                <div data-ng-repeat="spot in floor.elevator.riders track by $index">
+                                    {{spot}}
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="waiting-room">
+                            <div class="buttons">
+                                <div class="{{floor.waitingRoom.up}}">up</div>
+                                <div class="{{floor.waitingRoom.down}}">down</div>
+                            </div>
+                            <div class="people">
+                                <div data-ng-repeat="person in floor.waitingRoom.requests track by $index">
+                                    {{person}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix small"></div>
                     </div>
                 </div>
             </div>

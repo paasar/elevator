@@ -1,9 +1,69 @@
+body {
+    background-color: #333333;
+}
+
 div {
     border: solid 1px black;
     margin: 1px;
+    padding: 2px;
+}
+.floor > div {
+    position: relative;
+    float: left;
+    width: 200px;
+    height: 50px;
+    z-index: 0;
 }
 
-.elevator-shaft {
-    width: 200px;
-    height: 600px;
+.floor > div > div {
+    /*min-height: 40px;*/
+    /*float: left;*/
+    background-color: aquamarine;
+}
+
+.floor > div > div:after {
+    clear: both;
+    background-color: red;
+}
+
+.control-panel {
+    z-index: 5;
+}
+
+.elevator {
+    z-index: 5;
+}
+
+.waiting-room {
+
+}
+
+.people, .buttons {
+    float: left;
+}
+
+.clearfix {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.small {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+
+
+.on {
+    background-color: green;
+}
+
+.off {
+    background-color: red;
+}
+
+.white-text {
+    color: white;
 }
