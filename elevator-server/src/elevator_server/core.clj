@@ -21,6 +21,8 @@
 
 (defn set-game-state [new-state] (reset! game-state new-state))
 
+(defn update-game-state [update-fun] (swap! game-state update-fun))
+
 (defn generate-request [highest-floor]
   (let [current-floor (inc (rand-int highest-floor))
         highest-floor-exclusive (inc highest-floor)

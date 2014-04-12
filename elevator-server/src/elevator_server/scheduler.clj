@@ -19,8 +19,8 @@
 
 (defjob update-job [ctx]
   (do
-    (set-game-state (map update-target (get-game-state)))
-    (set-game-state (advance-game-state (get-game-state)))))
+    (update-game-state #(map update-target %))
+    (update-game-state #(advance-game-state %))))
 
 (defn start-update-job []
   (qs/initialize)

@@ -8,47 +8,43 @@
         <link rel="stylesheet" type="text/css" href="css/elevator.css"/>
     </head>
     <body data-ng-controller="RenderController">
-        <div class="player-states">
-            <div class="player-state" data-ng-repeat="state in states">
-                <div class="header white-text">
-                    Team: {{state.client.name}} |
-                    Happy: {{state.tally.happy}} |
-                    Unhappy: {{state.tally.unhappy}} |
-                    Overall: {{state.tally.overall}}
-                </div>
-                <div class="elevator-and-floors">
-                    <div class="floor" data-ng-repeat="floor in state.floors">
-                        <div class="clearfix small"></div>
+        <div class="player-state" data-ng-repeat="state in states">
+            <div class="header white-text">
+                Team: {{state.client.name}} |
+                Happy: {{state.tally.happy}} |
+                Unhappy: {{state.tally.unhappy}} |
+                Overall: {{state.tally.overall}}
+            </div>
+            <div class="floors">
+                <div class="floor" data-ng-repeat="floor in state.floors">
+                    <!--<div class="clearfix small"></div>-->
 
-                        <div class="control-panel-placeholder">
+                    <div class="control-panel-placeholder">
                         <div class="control-panel" data-ng-if="floor.controlPanel">
-                            <div data-ng-repeat="button in floor.controlPanel">
-                                <div class="{{button.state}}">{{button.number}}</div>
+                            <div class="button-wrapper" data-ng-repeat="button in floor.controlPanel">
+                                <div class="button {{button.state}}">{{button.number}}</div>
                             </div>
                         </div>
-                        </div>
-
-                        <div class="elevator-shaft">
-                            <div class="elevator {{floor.elevator.state}}" data-ng-if="floor.elevator">
-                                <div data-ng-repeat="spot in floor.elevator.riders track by $index">
-                                    {{spot}}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="waiting-room">
-                            <div class="buttons">
-                                <div class="{{floor.waitingRoom.up}}">up</div>
-                                <div class="{{floor.waitingRoom.down}}">down</div>
-                            </div>
-                            <div class="people">
-                                <div data-ng-repeat="person in floor.waitingRoom.requests track by $index">
-                                    {{person}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix small"></div>
                     </div>
+
+                    <div class="elevator-shaft">
+                        <div class="elevator {{floor.elevator.state}}" data-ng-if="floor.elevator">
+                            <div data-ng-repeat="spot in floor.elevator.riders track by $index">
+                                {{spot}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="waiting-room">
+                        <div class="buttons">
+                            <div class="button {{floor.waitingRoom.up}}">&#9650;</div>
+                            <div class="button {{floor.waitingRoom.down}}">&#9660;</div>
+                        </div>
+                        <div class="people">
+                            <span class="{{person}}" data-ng-repeat="person in floor.waitingRoom.requests track by $index">X</span>
+                        </div>
+                    </div>
+                    <!--<div class="clearfix small"></div>-->
                 </div>
             </div>
         </div>
