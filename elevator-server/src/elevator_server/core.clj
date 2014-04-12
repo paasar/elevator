@@ -93,12 +93,13 @@
       (assoc :from-requests happy-group)
       (update-in [:tally :unhappy] + (count unhappy-group)))))
 
-(defn advance-player-state [player-state]
+(defn advance-player-state [player-state new-request]
   (-> player-state
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
     (update-elevator-state)
-    (add-next-request (generate-request number-of-floors))))
+    (add-next-request new-request)))
 
 (defn advance-game-state [state]
-  (map advance-player-state state))
+  (let [new-from-request (generate-request number-of-floors)]
+    (map #(advance-player-state % new-from-request) state)))

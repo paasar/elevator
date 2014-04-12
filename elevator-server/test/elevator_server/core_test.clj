@@ -69,22 +69,20 @@
   (testing "waited too long"
     (let [start-player-state (add-next-request (create-new-player-state)
                                                {:from 'test :to 3 :waited (- max-wait-time 2)})
-          state-after-first-step (advance-player-state start-player-state)
-          state-after-second-step (advance-player-state state-after-first-step)]
+          state-after-first-step (advance-player-state start-player-state patient-request)
+          state-after-second-step (advance-player-state state-after-first-step patient-request)]
       (is (= 2 (count (:from-requests state-after-first-step))))
       (is (= 2 (count (:from-requests state-after-second-step))))
-      ;TODO wut?
-      ;expected: (= 2 (count (:from-requests state-after-second-step)))
-      ;actual: (not (= 2 1))
       (is (= 0 (count-test-requests state-after-second-step)))))
 
   (testing "unhappy tally is incremented"
     (let [start-player-state (add-next-request (create-new-player-state)
                                                {:from 'test :to 3 :waited max-wait-time})
-          state-after-step (advance-player-state start-player-state)]
+          state-after-step (advance-player-state start-player-state patient-request)]
       (is (= 1 (get-in state-after-step [:tally :unhappy]))))))
 
 (deftest adding-requests
   (testing "advancing state adds same request to all player states"
-    ;TODO
-    ))
+    (let [game-state-before (vec (repeat 2 (create-new-player-state)))
+          game-state-after (advance-game-state game-state-before)]
+      (is (= (:from-requests (first game-state-after)) (:from-requests (second game-state-after)))))))
