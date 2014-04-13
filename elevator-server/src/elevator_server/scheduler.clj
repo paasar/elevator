@@ -32,5 +32,5 @@
                   (t/with-identity (t/key "update trigger"))
                   (t/start-now)
                   (t/with-schedule (schedule
-                                     (with-interval-in-seconds 5))))]
+                                     (with-interval-in-seconds 1))))]
     (qs/schedule job trigger)))

@@ -5,8 +5,8 @@ renderApp.controller('RenderController', ['$scope', '$timeout', 'GameState', fun
 
     var updateState = function () {
         $scope.states = GameState.query();
-        $timeout(function() {updateState();}, 5000);
+        $timeout(function() {updateState();}, 1000);
 
     };
-    $timeout(function() {updateState();}, 5000);
+    $timeout(function() {updateState();}, 1000);
 }]);

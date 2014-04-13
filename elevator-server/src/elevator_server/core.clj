@@ -8,8 +8,6 @@
 
 (def capacity number-of-floors)
 
-(def total-number-of-requests 5)
-
 (def impatience-start 5)
 
 (def max-wait-time (* 2 impatience-start))
@@ -25,8 +23,8 @@
 
 (defn generate-request [highest-floor]
   (let [current-floor (inc (rand-int highest-floor))
-        highest-floor-exclusive (inc highest-floor)
-        possible-floors (vec (disj (set (range 1 highest-floor-exclusive))
+        highest-floor-plus-one (inc highest-floor)
+        possible-floors (vec (disj (set (range 1 highest-floor-plus-one))
                                    current-floor))]
     {:from current-floor
      :to (rand-nth possible-floors)

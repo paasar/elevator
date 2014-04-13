@@ -25,7 +25,7 @@ div {
 }
 
 .control-panel-placeholder {
-    background-color: aliceblue;
+    background-color: #223388;
 }
 
 .control-panel {
@@ -89,7 +89,6 @@ div {
 .clearfix {
     content: " ";
     display: block;
-    height: 0;
     clear: both;
 }
 
@@ -122,10 +121,16 @@ div {
     color: white;
 }
 
+.person {
+    float: right;
+    font-size: 2.5em;
+}
+
 .patient {
     color: blue;
 }
 
 .impatient {
     color: orange;
+    font-size: 0.8em;
 }
