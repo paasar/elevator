@@ -12,7 +12,7 @@
 
 (def max-wait-time (* 2 impatience-start))
 
-;game-state is vector of player-states
+;game-state is a vector of player-states
 (def game-state (atom []))
 
 (defn get-game-state [] @game-state)
