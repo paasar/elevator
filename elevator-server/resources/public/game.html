@@ -29,7 +29,7 @@
 
                     <div class="elevator-shaft">
                         <div class="elevator {{floor.elevator.state}}" data-ng-if="floor.elevator">
-                            <div data-ng-repeat="spot in floor.elevator.riders track by $index">
+                            <div class="spot" data-ng-class="{clearfix : $index % 2 == 0}" data-ng-repeat="spot in floor.elevator.riders track by $index">
                                 {{spot}}
                             </div>
                         </div>

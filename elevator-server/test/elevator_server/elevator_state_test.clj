@@ -16,8 +16,17 @@
     (is (= :waiting (get-next-elevator-state 1 1 :waiting false false))))
   (testing "higher target floor gives ascending"
     (is (= :ascending (get-next-elevator-state 1 2 :ascending false false))))
-  (testing "lower target floor gives waiting"
+  (testing "lower target floor gives descending"
     (is (= :descending (get-next-elevator-state 2 1 :descending false false))))
+  (testing "disembarking with combinatons of riders and newcomers"
+    (is (= :embarking (get-next-elevator-state 1 1 :disembarking true true)))
+    (is (= :embarking (get-next-elevator-state 1 1 :disembarking false true)))
+    (is (= :waiting (get-next-elevator-state 1 1 :disembarking true false)))
+    (is (= :embarking (get-next-elevator-state 1 2 :disembarking true true))))
+  (testing "embarking with combinatons of riders and newcomers"
+    (is (= :waiting (get-next-elevator-state 1 1 :embarking true true)))
+    (is (= :waiting (get-next-elevator-state 1 1 :embarking false true)))
+    (is (= :waiting (get-next-elevator-state 1 1 :embarking true false))))
 
   (testing "setting elevator to go up"
     (let [before-update (create-new-player-state)
@@ -163,9 +172,12 @@
 
   (testing "embarking adds new rider only up to capacity"
     (let [before-update (-> (create-state-with-defined-elevator :embarking 2 2)
-                          (assoc-in [:elevator :to-requests] [3 3 3 3])
-                          (assoc :from-requests [{:from 2 :to 1} {:from 2 :to 4}]))
+                            (assoc-in [:elevator :to-requests] [3 3 3 3])
+                            (assoc :from-requests [{:from 2 :to 1} {:from 2 :to 4}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= [3 3 3 3 1] (:to-requests elevator)))
-      (is (= [{:from 2 :to 4}] (:from-requests after-update))))))
+      (is (= [{:from 2 :to 4}] (:from-requests after-update)))))
+
+  ;TODO impatients embark first
+  )

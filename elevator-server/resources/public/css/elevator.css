@@ -44,15 +44,18 @@ div {
 
 .elevator-shaft {
     background-color: dimgrey;
-    min-width: 76px;
+    min-width: 133px;
     min-height: 150px;
 }
 
 .elevator {
     z-index: 5;
     border-width: 3px;
-    min-width: 58px;
-    min-height: 136px;
+    min-width: 116px;
+    overflow: hidden;
+}
+.spot {
+    float: left;
 }
 
 .waiting {

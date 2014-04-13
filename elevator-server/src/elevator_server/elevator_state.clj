@@ -1,22 +1,29 @@
 (ns elevator-server.elevator-state
   (:require [elevator-server.util :refer [empty-if-nil]]))
 
+(defn waiting-ascending-or-descending [target-floor current-floor]
+  (if (= target-floor current-floor)
+    :waiting
+    (if (> target-floor current-floor)
+      :ascending
+      :descending)))
+
 (defn get-next-elevator-state [current-floor target-floor current-state has-riders has-newcomers]
   (cond
-    (= target-floor current-floor)
-      (cond
-        (= :disembarking current-state)
-         (if has-newcomers
-           :embarking
-           :waiting)
-        (or (= :ascending current-state) (= :descending current-state))
-          (cond
-            has-riders :disembarking
-            has-newcomers :embarking
-            :else :waiting)
-        :else :waiting)
-    (> target-floor current-floor) :ascending
-    :else :descending))
+    (= :disembarking current-state)
+      (if has-newcomers
+        :embarking
+        :waiting)
+    (= :embarking current-state)
+      (waiting-ascending-or-descending target-floor current-floor)
+    (or (= :ascending current-state) (= :descending current-state))
+      (if (= target-floor current-floor)
+        (cond
+          has-riders :disembarking
+          has-newcomers :embarking
+          :else :waiting)
+        current-state)
+    :else (waiting-ascending-or-descending target-floor current-floor)))
 
 (defn set-elevator-target-floor [player-state target-floor]
   (assoc-in player-state [:elevator :going-to] target-floor))
