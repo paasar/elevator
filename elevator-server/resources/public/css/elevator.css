@@ -20,12 +20,13 @@ div {
 
 .floor > div {
     float: left;
-    min-width: 60px;
     z-index: 0;
 }
 
 .control-panel-placeholder {
     background-color: #223388;
+    min-width: 164px;
+    min-height: 114px;
 }
 
 .control-panel {
@@ -43,11 +44,15 @@ div {
 
 .elevator-shaft {
     background-color: dimgrey;
+    min-width: 76px;
+    min-height: 150px;
 }
 
 .elevator {
     z-index: 5;
     border-width: 3px;
+    min-width: 58px;
+    min-height: 136px;
 }
 
 .waiting {
@@ -59,7 +64,7 @@ div {
 }
 
 .embarking {
-    border-color: darkcyan;
+    border-color: maroon;
 
 }
 
@@ -73,6 +78,8 @@ div {
 
 .waiting-room {
     background-color: darkolivegreen;
+    min-width: 192px;
+    min-height: 97px;
 }
 
 .waiting-room:after {
