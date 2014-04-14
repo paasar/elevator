@@ -22,5 +22,6 @@
     "tally": {
         "happy": 0,
         "unhappy": 0
-    }
+    },
+    "tick": 0
 }

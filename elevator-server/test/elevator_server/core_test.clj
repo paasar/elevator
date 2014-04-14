@@ -60,7 +60,11 @@
 
   (testing "increment wait time"
     (let [result (increment-wait-time patient-request)]
-      (is (= {:from 5 :to 3 :waited 2} result)))))
+      (is (= {:from 5 :to 3 :waited 2} result))))
+
+  (testing "increment tick"
+    (let [result (increment-tick (create-new-player-state))]
+      (is (= 1 (:tick result))))))
 
 (defn count-test-requests [player-state]
   (count (filter #(= (:from %) 'test) (:from-requests player-state))))

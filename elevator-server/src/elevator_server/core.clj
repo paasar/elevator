@@ -58,6 +58,7 @@
   (-> player-state
     (dissoc-in [:client :ip])
     (dissoc-in [:client :port])
+    (dissoc-in [:tick])
     (update-in [:from-requests] #(map transform-from-request-to-public %))))
 
 (defn transform-game-state-to-public [state]
@@ -91,12 +92,16 @@
       (assoc :from-requests happy-group)
       (update-in [:tally :unhappy] + (count unhappy-group)))))
 
+(defn increment-tick [player-state]
+  (update-in player-state [:tick] inc))
+
 (defn advance-player-state [player-state new-request]
   (-> player-state
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
     (update-elevator-state)
-    (add-next-request new-request)))
+    (add-next-request new-request)
+    (increment-tick)))
 
 (defn advance-game-state [state]
   (let [new-from-request (generate-request number-of-floors)]
