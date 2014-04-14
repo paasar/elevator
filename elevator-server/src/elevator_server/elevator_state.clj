@@ -13,7 +13,7 @@
     (= :disembarking current-state)
       (if has-newcomers
         :embarking
-        :waiting)
+        (waiting-ascending-or-descending target-floor current-floor))
     (= :embarking current-state)
       (waiting-ascending-or-descending target-floor current-floor)
     (or (= :ascending current-state) (= :descending current-state))

@@ -22,7 +22,9 @@
     (is (= :embarking (get-next-elevator-state 1 1 :disembarking true true)))
     (is (= :embarking (get-next-elevator-state 1 1 :disembarking false true)))
     (is (= :waiting (get-next-elevator-state 1 1 :disembarking true false)))
-    (is (= :embarking (get-next-elevator-state 1 2 :disembarking true true))))
+    (is (= :embarking (get-next-elevator-state 1 2 :disembarking true true)))
+    (is (= :ascending (get-next-elevator-state 1 2 :disembarking true false)))
+    (is (= :descending (get-next-elevator-state 2 1 :disembarking true false))))
   (testing "embarking with combinatons of riders and newcomers"
     (is (= :waiting (get-next-elevator-state 1 1 :embarking true true)))
     (is (= :waiting (get-next-elevator-state 1 1 :embarking false true)))
