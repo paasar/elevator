@@ -24,6 +24,7 @@
                             <div class="button-wrapper" data-ng-class="{clearfix : $index % 3 == 0}" data-ng-repeat="button in floor.controlPanel">
                                 <div class="button {{button.state}}">{{button.number}}</div>
                             </div>
+                            <div class="going-to">{{floor.elevator.goingTo}}</div>
                         </div>
                     </div>
 

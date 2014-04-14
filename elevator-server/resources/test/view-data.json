@@ -49,6 +49,7 @@
                 }
             ],
             "elevator": {
+                "goingTo": 4,
                 "state": "ascending",
                 "riders": [5, 4, "free", "free", "free"]
             },

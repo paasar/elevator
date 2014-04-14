@@ -13,7 +13,8 @@
 (defn create-elevator-for-view [elevator]
   (let [to-requests (:to-requests elevator)
         capacity (:capacity elevator)]
-  {:state (:state elevator)
+  {:goingTo (:going-to elevator)
+   :state (:state elevator)
    :riders (into to-requests (repeat (- capacity (count to-requests)) "free"))}))
 
 (defn floor-numbers [max-floor]
@@ -75,6 +76,5 @@
       (assoc :tally (add-overall-score tally))
       (assoc :floors (create-view-floors elevator requests max-floor))
       (assoc :client {:name (:name client)}))))
-
 (defn transform-game-state-to-view-data [state]
   (map transform-player-state-to-view-data state))

@@ -58,6 +58,12 @@ div {
     float: left;
 }
 
+.going-to {
+    font-size: 1.2em;
+    color: #FFFFFF;
+    float: left;
+}
+
 .waiting {
     border-color: dodgerblue;
 }
