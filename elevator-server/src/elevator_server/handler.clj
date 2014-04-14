@@ -20,7 +20,7 @@
   (GET "/state" [] (generate-string (transform-game-state-to-view-data (get-game-state))))
   (GET "/state/internal" [] (generate-string (get-game-state)))
 
-  ;(GET "/admin" [] (file "admin.html")
+  ;TODO (GET "/admin" [] (file "admin.html")
   (GET "/start" [] "TODO start command")
   (GET "/stop" [] "TODO stop command")
 

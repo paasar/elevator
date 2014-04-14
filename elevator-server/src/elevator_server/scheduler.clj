@@ -7,6 +7,7 @@
             [clojurewerkz.quartzite.jobs :refer [defjob]]
             [clojurewerkz.quartzite.schedule.calendar-interval :refer [schedule with-interval-in-seconds]]))
 
+;TODO separate into own name space and update job
 (defjob update-job [ctx]
   (do
     (update-game-state #(map update-elevator-target-floor %))
