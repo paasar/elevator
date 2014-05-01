@@ -22,15 +22,6 @@
 
 (defn update-game-state [update-fun] (swap! game-state update-fun))
 
-(defn generate-request [highest-floor]
-  (let [current-floor (inc (rand-int highest-floor))
-        highest-floor-plus-one (inc highest-floor)
-        possible-floors (vec (disj (set (range 1 highest-floor-plus-one))
-                                   current-floor))]
-    {:from current-floor
-     :to (rand-nth possible-floors)
-     :waited 0}))
-
 (def player-state-template
   (json/parse-string (slurp "resources/player-state-template.json") true))
 
@@ -107,5 +98,5 @@
 (defn advance-game-state [state]
   (let [first-player-state (first state)
         current-tick (:tick first-player-state);TODO should tick be in game state instead?
-        new-from-requests (generate-requests number-of-floors curren-tick)]
+        new-from-requests (generate-requests number-of-floors current-tick)]
     (map #(advance-player-state % new-from-requests) state)))

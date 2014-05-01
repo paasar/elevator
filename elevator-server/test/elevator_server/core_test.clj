@@ -3,18 +3,6 @@
             [elevator-server.core :refer :all]
             [cheshire.core :as json]))
 
-(deftest floor-manipulation
-  (testing "generate request"
-    (let [floors 5
-          generated-request (generate-request floors)
-          from (:from generated-request)
-          to (:to generated-request)]
-      (is (not (nil? from)))
-      (is (not (nil? to)))
-      (is (not (= from to)))
-      (is (and (> from 0) (<= from floors)))
-      (is (and (> to 0) (<= to floors))))))
-
 (def patient-request {:from 5 :to 3 :waited 1})
 (def impatient-request {:from 5 :to 3 :waited 6})
 
