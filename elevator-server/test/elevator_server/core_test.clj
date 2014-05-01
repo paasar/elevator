@@ -21,7 +21,7 @@
 (defn set-up-player-state-for-transformation [player-state]
   (-> player-state
     (assoc-in [:elevator :to-requests] [3 2])
-    (add-next-request patient-request)
+    (add-requests [patient-request])
     (assoc :floors 5)))
 
 (def expected-public-player-state
@@ -40,7 +40,7 @@
 
   (testing "add new request"
     (let [request {:from 2 :to 3}
-          state-with-request (add-next-request (create-new-player-state) request)]
+          state-with-request (add-requests (create-new-player-state) [request])]
       (is (= request (first (:from-requests state-with-request))))))
 
   (testing "transform full internal game state to public"
@@ -71,18 +71,18 @@
 
 (deftest waiting-and-tally
   (testing "waited too long"
-    (let [start-player-state (add-next-request (create-new-player-state)
-                                               {:from 'test :to 3 :waited (- max-wait-time 2)})
-          state-after-first-step (advance-player-state start-player-state patient-request)
-          state-after-second-step (advance-player-state state-after-first-step patient-request)]
+    (let [start-player-state (add-requests (create-new-player-state)
+                                           [{:from 'test :to 3 :waited (- max-wait-time 2)}])
+          state-after-first-step (advance-player-state start-player-state [patient-request])
+          state-after-second-step (advance-player-state state-after-first-step [patient-request])]
       (is (= 2 (count (:from-requests state-after-first-step))))
       (is (= 2 (count (:from-requests state-after-second-step))))
       (is (= 0 (count-test-requests state-after-second-step)))))
 
   (testing "unhappy tally is incremented"
-    (let [start-player-state (add-next-request (create-new-player-state)
-                                               {:from 'test :to 3 :waited max-wait-time})
-          state-after-step (advance-player-state start-player-state patient-request)]
+    (let [start-player-state (add-requests (create-new-player-state)
+                                           [{:from 'test :to 3 :waited max-wait-time}])
+          state-after-step (advance-player-state start-player-state [patient-request])]
       (is (= 1 (get-in state-after-step [:tally :unhappy]))))))
 
 (deftest adding-requests

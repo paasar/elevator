@@ -2,7 +2,8 @@
   (:require [cheshire.core :as json]
             [clojure.core.incubator :refer [dissoc-in]]
             [elevator-server.elevator-state :refer [update-elevator-state]]
-            [elevator-server.util :refer [empty-if-nil]]))
+            [elevator-server.util :refer [empty-if-nil]]
+            [elevator-server.request-generator :refer [generate-requests]]))
 
 (def number-of-floors 5)
 
@@ -73,10 +74,10 @@
       set-elevator-capacity
       clear-from-requests))
 
-(defn add-next-request [player-state next-request]
+(defn add-requests [player-state new-requests]
   (assoc-in player-state
             [:from-requests]
-            (conj (:from-requests player-state) next-request)))
+            (into (:from-requests player-state) new-requests)))
 
 (defn increment-wait-time [from-request]
   (update-in from-request [:waited] inc))
@@ -95,14 +96,16 @@
 (defn increment-tick [player-state]
   (update-in player-state [:tick] inc))
 
-(defn advance-player-state [player-state new-request]
+(defn advance-player-state [player-state new-requests]
   (-> player-state
+    (increment-tick)
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
     (update-elevator-state)
-    (add-next-request new-request)
-    (increment-tick)))
+    (add-requests new-requests)))
 
 (defn advance-game-state [state]
-  (let [new-from-request (generate-request number-of-floors)]
-    (map #(advance-player-state % new-from-request) state)))
+  (let [first-player-state (first state)
+        current-tick (:tick first-player-state);TODO should tick be in game state instead?
+        new-from-requests (generate-requests number-of-floors curren-tick)]
+    (map #(advance-player-state % new-from-requests) state)))
