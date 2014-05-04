@@ -8,7 +8,9 @@
                  [compojure "1.1.6"]
                  [cheshire "5.3.1"]
                  [clojurewerkz/quartzite "1.2.0"]
-                 [clj-http "0.9.1"]]
+                 [clj-http "0.9.1"]
+                 [org.clojure/tools.logging "0.2.6"]
+                 [org.slf4j/slf4j-log4j12 "1.7.5"]]
   :plugins [[lein-ring "0.8.10"]]
   :ring {:handler elevator-server.handler/app}
   :profiles
