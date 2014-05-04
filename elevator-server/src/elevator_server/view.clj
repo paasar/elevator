@@ -76,5 +76,6 @@
       (assoc :tally (add-overall-score tally))
       (assoc :floors (create-view-floors elevator requests max-floor))
       (assoc :client {:name (:name client)}))))
+
 (defn transform-game-state-to-view-data [state]
   (map transform-player-state-to-view-data state))

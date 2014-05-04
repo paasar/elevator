@@ -74,7 +74,7 @@
     ],
     "tally": {
         "overall": 1,
-        "happy": 3,
-        "unhappy": 1
+        "unhappy": 1,
+        "happy": 3
     }
 }
