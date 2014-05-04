@@ -77,6 +77,7 @@
     (set-elevator-target-floor target-floor)
     (set-elevator-state target-floor)))
 
+;TODO don't go over or under board...
 (defn get-floor-in-next-step [current-floor state]
   (cond
     (= :ascending state) (inc current-floor)
