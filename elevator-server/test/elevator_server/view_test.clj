@@ -1,7 +1,8 @@
 (ns elevator-server.view-test
   (:require [clojure.test :refer :all]
             [elevator-server.view :refer [transform-player-state-to-view-data]]
-            [elevator-server.core :refer [create-new-player-state impatience-start]]
+            [elevator-server.core :refer [create-new-player-state]]
+            [elevator-server.constants :refer [impatience-start]]
             [cheshire.core :as json]))
 
 (defn create-request [from to waited]

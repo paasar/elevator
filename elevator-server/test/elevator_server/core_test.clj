@@ -1,6 +1,7 @@
 (ns elevator-server.core-test
   (:require [clojure.test :refer :all]
             [elevator-server.core :refer :all]
+            [elevator-server.constants :refer [number-of-floors max-wait-time]]
             [cheshire.core :as json]))
 
 (def patient-request {:from 5 :to 3 :waited 1})

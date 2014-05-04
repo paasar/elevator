@@ -1,5 +1,5 @@
 (ns elevator-server.elevator-state
-  (:require [elevator-server.util :refer [empty-if-nil]]))
+  (:require [elevator-server.util :refer [empty-if-nil keep-floor-target-inside-boundaries]]))
 
 (defn waiting-ascending-or-descending [target-floor current-floor]
   (if (= target-floor current-floor)
@@ -77,11 +77,10 @@
     (set-elevator-target-floor target-floor)
     (set-elevator-state target-floor)))
 
-;TODO don't go over or under board...
 (defn get-floor-in-next-step [current-floor state]
   (cond
-    (= :ascending state) (inc current-floor)
-    (= :descending state) (dec current-floor)
+    (= :ascending state) (keep-floor-target-inside-boundaries (inc current-floor))
+    (= :descending state) (keep-floor-target-inside-boundaries (dec current-floor))
     :else current-floor))
 
 (defn update-elevator-state [player-state]

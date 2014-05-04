@@ -1,7 +1,7 @@
 (ns elevator-server.view
   (:require [clojure.core.incubator :refer [dissoc-in]]
             [elevator-server.util :refer [empty-if-nil]]
-            [elevator-server.core :refer [impatience-start]]))
+            [elevator-server.constants :refer [impatience-start]]))
 
 (def happy-unhappy-ratio 2)
 

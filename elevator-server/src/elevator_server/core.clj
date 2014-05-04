@@ -3,15 +3,8 @@
             [clojure.core.incubator :refer [dissoc-in]]
             [elevator-server.elevator-state :refer [update-elevator-state]]
             [elevator-server.util :refer [empty-if-nil]]
-            [elevator-server.request-generator :refer [generate-requests]]))
-
-(def number-of-floors 5)
-
-(def capacity number-of-floors)
-
-(def impatience-start 5)
-
-(def max-wait-time (* 2 impatience-start))
+            [elevator-server.request-generator :refer [generate-requests]]
+            [elevator-server.constants :refer [number-of-floors capacity impatience-start max-wait-time]]))
 
 ;game-state is a vector of player-states
 (def game-state (atom []))
