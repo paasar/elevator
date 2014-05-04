@@ -1,4 +1,4 @@
-(ns elevator-server.request-generator
+(ns elevator-server.request-generator-test
   (:require [clojure.test :refer :all]
             [elevator-server.request-generator :refer :all]))
 
