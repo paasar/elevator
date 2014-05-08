@@ -24,7 +24,7 @@
   (GET "/state" [] (generate-string (v/transform-game-state-to-view-data (c/get-game-state))))
   (GET "/state/internal" [] (json/generate-string (c/get-game-state)))
 
-  ;TODO (GET "/admin" [] (file "admin.html")
+  (GET "/admin" [] (file "admin.html"))
   (GET "/start" [] (do
                      (c/run-game)
                      "Started"))
