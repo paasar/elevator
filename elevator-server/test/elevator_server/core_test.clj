@@ -79,3 +79,10 @@
     (let [game-state-before (vec (repeat 2 (create-new-player-state)))
           game-state-after (advance-game-state game-state-before)]
       (is (= (:from-requests (first game-state-after)) (:from-requests (second game-state-after)))))))
+
+(deftest running-switch
+  (testing "state should not advance if running is false"
+    (let [game-state-before (vector (create-new-player-state))
+          _ (stop-game)
+          game-state-after (advance-game-state game-state-before)]
+      (is (= game-state-before game-state-after)))))
