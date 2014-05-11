@@ -97,7 +97,7 @@
     (add-requests new-requests)))
 
 (defn advance-game-state [state]
-  (if (running?)
+  (if (and (running?) (not-empty state))
     (let [first-player-state (first state)
           current-tick (:tick first-player-state);TODO should tick be in game state instead?
           new-from-requests (generate-requests number-of-floors current-tick)]
