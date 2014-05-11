@@ -7,21 +7,26 @@
             [clojurewerkz.quartzite.jobs :refer [defjob]]
             [clojurewerkz.quartzite.schedule.calendar-interval :refer [schedule with-interval-in-seconds]]))
 
-;TODO separate into own name space and update job
-(defjob update-job [ctx]
-  (do
-    (update-game-state #(map update-elevator-target-floor %))
-    (update-game-state #(advance-game-state %))))
+(defjob game-advancing-job [ctx]
+    (update-game-state #(advance-game-state %)))
 
-(defn start-update-job []
+(defjob client-poller-job [ctx]
+    (update-game-state #(map update-elevator-target-floor %)))
+
+(defn start-job [job-function job-identity trigger-identity interval]
   (qs/initialize)
   (qs/start)
   (let [job (j/build
-              (j/of-type update-job)
-              (j/with-identity (j/key "jobs.update")))
+              (j/of-type job-function)
+              (j/with-identity (j/key job-identity)))
         trigger (t/build
-                  (t/with-identity (t/key "update trigger"))
+                  (t/with-identity (t/key trigger-identity))
                   (t/start-now)
                   (t/with-schedule (schedule
-                                     (with-interval-in-seconds 1))))]
+                                     (with-interval-in-seconds interval))))]
     (qs/schedule job trigger)))
+
+(defn start-jobs []
+  (do
+    (start-job game-advancing-job "jobs.advance-game-state" "game advance trigger" 1)
+    (start-job client-poller-job "jobs.client-poller" "client poller trigger" 1)))

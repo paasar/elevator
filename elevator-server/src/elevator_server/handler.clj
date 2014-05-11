@@ -38,5 +38,5 @@
 (def app
   (do
     (c/set-game-state (vector (c/create-new-player-state)));TODO in final product state data is created when player is added
-    (scheduler/start-update-job)
+    (scheduler/start-jobs)
     (handler/site app-routes)))
