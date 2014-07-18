@@ -1,7 +1,7 @@
 (ns elevator-server.core-test
   (:require [clojure.test :refer :all]
             [elevator-server.core :refer :all]
-            [elevator-server.constants :refer [number-of-floors max-wait-time]]
+            [elevator-server.constants :refer [*number-of-floors* *max-wait-time*]]
             [cheshire.core :as json]))
 
 (def patient-request {:from 5 :to 3 :waited 1})
@@ -20,7 +20,7 @@
   (testing "create new player state"
     (let [new-state (create-new-player-state)]
       (is (= (:from-requests new-state) []))
-      (is (= (:floors new-state) number-of-floors))))
+      (is (= (:floors new-state) *number-of-floors*))))
 
   (testing "transform single player state into public form"
     (let [game-state (set-up-player-state-for-transformation (create-new-player-state))
@@ -61,7 +61,7 @@
 (deftest waiting-and-tally
   (testing "waited too long"
     (let [start-player-state (add-requests (create-new-player-state)
-                                           [{:from 'test :to 3 :waited (- max-wait-time 2)}])
+                                           [{:from 'test :to 3 :waited (- *max-wait-time* 2)}])
           state-after-first-step (advance-player-state start-player-state [patient-request])
           state-after-second-step (advance-player-state state-after-first-step [patient-request])]
       (is (= 2 (count (:from-requests state-after-first-step))))
@@ -70,7 +70,7 @@
 
   (testing "unhappy tally is incremented"
     (let [start-player-state (add-requests (create-new-player-state)
-                                           [{:from 'test :to 3 :waited max-wait-time}])
+                                           [{:from 'test :to 3 :waited *max-wait-time*}])
           state-after-step (advance-player-state start-player-state [patient-request])]
       (is (= 1 (get-in state-after-step [:tally :unhappy]))))))
 

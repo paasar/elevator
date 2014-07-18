@@ -1,7 +1,7 @@
 (ns elevator-server.view
   (:require [clojure.core.incubator :refer [dissoc-in]]
             [elevator-server.util :refer [empty-if-nil]]
-            [elevator-server.constants :refer [impatience-start]]))
+            [elevator-server.constants :refer [*impatience-start*]]))
 
 (def happy-unhappy-ratio 2)
 
@@ -43,7 +43,7 @@
     floor))
 
 (defn create-requests-for-view [requests]
-  (vec (map #(if (< (:waited %) impatience-start) "patient" "impatient") requests)))
+  (vec (map #(if (< (:waited %) *impatience-start*) "patient" "impatient") requests)))
 
 (defn create-waiting-room [current-floor requests]
   (let [any-up (some #(< current-floor (:to %)) requests)

@@ -1,5 +1,5 @@
 (ns elevator-server.util
-  (:require [elevator-server.constants :refer [number-of-floors]]))
+  (:require [elevator-server.constants :refer [*number-of-floors*]]))
 
 (defn empty-if-nil [val]
   (if (nil? val)
@@ -10,6 +10,6 @@
   (cond
     (< target 1)
       1
-    (> target number-of-floors)
-      number-of-floors
+    (> target *number-of-floors*)
+      *number-of-floors*
     :else target))

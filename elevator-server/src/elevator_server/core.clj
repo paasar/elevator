@@ -4,7 +4,7 @@
             [elevator-server.elevator-state :refer [update-elevator-state]]
             [elevator-server.util :refer [empty-if-nil]]
             [elevator-server.request-generator :refer [generate-requests]]
-            [elevator-server.constants :refer [number-of-floors capacity impatience-start max-wait-time]]))
+            [elevator-server.constants :refer [*number-of-floors* *capacity* *impatience-start* *max-wait-time*]]))
 
 ;game-state is a vector of player-states
 (def game-state (atom []))
@@ -27,10 +27,10 @@
 (defn running? [] @running)
 
 (defn set-floor-amount [player-state]
-  (assoc-in player-state [:floors] number-of-floors))
+  (assoc-in player-state [:floors] *number-of-floors*))
 
 (defn set-elevator-capacity [player-state]
-  (assoc-in player-state [:elevator :capacity] capacity))
+  (assoc-in player-state [:elevator :capacity] *capacity*))
 
 (defn get-direction [request]
   (let [from (:from request)
@@ -40,7 +40,7 @@
       "down")))
 
 (defn is-impatient? [waited]
-  (>= waited impatience-start))
+  (>= waited *impatience-start*))
 
 (defn transform-from-request-to-public [request]
   {:floor (:from request)
@@ -78,7 +78,7 @@
   (update-in player-state [:from-requests] #(map increment-wait-time %)))
 
 (defn remove-requests-that-have-waited-too-long-and-update-unhappy-tally [player-state]
-  (let [request-groups (group-by #(< (:waited %) max-wait-time) (:from-requests player-state))
+  (let [request-groups (group-by #(< (:waited %) *max-wait-time*) (:from-requests player-state))
         happy-group (empty-if-nil (get request-groups true))
         unhappy-group (empty-if-nil (get request-groups false))]
     (-> player-state
@@ -100,6 +100,6 @@
   (if (and (running?) (not-empty state))
     (let [first-player-state (first state)
           current-tick (:tick first-player-state);TODO should tick be in game state instead?
-          new-from-requests (generate-requests number-of-floors current-tick)]
+          new-from-requests (generate-requests *number-of-floors* current-tick)]
       (map #(advance-player-state % new-from-requests) state))
     state))
