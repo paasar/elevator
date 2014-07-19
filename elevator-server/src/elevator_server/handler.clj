@@ -11,7 +11,8 @@
             [compojure.route :as route]
             [elevator-server.view :as v :refer [transform-game-state-to-view-data]]
             [elevator-server.scheduler :as scheduler]
-            [cheshire.core :as json :refer [generate-string]]))
+            [cheshire.core :as json :refer [generate-string]]
+            [clojure.tools.logging :as log]))
 
 (defn file [path]
   (resource-response path {:root "public"}))
@@ -21,12 +22,14 @@
   (POST "/player" {ip :remote-addr
                    {team-name :team-name
                     port :port} :params}
-                      (let [success (c/create-and-add-player team-name port ip)]
-                        (if success
-                          ;TODO redirect to game view
-                          "Created"
-                          ;TODO redirect back to player creation
-                          "Creation failed")))
+    (do
+      (log/infof "Create player with: %s %s %s" team-name ip port)
+      (let [success (c/create-and-add-player team-name port ip)]
+        (if success
+          ;TODO redirect to game view
+          "Created"
+          ;TODO redirect back to player creation
+          "Creation failed"))))
 
   (GET "/game" [] (file "game.html"))
 
