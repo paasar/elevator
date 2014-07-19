@@ -86,3 +86,13 @@
           _ (stop-game)
           game-state-after (advance-game-state game-state-before)]
       (is (= game-state-before game-state-after)))))
+
+(deftest adding-player
+  (testing "create a new player with given information retains that information"
+    (let [name "A-team"
+          ip "10.0.0.1"
+          port "4444"
+          created-player-state (create-new-player name ip port)]
+      (is (= name (get-in created-player-state [:client :name])))
+      (is (= ip (get-in created-player-state [:client :ip])))
+      (is (= port (get-in created-player-state [:client :port]))))))

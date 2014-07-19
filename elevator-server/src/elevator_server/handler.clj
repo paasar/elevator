@@ -5,7 +5,8 @@
                                                 set-game-state
                                                 stop-game
                                                 run-game
-                                                create-new-player-state]]
+                                                create-new-player-state
+                                                create-and-add-player]]
             [compojure.handler :as handler]
             [compojure.route :as route]
             [elevator-server.view :as v :refer [transform-game-state-to-view-data]]
@@ -17,7 +18,15 @@
 
 (defroutes app-routes
   (GET "/" [] (file "player-creation.html"))
-  (POST "/player" [post-data] "TODO create new player")
+  (POST "/player" {ip :remote-addr
+                   {team-name :team-name
+                    port :port} :params}
+                      (let [success (c/create-and-add-player team-name port ip)]
+                        (if success
+                          ;TODO redirect to game view
+                          "Created"
+                          ;TODO redirect back to player creation
+                          "Creation failed")))
 
   (GET "/game" [] (file "game.html"))
 
@@ -37,6 +46,6 @@
 
 (def app
   (do
-    (c/set-game-state (vector (c/create-new-player-state)));TODO in final product state data is created when player is added
+;    (c/set-game-state (vector (c/create-new-player-state)));TODO in final product state data is created when player is added
     (scheduler/start-jobs)
     (handler/site app-routes)))

@@ -66,6 +66,21 @@
       set-elevator-capacity
       clear-from-requests))
 
+(defn create-new-player [name port ip]
+  (-> (create-new-player-state)
+      (assoc-in [:client :name] name)
+      (assoc-in [:client :ip] ip)
+      (assoc-in [:client :port] port)))
+
+;TODO handle error cases like duplicate name or ip
+(defn create-and-add-player [name port ip]
+  (let [new-player-state (create-new-player name port ip)
+        game-state (get-game-state)
+        game-state-with-new-player (conj game-state new-player-state)]
+    (do
+      (set-game-state game-state-with-new-player)
+      true)))
+
 (defn add-requests [player-state new-requests]
   (assoc-in player-state
             [:from-requests]
