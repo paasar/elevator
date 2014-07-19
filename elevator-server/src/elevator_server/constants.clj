@@ -1,6 +1,6 @@
 (ns elevator-server.constants)
 
-;TODO dynamic var
+;TODO utilize dynamic vars in tests
 (def ^:dynamic *number-of-floors* 5)
 
 (def ^:dynamic *capacity* *number-of-floors*)

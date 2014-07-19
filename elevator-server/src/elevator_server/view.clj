@@ -66,7 +66,7 @@
 (defn create-view-floors [elevator requests max-floor]
     (vec (map #(create-floor-for-view % elevator requests max-floor) (floor-numbers max-floor))))
 
-(defn transform-player-state-to-view-data [player-state]
+(defn player-state->view-data [player-state]
   (let [client (:client player-state)
         elevator (:elevator player-state)
         max-floor (:floors player-state)
@@ -77,5 +77,5 @@
       (assoc :floors (create-view-floors elevator requests max-floor))
       (assoc :client {:name (:name client)}))))
 
-(defn transform-game-state-to-view-data [state]
-  (map transform-player-state-to-view-data state))
+(defn game-state->view-data [state]
+  (map player-state->view-data state))

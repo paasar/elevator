@@ -9,7 +9,7 @@
                                                 create-and-add-player]]
             [compojure.handler :as handler]
             [compojure.route :as route]
-            [elevator-server.view :as v :refer [transform-game-state-to-view-data]]
+            [elevator-server.view :as v :refer [game-state->view-data]]
             [elevator-server.scheduler :as scheduler]
             [cheshire.core :as json :refer [generate-string]]
             [clojure.tools.logging :as log]))
@@ -35,18 +35,17 @@
 
   (DELETE "/player/:ip" [ip]
     (do
-      (log/infof "Deleting player with ip %s" ip)
+      (log/infof "Deleting player with IP %s" ip)
       (let [modified-game-state (c/delete-player (c/get-game-state) ip)]
         (if modified-game-state
           (do
-            (log/infof "game state after deletion: %s" modified-game-state)
             (c/set-game-state modified-game-state)
             "Deleted")
           "Deletion failed"))))
 
   (GET "/game" [] (file "game.html"))
 
-  (GET "/state" [] (generate-string (v/transform-game-state-to-view-data (c/get-game-state))))
+  (GET "/state" [] (generate-string (v/game-state->view-data (c/get-game-state))))
   (GET "/state/internal" [] (json/generate-string (c/get-game-state)))
 
   (GET "/admin" [] (file "admin.html"))

@@ -1,6 +1,6 @@
 (ns elevator-server.view-test
   (:require [clojure.test :refer :all]
-            [elevator-server.view :refer [transform-player-state-to-view-data]]
+            [elevator-server.view :refer [player-state->view-data]]
             [elevator-server.core :refer [create-new-player-state]]
             [elevator-server.constants :refer [*impatience-start*]]
             [cheshire.core :as json]))
@@ -26,7 +26,7 @@
 (deftest player-state-to-view-state
   (testing "transform player state"
     (let [before-state (create-player-state)
-          transformed-state (transform-player-state-to-view-data before-state)]
+          transformed-state (player-state->view-data before-state)]
       ;Using stupid generate-string here because elevator keystring comparing trouble
       ; eg. "ascending" vs. :ascending
       ;TODO Create custom decoder?
