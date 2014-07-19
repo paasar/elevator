@@ -87,7 +87,7 @@
           game-state-after (advance-game-state game-state-before)]
       (is (= game-state-before game-state-after)))))
 
-(deftest adding-player
+(deftest player-manipulation
   (testing "create a new player with given information retains that information"
     (let [name "A-team"
           ip "10.0.0.1"
@@ -95,4 +95,14 @@
           created-player-state (create-new-player name ip port)]
       (is (= name (get-in created-player-state [:client :name])))
       (is (= ip (get-in created-player-state [:client :ip])))
-      (is (= port (get-in created-player-state [:client :port]))))))
+      (is (= port (get-in created-player-state [:client :port])))))
+
+  (testing "deleting a player"
+    (let [ip-a "10.0.0.1"
+          team-b "b"
+          game-state-before (-> []
+                                (create-and-add-player "a" ip-a "3333")
+                                (create-and-add-player team-b "10.0.0.2" "3333"))
+          game-state-after (delete-player game-state-before ip-a)]
+      (is (= 1 (count game-state-after)))
+      (is (= team-b (get-in (first game-state-after) [:client :name]))))))

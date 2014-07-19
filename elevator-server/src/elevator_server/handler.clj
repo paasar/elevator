@@ -24,12 +24,25 @@
                     port :port} :params}
     (do
       (log/infof "Create player with: %s %s %s" team-name ip port)
-      (let [success (c/create-and-add-player team-name port ip)]
-        (if success
-          ;TODO redirect to game view
-          "Created"
+      (let [modified-game-state (c/create-and-add-player (c/get-game-state) team-name ip port)]
+        (if modified-game-state
+          (do
+            (c/set-game-state modified-game-state)
+            ;TODO redirect to game view
+            "Created")
           ;TODO redirect back to player creation
           "Creation failed"))))
+
+  (DELETE "/player/:ip" [ip]
+    (do
+      (log/infof "Deleting player with ip %s" ip)
+      (let [modified-game-state (c/delete-player (c/get-game-state) ip)]
+        (if modified-game-state
+          (do
+            (log/infof "game state after deletion: %s" modified-game-state)
+            (c/set-game-state modified-game-state)
+            "Deleted")
+          "Deletion failed"))))
 
   (GET "/game" [] (file "game.html"))
 
