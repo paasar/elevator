@@ -1,5 +1,5 @@
 (ns elevator-server.scheduler
-  (:require [elevator-server.core :refer [update-game-state advance-game-state]]
+  (:require [elevator-server.core :refer [get-game-state update-game-state advance-game-state]]
             [elevator-server.rest-client :refer [update-all-elevator-target-floors]]
             [clojurewerkz.quartzite.scheduler :as qs]
             [clojurewerkz.quartzite.triggers :as t]
@@ -8,10 +8,10 @@
             [clojurewerkz.quartzite.schedule.calendar-interval :refer [schedule with-interval-in-seconds]]))
 
 (defjob game-advancing-job [ctx]
-    (update-game-state #(advance-game-state %)))
+  (update-game-state #(advance-game-state %)))
 
 (defjob client-poller-job [ctx]
-    (update-game-state update-all-elevator-target-floors))
+  (update-all-elevator-target-floors (get-game-state)))
 
 (defn start-job [job-function job-identity trigger-identity interval]
   (qs/initialize)
