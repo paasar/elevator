@@ -20,7 +20,7 @@
 (def player-state-template
   (json/parse-string (slurp "resources/player-state-template.json") true))
 
-(def running (atom false))
+(def running (atom true))
 
 (defn stop-game [] (reset! running false))
 
@@ -135,6 +135,5 @@
     (let [first-player-state (first (vals state))
           current-tick (:tick first-player-state);TODO should tick be in game state instead?
           new-from-requests (generate-requests *number-of-floors* current-tick)]
-;      (map #(advance-player-state % new-from-requests) state))
       (advance-player-states state new-from-requests))
     state))
