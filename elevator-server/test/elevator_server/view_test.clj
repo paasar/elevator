@@ -25,8 +25,11 @@
 
 (deftest player-state-to-view-state
   (testing "transform player state"
-    (let [before-state (create-player-state)
-          transformed-state (player-state->view-data before-state)]
+    (let [player-key {:name "team-1"
+                      :ip "127.0.0.1"
+                      :port "3333"}
+          before-state (create-player-state)
+          transformed-state (player-state->view-data player-key before-state)]
       ;Using stupid generate-string here because elevator keystring comparing trouble
       ; eg. "ascending" vs. :ascending
       ;TODO Create custom decoder?

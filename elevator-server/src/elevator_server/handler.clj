@@ -6,7 +6,8 @@
                                                 stop-game
                                                 run-game
                                                 create-new-player-state
-                                                create-and-add-player]]
+                                                create-and-add-player
+                                                delete-player-by-ip]]
             [compojure.handler :as handler]
             [compojure.route :as route]
             [elevator-server.view :as v :refer [game-state->view-data]]
@@ -33,10 +34,11 @@
           ;TODO redirect back to player creation
           "Creation failed"))))
 
+  ;TODO delete with ip & port
   (DELETE "/player/:ip" [ip]
     (do
       (log/infof "Deleting player with IP %s" ip)
-      (let [modified-game-state (c/delete-player (c/get-game-state) ip)]
+      (let [modified-game-state (c/delete-player-by-ip (c/get-game-state) ip)]
         (if modified-game-state
           (do
             (c/set-game-state modified-game-state)
@@ -61,6 +63,6 @@
 
 (def app
   (do
-;    (c/set-game-state (vector (c/create-new-player-state)));TODO in final product state data is created when player is added
+    (c/set-game-state (c/create-new-player "A-team" "127.0.0.1" "3333"));TODO in final product state data is created when player is added
     (scheduler/start-jobs)
     (handler/site app-routes)))

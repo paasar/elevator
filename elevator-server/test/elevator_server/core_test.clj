@@ -7,14 +7,18 @@
 (def patient-request {:from 5 :to 3 :waited 1})
 (def impatient-request {:from 5 :to 3 :waited 6})
 
+(def player-key-1 {:name "team-1" :ip "127.0.0.1" :port "3333"})
+(def player-key-2 {:name "team-2" :ip "127.0.0.2" :port "3334"})
+
 (defn set-up-player-state-for-transformation [player-state]
   (-> player-state
     (assoc-in [:elevator :to-requests] [3 2])
     (add-requests [patient-request])
     (assoc :floors 5)))
 
-(def expected-public-player-state
-  (json/parse-string (slurp "resources/test/public-player-state.json") true))
+(defn expected-public-player-state [& {:keys [name], :or {name "team-1"}}]
+  (-> (json/parse-string (slurp "resources/test/public-player-state.json") true)
+    (assoc-in [:client :name] name)))
 
 (deftest state-manipulation
   (testing "create new player state"
@@ -23,9 +27,9 @@
       (is (= (:floors new-state) *number-of-floors*))))
 
   (testing "transform single player state into public form"
-    (let [game-state (set-up-player-state-for-transformation (create-new-player-state))
-          public-data (transform-player-state-to-public game-state)]
-      (is (= public-data expected-public-player-state))))
+    (let [player-state (set-up-player-state-for-transformation (create-new-player-state))
+          public-data (transform-player-state-to-public player-key-1 player-state)]
+      (is (= public-data (expected-public-player-state)))))
 
   (testing "add new request"
     (let [request {:from 2 :to 3}
@@ -34,9 +38,10 @@
 
   (testing "transform full internal game state to public"
     (let [player-state (set-up-player-state-for-transformation (create-new-player-state))
-          internal-game-state (vector player-state player-state)
+          internal-game-state {player-key-1 player-state
+                               player-key-2 player-state}
           public-game-state (transform-game-state-to-public internal-game-state)
-          expected-result (vector expected-public-player-state expected-public-player-state)]
+          expected-result (vector (expected-public-player-state) (expected-public-player-state :name "team-2"))]
       (is (= public-game-state expected-result))))
 
   (testing "transform patient request"
@@ -76,13 +81,15 @@
 
 (deftest adding-requests
   (testing "advancing state adds same request to all player states"
-    (let [game-state-before (vec (repeat 2 (create-new-player-state)))
-          game-state-after (advance-game-state game-state-before)]
-      (is (= (:from-requests (first game-state-after)) (:from-requests (second game-state-after)))))))
+    (let [game-state-before {{"client" 1} (create-new-player-state)
+                             {"client" 2} (create-new-player-state)}
+          game-state-after (advance-game-state game-state-before)
+          player-states-after (vals game-state-after)]
+      (is (= (:from-requests (first player-states-after)) (:from-requests (second player-states-after)))))))
 
 (deftest running-switch
   (testing "state should not advance if running is false"
-    (let [game-state-before (vector (create-new-player-state))
+    (let [game-state-before (create-new-player (:name player-key-1) (:ip player-key-1) (:port player-key-1))
           _ (stop-game)
           game-state-after (advance-game-state game-state-before)]
       (is (= game-state-before game-state-after)))))
@@ -92,17 +99,18 @@
     (let [name "A-team"
           ip "10.0.0.1"
           port "4444"
-          created-player-state (create-new-player name ip port)]
-      (is (= name (get-in created-player-state [:client :name])))
-      (is (= ip (get-in created-player-state [:client :ip])))
-      (is (= port (get-in created-player-state [:client :port])))))
+          created-player-state (create-new-player name ip port)
+          key (first (keys created-player-state))]
+      (is (= name (:name key)))
+      (is (= ip (:ip key)))
+      (is (= port (:port key)))))
 
   (testing "deleting a player"
     (let [ip-a "10.0.0.1"
           team-b "b"
-          game-state-before (-> []
+          game-state-before (-> {}
                                 (create-and-add-player "a" ip-a "3333")
                                 (create-and-add-player team-b "10.0.0.2" "3333"))
-          game-state-after (delete-player game-state-before ip-a)]
+          game-state-after (delete-player-by-ip game-state-before ip-a)]
       (is (= 1 (count game-state-after)))
-      (is (= team-b (get-in (first game-state-after) [:client :name]))))))
+      (is (= team-b (:name (first (keys game-state-after))))))))

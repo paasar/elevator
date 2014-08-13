@@ -30,13 +30,19 @@
           current-floor
           (:go-to result-body))))
 
-(defn poll-client [player-state]
-  (let [client (:client player-state)
-        ip (:ip client)
-        port (:port client)]
-    (poll-for-action ip port (transform-player-state-to-public player-state))))
+(defn poll-client [player-key player-state]
+  (let [ip (:ip player-key)
+        port (:port player-key)]
+    (poll-for-action ip port (transform-player-state-to-public player-key player-state))))
 
-(defn update-elevator-target-floor [player-state]
-  (let [new-wanted-target-floor (poll-client player-state)
+(defn update-elevator-target-floor [player-key player-state]
+  (let [new-wanted-target-floor (poll-client player-key player-state)
         new-target-floor (keep-floor-target-inside-boundaries new-wanted-target-floor)]
     (assoc-in player-state [:elevator :going-to] new-target-floor)))
+
+(defn update-all-elevator-target-floors [game-state]
+  ;TODO threading
+  (let [player-keys-and-states (seq game-state)]
+    (into {} (map (fn [[player-key player-state]]
+                    [player-key (update-elevator-target-floor player-key player-state)])
+                  player-keys-and-states))))

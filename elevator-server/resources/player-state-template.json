@@ -1,9 +1,4 @@
 {
-    "client": {
-        "name": "team-1",
-        "ip": "127.0.0.1",
-        "port": 3333
-    },
     "elevator": {
         "to-requests": [],
         "current-floor": 1,

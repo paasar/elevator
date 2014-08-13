@@ -66,16 +66,15 @@
 (defn create-view-floors [elevator requests max-floor]
     (vec (map #(create-floor-for-view % elevator requests max-floor) (floor-numbers max-floor))))
 
-(defn player-state->view-data [player-state]
-  (let [client (:client player-state)
-        elevator (:elevator player-state)
+(defn player-state->view-data [player-key player-state]
+  (let [elevator (:elevator player-state)
         max-floor (:floors player-state)
         requests (:from-requests player-state)
         tally (:tally player-state)]
     (-> {}
       (assoc :tally (add-overall-score tally))
       (assoc :floors (create-view-floors elevator requests max-floor))
-      (assoc :client {:name (:name client)}))))
+      (assoc :client {:name (:name player-key)}))))
 
 (defn game-state->view-data [state]
-  (map player-state->view-data state))
+  (map (fn [[player-key player-state]] (player-state->view-data player-key player-state)) state))

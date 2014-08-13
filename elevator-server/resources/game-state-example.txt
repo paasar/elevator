@@ -1,0 +1,32 @@
+; map
+{
+    ; key
+    {
+        "name": "team-1",
+        "ip": "127.0.0.1",
+        "port": 3333
+    }
+    ; value
+    {
+        "elevator": {
+            "to-requests": [],
+            "current-floor": 1,
+            "going-to": 1,
+            "state": "waiting",
+            "capacity": 1
+        },
+        "floors": 1,
+        "from-requests": [
+            {
+                "from": 1,
+                "to": 2,
+                "waited": 0
+            }
+        ],
+            "tally": {
+            "happy": 0,
+            "unhappy": 0
+        },
+            "tick": 0
+    }
+}
