@@ -13,8 +13,7 @@
     (inc current-floor)))
 
 (defn one-up-and-from-top-to-bottom [state]
-  (let [_ (log/infof "Server is asking where to go.")
-        current-floor (get-in state [:elevator :current-floor])
+  (let [current-floor (get-in state [:elevator :current-floor])
         top-floor (get state :floors)
         next-in-rotation (get-next-in-rotation current-floor top-floor)
         current-target @target]
@@ -23,10 +22,13 @@
         (log/infof "I want to go to %s." next-in-rotation)
         (reset! target next-in-rotation)
         next-in-rotation)
-      current-target)))
+      (do
+        (log/infof "I still want to go to %s." current-target)
+        current-target))))
 
 (defn decide-floor-to-go [state]
   (do
-    ;(println (str "-> " state))
+    (log/infof "Server is asking where to go.")
+    (log/debugf "State:\n%s" state)
     (format-response
       (one-up-and-from-top-to-bottom state))))
