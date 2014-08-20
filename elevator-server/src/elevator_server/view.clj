@@ -76,5 +76,9 @@
       (assoc :floors (create-view-floors elevator requests max-floor))
       (assoc :client {:name (:name player-key)}))))
 
+(defn sort-game-state-by-name-ip-port [game-state]
+  (sort-by (fn [[key _]] ((juxt :name :ip :port) key)) game-state))
+
 (defn game-state->view-data [state]
-  (map (fn [[player-key player-state]] (player-state->view-data player-key player-state)) state))
+  (map (fn [[player-key player-state]] (player-state->view-data player-key player-state))
+       (sort-game-state-by-name-ip-port state)))
