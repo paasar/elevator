@@ -1,15 +1,59 @@
 body {
-    background-color: #FFFFFF;
+    background-color: #444444;
+    font-family: sans-serif;
 }
 
 div {
-    border: solid 1px white;
-    background-color: #555555;
+    /*border: solid 1px white;*/
+    /*background-color: #555555;*/
     padding: 2px;
 }
 
 .player-state {
     float: left;
+    color: #000000;
+    background-color: #111111;
+    margin: 2px;
+}
+
+.header {
+    border: solid 2px black;
+
+    -moz-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+    -o-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+    box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+}
+
+.header:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.team-name {
+    float: left;
+    font-size: 2em;
+    /*background-color: transparent;*/
+}
+
+.tally {
+    float: left;
+    clear: both;
+    /*background-color: transparent;*/
+}
+
+.overall {
+    float: right;
+    font-size: 2em;
+    vertical-align: top;
+    /*background-color: transparent;*/
+}
+
+.overall > .score {
+    font-size: 2.5em;
+    /*background-color: transparent;*/
 }
 
 .floors {
@@ -24,6 +68,8 @@ div {
     padding: 0px;
     border-top: none;
     border-bottom: none;
+
+    background-color: #222233;
 }
 
 .floor > div {
@@ -41,7 +87,7 @@ div {
 }
 
 .control-panel-placeholder {
-    background-color: #223388;
+    background-color: #010101;
     min-width: 108px;
     min-height: 114px;
     margin: 10px;
@@ -50,12 +96,15 @@ div {
     -webkit-box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.6);
     -o-box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.6);
     box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.6);
+
+    border: none;
 }
 
 .control-panel {
     z-index: 5;
     clear: both;
     overflow: hidden;
+    border: none;
 }
 
 .control-panel .button-wrapper {
@@ -63,12 +112,13 @@ div {
 }
 
 .control-panel .button {
+    font-size: 1.5em;
 }
 
 .elevator-shaft {
     background-color: dimgrey;
     min-width: 133px;
-    min-height: 150px;
+    min-height: 171px;
 
     margin: 0px;
     border-top: none;
@@ -107,6 +157,10 @@ div {
 .spot {
     float: left;
 }
+.going-to-wrapper {
+    margin: 0;
+    padding: 0;
+}
 
 .going-to {
     font-size: 1.2em;
@@ -138,7 +192,7 @@ div {
 
 .waiting-room {
     background-color: darkolivegreen;
-    min-width: 192px;
+    min-width: 220px;
     min-height: 97px;
 }
 
@@ -167,6 +221,8 @@ div {
 .button-wrapper {
     border: none;
     margin: 2px;
+
+    background-color: transparent;
 }
 
 .button {
@@ -177,6 +233,14 @@ div {
     border-radius: 20px;
     text-align: center;
     border: 3px solid #005500;
+}
+
+.button.up {
+    line-height: 1.8;
+}
+
+.button.down {
+    line-height: 2.2;
 }
 
 .on {
@@ -219,4 +283,55 @@ div {
 
 .hidden {
     visibility: hidden;
+}
+
+.blue-metal {
+    background-image: -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            color-stop(0, #06496B),
+            color-stop(0.19, #166085),
+            color-stop(0.46, #175E8A),
+            color-stop(0.72, #0E6891),
+            color-stop(1, #0C6785)
+    );
+    background-image: -o-linear-gradient(bottom, #06496B 0%, #166085 19%, #175E8A 46%, #0E6891 72%, #0C6785 100%);
+    background-image: -moz-linear-gradient(bottom, #06496B 0%, #166085 19%, #175E8A 46%, #0E6891 72%, #0C6785 100%);
+    background-image: -webkit-linear-gradient(bottom, #06496B 0%, #166085 19%, #175E8A 46%, #0E6891 72%, #0C6785 100%);
+    background-image: -ms-linear-gradient(bottom, #06496B 0%, #166085 19%, #175E8A 46%, #0E6891 72%, #0C6785 100%);
+    background-image: linear-gradient(to bottom, #06496B 0%, #166085 19%, #175E8A 46%, #0E6891 72%, #0C6785 100%);
+}
+
+.black-metal {
+    background-image: -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            color-stop(0, #222629),
+            color-stop(1, #222329)
+    );
+    background-image: -o-linear-gradient(bottom, #222629 0%, #222329 100%);
+    background-image: -moz-linear-gradient(bottom, #222629 0%, #222329 100%);
+    background-image: -webkit-linear-gradient(bottom, #222629 0%, #222329 100%);
+    background-image: -ms-linear-gradient(bottom, #222629 0%, #222329 100%);
+    background-image: linear-gradient(to bottom, #222629 0%, #222329 100%);
+}
+
+.white-metal {
+    background-image: -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            color-stop(0, #E0F0FC),
+            color-stop(0.35, #EDFEFF),
+            color-stop(0.63, #EDFFFF),
+            color-stop(0.83, #F9F9FC),
+            color-stop(1, #EAF3FC)
+    );
+    background-image: -o-linear-gradient(bottom, #E0F0FC 0%, #EDFEFF 35%, #EDFFFF 63%, #F9F9FC 83%, #EAF3FC 100%);
+    background-image: -moz-linear-gradient(bottom, #E0F0FC 0%, #EDFEFF 35%, #EDFFFF 63%, #F9F9FC 83%, #EAF3FC 100%);
+    background-image: -webkit-linear-gradient(bottom, #E0F0FC 0%, #EDFEFF 35%, #EDFFFF 63%, #F9F9FC 83%, #EAF3FC 100%);
+    background-image: -ms-linear-gradient(bottom, #E0F0FC 0%, #EDFEFF 35%, #EDFFFF 63%, #F9F9FC 83%, #EAF3FC 100%);
+    background-image: linear-gradient(to bottom, #E0F0FC 0%, #EDFEFF 35%, #EDFFFF 63%, #F9F9FC 83%, #EAF3FC 100%);
 }
