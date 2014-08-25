@@ -19,16 +19,17 @@
                 <div class="floor" data-ng-repeat="floor in state.floors">
                     <!--<div class="clearfix small"></div>-->
 
-                    <div class="control-panel-placeholder">
+
+                    <div class="control-panel-placeholder" data-ng-class="{hidden : floor.controlPanel == null}">
                         <div class="control-panel" data-ng-if="floor.controlPanel">
-                            <div class="button-wrapper" data-ng-class="{clearfix : $index % 3 == 0}" data-ng-repeat="button in floor.controlPanel">
+                            <div class="button-wrapper" data-ng-class="{clearfix : $index % 2 == 0}" data-ng-repeat="button in floor.controlPanel">
                                 <div class="button {{button.state}}">{{button.number}}</div>
                             </div>
-                            <div class="going-to">{{floor.elevator.goingTo}}</div>
                         </div>
                     </div>
 
                     <div class="elevator-shaft">
+                        <div class="going-to" data-ng-show="floor.elevator.goingTo">{{floor.elevator.goingTo}}</div>
                         <div class="elevator {{floor.elevator.state}}" data-ng-if="floor.elevator">
                             <div class="spot" data-ng-class="{clearfix : $index % 2 == 0}" data-ng-repeat="spot in floor.elevator.riders track by $index">
                                 {{spot}}
@@ -38,8 +39,12 @@
 
                     <div class="waiting-room">
                         <div class="buttons">
-                            <div class="button {{floor.waitingRoom.up}}">&#9650;</div>
-                            <div class="button {{floor.waitingRoom.down}}">&#9660;</div>
+                            <div class="button-wrapper">
+                                <div class="button {{floor.waitingRoom.up}}">&#9650;</div>
+                            </div>
+                            <div class="button-wrapper">
+                                <div class="button {{floor.waitingRoom.down}}">&#9660;</div>
+                            </div>
                         </div>
                         <div class="people">
                             <div class="person" data-ng-repeat="person in floor.waitingRoom.requests track by $index">
@@ -48,7 +53,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--<div class="clearfix small"></div>-->
                 </div>
             </div>
         </div>

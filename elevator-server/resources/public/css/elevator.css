@@ -1,11 +1,15 @@
 body {
-    background-color: #333333;
+    background-color: #FFFFFF;
 }
 
 div {
-    border: solid 1px black;
-    margin: 1px;
+    border: solid 1px white;
+    background-color: #555555;
     padding: 2px;
+}
+
+.player-state {
+    float: left;
 }
 
 .floors {
@@ -16,6 +20,10 @@ div {
 .floor {
     clear: both;
     overflow: hidden;
+
+    padding: 0px;
+    border-top: none;
+    border-bottom: none;
 }
 
 .floor > div {
@@ -23,10 +31,25 @@ div {
     z-index: 0;
 }
 
+.floors > div:first-child {
+    border-top: solid 1px white;
+    border-bottom: none;
+}
+
+.floors > div:last-child {
+    border-bottom: solid 1px white;
+}
+
 .control-panel-placeholder {
     background-color: #223388;
-    min-width: 164px;
+    min-width: 108px;
     min-height: 114px;
+    margin: 10px;
+
+    -moz-box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.6);
+    -o-box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.6);
+    box-shadow: 0px 0px 5px 4px rgba(0,0,0,0.6);
 }
 
 .control-panel {
@@ -46,6 +69,33 @@ div {
     background-color: dimgrey;
     min-width: 133px;
     min-height: 150px;
+
+    margin: 0px;
+    border-top: none;
+    border-bottom: none;
+
+    -moz-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+    -o-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+    box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+}
+
+.floors > div:first-child > .elevator-shaft {
+    border-top: solid 1px white;
+
+    -moz-box-shadow: inset 10px 10px 10px 0px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 10px 10px 10px 0px rgba(0,0,0,0.6);
+    -o-box-shadow: inset 10px 10px 10px 0px rgba(0,0,0,0.6);
+    box-shadow: inset 10px 10px 10px 0px rgba(0,0,0,0.6);
+}
+
+.floors > div:last-child > .elevator-shaft {
+    border-bottom: solid 1px white;
+
+    -moz-box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
+    -o-box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
+    box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
 }
 
 .elevator {
@@ -60,8 +110,9 @@ div {
 
 .going-to {
     font-size: 1.2em;
-    color: #FFFFFF;
-    float: left;
+    color: #FF0000;
+    background-color: #111111;
+    text-align: center;
 }
 
 .waiting {
@@ -113,6 +164,11 @@ div {
     height: 0 !important;
 }
 
+.button-wrapper {
+    border: none;
+    margin: 2px;
+}
+
 .button {
     height: 30px;
     width: 30px;
@@ -126,11 +182,21 @@ div {
 .on {
     border-color: #00EE00;
     background-color: #EEEEEE;
+
+    -moz-box-shadow: 0px 0px 6px 2px rgba(111, 255, 117, 0.6);
+    -webkit-box-shadow: 0px 0px 6px 2px rgba(111, 255, 117, 0.6);
+    -o-box-shadow: 0px 0px 6px 2px rgba(111, 255, 117, 0.6);
+    box-shadow: 0px 0px 6px 2px rgba(111, 255, 117, 0.6);
 }
 
 .off {
     border-color: #005500;
-    background-color: #555555;
+    background-color: #888888;
+
+    -moz-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
+    -o-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
+    box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
 }
 
 .white-text {
@@ -149,4 +215,8 @@ div {
 .impatient {
     color: orange;
     font-size: 0.8em;
+}
+
+.hidden {
+    visibility: hidden;
 }
