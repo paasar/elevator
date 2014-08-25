@@ -6,6 +6,8 @@
         <script src="js/controllers.js"></script>
         <script src="js/services.js"></script>
         <link rel="stylesheet" type="text/css" href="css/elevator.css"/>
+        <link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
     </head>
     <body data-ng-controller="RenderController">
         <div class="player-state" data-ng-repeat="state in states">
@@ -19,9 +21,6 @@
             </div>
             <div class="floors">
                 <div class="floor" data-ng-repeat="floor in state.floors">
-                    <!--<div class="clearfix small"></div>-->
-
-
                     <div class="control-panel-placeholder white-metal" data-ng-class="{hidden : floor.controlPanel == null}">
                         <div class="control-panel blue-metal" data-ng-if="floor.controlPanel">
                             <div class="button-wrapper" data-ng-class="{clearfix : $index % 2 == 0}" data-ng-repeat="button in floor.controlPanel">
@@ -32,7 +31,7 @@
 
                     <div class="elevator-shaft black-metal">
                         <div class="going-to-wrapper white-metal" data-ng-show="floor.elevator.goingTo">
-                            <div class="going-to">{{floor.elevator.goingTo}}</div>
+                            <div class="going-to">&gt;&gt;&nbsp;{{floor.elevator.goingTo}}</div>
                         </div>
                         <div class="elevator {{floor.elevator.state}}" data-ng-if="floor.elevator">
                             <div class="spot" data-ng-class="{clearfix : $index % 2 == 0}" data-ng-repeat="spot in floor.elevator.riders track by $index">

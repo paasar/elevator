@@ -1,6 +1,6 @@
 body {
     background-color: #444444;
-    font-family: sans-serif;
+    font-family: Electrolize, 'Black Ops One', sans-serif;
 }
 
 div {
@@ -18,11 +18,11 @@ div {
 
 .header {
     border: solid 2px black;
-
-    -moz-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
-    -webkit-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
-    -o-box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
-    box-shadow: inset 20px 5px 10px -10px rgba(0,0,0,0.6);
+    padding: 5px 15px 0 15px;
+    -moz-box-shadow: inset 20px 20px 10px -10px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 20px 20px 10px -10px rgba(0,0,0,0.6);
+    -o-box-shadow: inset 20px 20px 10px -10px rgba(0,0,0,0.6);
+    box-shadow: inset 20px 20px 10px -10px rgba(0,0,0,0.6);
 }
 
 .header:after {
@@ -153,6 +153,7 @@ div {
     border-width: 3px;
     min-width: 116px;
     overflow: hidden;
+    background-color: sandybrown;
 }
 .spot {
     float: left;
@@ -167,6 +168,7 @@ div {
     color: #FF0000;
     background-color: #111111;
     text-align: center;
+    font-family: 'Black Ops One', sans-serif;
 }
 
 .waiting {
