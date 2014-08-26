@@ -34,19 +34,21 @@
                             <div class="going-to">&gt;&gt;&nbsp;{{floor.elevator.goingTo}}</div>
                         </div>
                         <div class="elevator {{floor.elevator.state}}" data-ng-if="floor.elevator">
-                            <div class="spot" data-ng-class="{clearfix : $index % 2 == 0}" data-ng-repeat="spot in floor.elevator.riders track by $index">
-                                {{spot}}
+                            <div class="spot" data-ng-repeat="spot in floor.elevator.riders track by $index">
+                                {{spot == 'free' ? ' ' : spot}}
                             </div>
                         </div>
                     </div>
 
                     <div class="waiting-room">
-                        <div class="buttons">
-                            <div class="button-wrapper">
-                                <div class="button {{floor.waitingRoom.up}} up">&#9650;</div>
-                            </div>
-                            <div class="button-wrapper">
-                                <div class="button {{floor.waitingRoom.down}} down">&#9660;</div>
+                        <div class="waiting-room-buttons-edge white-metal">
+                            <div class="waiting-room-buttons blue-metal">
+                                <div class="button-wrapper">
+                                    <div class="button {{floor.waitingRoom.up}} up">&#9650;</div>
+                                </div>
+                                <div class="button-wrapper">
+                                    <div class="button {{floor.waitingRoom.down}} down">&#9660;</div>
+                                </div>
                             </div>
                         </div>
                         <div class="people">

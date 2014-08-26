@@ -4,8 +4,6 @@ body {
 }
 
 div {
-    /*border: solid 1px white;*/
-    /*background-color: #555555;*/
     padding: 2px;
 }
 
@@ -35,25 +33,21 @@ div {
 .team-name {
     float: left;
     font-size: 2em;
-    /*background-color: transparent;*/
 }
 
 .tally {
     float: left;
     clear: both;
-    /*background-color: transparent;*/
 }
 
 .overall {
     float: right;
     font-size: 2em;
     vertical-align: top;
-    /*background-color: transparent;*/
 }
 
 .overall > .score {
     font-size: 2.5em;
-    /*background-color: transparent;*/
 }
 
 .floors {
@@ -78,12 +72,12 @@ div {
 }
 
 .floors > div:first-child {
-    border-top: solid 1px white;
+    border-top: solid 1px black;
     border-bottom: none;
 }
 
 .floors > div:last-child {
-    border-bottom: solid 1px white;
+    border-bottom: solid 1px black;
 }
 
 .control-panel-placeholder {
@@ -118,9 +112,9 @@ div {
 .elevator-shaft {
     background-color: dimgrey;
     min-width: 133px;
-    min-height: 171px;
+    min-height: 170px;
 
-    margin: 0px;
+    margin: 0;
     border-top: none;
     border-bottom: none;
 
@@ -131,8 +125,6 @@ div {
 }
 
 .floors > div:first-child > .elevator-shaft {
-    border-top: solid 1px white;
-
     -moz-box-shadow: inset 10px 10px 10px 0px rgba(0,0,0,0.6);
     -webkit-box-shadow: inset 10px 10px 10px 0px rgba(0,0,0,0.6);
     -o-box-shadow: inset 10px 10px 10px 0px rgba(0,0,0,0.6);
@@ -140,8 +132,6 @@ div {
 }
 
 .floors > div:last-child > .elevator-shaft {
-    border-bottom: solid 1px white;
-
     -moz-box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
     -webkit-box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
     -o-box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
@@ -150,13 +140,39 @@ div {
 
 .elevator {
     z-index: 5;
-    border-width: 3px;
-    min-width: 116px;
+    width: 129px;
+    height: 139px;
     overflow: hidden;
-    background-color: sandybrown;
+
+    display: table-cell;
+    vertical-align: bottom;
+
+    background-image: -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            color-stop(0, #FFD972),
+            color-stop(1, #D9A619)
+    );
+    background-image: -o-linear-gradient(bottom, #FFD972 0%, #D9A619 100%);
+    background-image: -moz-linear-gradient(bottom, #FFD972 0%, #D9A619 100%);
+    background-image: -webkit-linear-gradient(bottom, #FFD972 0%, #D9A619 100%);
+    background-image: -ms-linear-gradient(bottom, #FFD972 0%, #D9A619 100%);
+    background-image: linear-gradient(to bottom, #FFD972 0%, #D9A619 100%);
+
+    -moz-box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
+    -o-box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
+    box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
 }
 .spot {
     float: left;
+    font-size: 1.3em;
+    border: dashed white 2px;
+    min-width: 13px;
+    min-height: 25px;
+    margin: 2px;
+    text-align: center;
 }
 .going-to-wrapper {
     margin: 0;
@@ -194,8 +210,8 @@ div {
 
 .waiting-room {
     background-color: darkolivegreen;
-    min-width: 220px;
-    min-height: 97px;
+    width: 220px;
+    height: 169px;
 }
 
 .waiting-room:after {
@@ -205,8 +221,24 @@ div {
     clear: both;
 }
 
-.people, .buttons {
+.people {
     float: left;
+    width: 160px;
+}
+
+.waiting-room-buttons {
+    float: left;
+}
+
+.waiting-room-buttons-edge {
+    float: left;
+}
+
+.waiting-room-buttons-edge:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
 }
 
 .clearfix {
@@ -263,10 +295,6 @@ div {
     -webkit-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
     -o-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
     box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
-}
-
-.white-text {
-    color: white;
 }
 
 .person {
