@@ -209,9 +209,15 @@ div {
 }
 
 .waiting-room {
-    background-color: darkolivegreen;
-    width: 220px;
-    height: 169px;
+    background-color: #222233;
+    width: 239px;
+    height: 154px;
+    padding: 10px;
+
+    -moz-box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
+    -webkit-box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
+    -o-box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
+    box-shadow: inset 2px 2px 10px 0px rgba(0,0,0,0.6);
 }
 
 .waiting-room:after {
@@ -303,12 +309,12 @@ div {
 }
 
 .patient {
-    color: blue;
+    color: #129854;
 }
 
 .impatient {
-    color: orange;
-    font-size: 0.8em;
+    color: #A63010;
+    font-size: 1em;
 }
 
 .hidden {
