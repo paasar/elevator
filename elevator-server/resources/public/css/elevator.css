@@ -138,11 +138,17 @@ div {
     box-shadow: inset 10px -5px 10px 0px rgba(0,0,0,0.6);
 }
 
+.elevator-walls {
+    border: solid 2px gray;
+    padding: 0;
+}
+
 .elevator {
     z-index: 5;
     width: 129px;
     height: 139px;
     overflow: hidden;
+    padding: 0;
 
     display: table-cell;
     vertical-align: bottom;
@@ -167,7 +173,7 @@ div {
 }
 .spot {
     float: left;
-    font-size: 1.3em;
+    font-size: 1.25em;
     border: dashed white 2px;
     min-width: 13px;
     min-height: 25px;
@@ -245,6 +251,14 @@ div {
     display: block;
     height: 0;
     clear: both;
+}
+
+.floor-number {
+    float: left;
+    display: block;
+    width: 25px;
+    font-size: 2em;
+    text-align: center;
 }
 
 .clearfix {
