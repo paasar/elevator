@@ -139,8 +139,7 @@ div {
 }
 
 .elevator-walls {
-    border: solid 2px gray;
-    padding: 0;
+    padding: 2px;
 }
 
 .elevator {
@@ -173,10 +172,10 @@ div {
 }
 .spot {
     float: left;
-    font-size: 1.25em;
+    font-size: 2em;
     border: dashed white 2px;
-    min-width: 13px;
-    min-height: 25px;
+    min-width: 24px;
+    min-height: 39px;
     margin: 2px;
     text-align: center;
 }
@@ -193,26 +192,15 @@ div {
     font-family: 'Black Ops One', sans-serif;
 }
 
-.waiting {
-    border-color: dodgerblue;
-}
+.waiting {}
 
-.disembarking {
-    border-color: mediumslateblue;
-}
+.disembarking {}
 
-.embarking {
-    border-color: maroon;
+.embarking {}
 
-}
+.ascending {}
 
-.ascending {
-    border-color: darkgoldenrod;
-}
-
-.descending {
-    border-color: chartreuse;
-}
+.descending {}
 
 .waiting-room {
     background-color: #222233;
@@ -235,7 +223,7 @@ div {
 
 .people {
     float: left;
-    width: 160px;
+    width: 150px;
 }
 
 .waiting-room-buttons {
@@ -295,6 +283,14 @@ div {
 
 .button.down {
     line-height: 2.2;
+}
+
+.floors > div:first-child > .waiting-room > .waiting-room-buttons-edge > .waiting-room-buttons > .button-wrapper > .button.up {
+    visibility: hidden;
+}
+
+.floors > div:last-child > .waiting-room > .waiting-room-buttons-edge > .waiting-room-buttons > .button-wrapper > .button.down {
+    visibility: hidden;
 }
 
 .on {

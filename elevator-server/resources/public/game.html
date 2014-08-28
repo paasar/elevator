@@ -30,13 +30,17 @@
                     </div>
 
                     <div class="elevator-shaft black-metal">
-                        <div class="elevator-walls {{floor.elevator.state}}" data-ng-if="floor.elevator">
+                        <div class="elevator-walls {{floor.elevator.state}} white-metal" data-ng-if="floor.elevator">
                             <div class="going-to-wrapper" data-ng-show="floor.elevator.goingTo">
-                                <div class="going-to">&gt;&gt;&nbsp;{{floor.elevator.goingTo}}</div>
+                                <div class="going-to" data-ng-if="floor.elevator.state == 'ascending'">&gt;&gt;&nbsp;{{floor.elevator.goingTo}}</div>
+                                <div class="going-to" data-ng-if="floor.elevator.state == 'descending'">{{floor.elevator.goingTo}}&nbsp;&lt;&lt;</div>
+                                <div class="going-to" data-ng-if="floor.elevator.state == 'embarking'">&lt;&lt;&lt;&lt;</div>
+                                <div class="going-to" data-ng-if="floor.elevator.state == 'disembarking'">&gt;&gt;&gt;&gt;</div>
+                                <div class="going-to" data-ng-if="floor.elevator.state == 'waiting'">{{floor.elevator.goingTo}}</div>
                             </div>
                             <div class="elevator">
                                 <div class="spot" data-ng-repeat="spot in floor.elevator.riders track by $index">
-                                    {{spot == 'free' ? ' ' : spot}}
+                                    {{spot == 'free' ? ' ' : '&#9786;'}}
                                 </div>
                             </div>
                         </div>
