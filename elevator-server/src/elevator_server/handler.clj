@@ -23,6 +23,7 @@
   (POST "/player" {ip :remote-addr
                    {team-name :team-name
                     port :port} :params}
+    ;TODO validate input
     (do
       (log/infof "Create player with: %s %s %s" team-name ip port)
       (let [modified-game-state (c/create-and-add-player (c/get-game-state) team-name ip port)]
