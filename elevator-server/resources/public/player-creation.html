@@ -1,14 +1,34 @@
 <html>
-<head>
-    <title>Sign up for the competition</title>
-</head>
-    <form action="/player" method="post">
-        <label name="team-name">Team name:</label>
-        <input name="team-name" type="text"/>
-        <br/>
-        <label name="port">Port:</label>
-        <input name="port" type="text" value="3333"/>
-        <br/>
-        <input type="submit" value="Enroll"/>
-    </form>
+    <head>
+        <title>Sign up for the competition</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/player-creation.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
+    </head>
+    <body class="player-creation">
+        <div class="panel form-panel col-lg-offset-2 margin-top-50">
+            <div class="panel-heading">
+                <div class="panel-title col-lg-offset-1"><h3>Name your team to participate!</h3></div>
+            </div>
+            <form action="/player" method="post">
+                <div class="input-group col-lg-10 col-lg-offset-1">
+                    <label class="input-group-addon min-label-width" name="team-name">Team name</label>
+                    <input class="form-control" name="team-name" type="text" pattern=".{2,}"
+                           required title="4 characters minimum"
+                            placeholder="A-team"/>
+                </div>
+                <div class="input-group col-lg-10 col-lg-offset-1 margin-top-5">
+                    <label class="input-group-addon min-label-width" name="port">Port</label>
+                    <input class="form-control" name="port" type="text" value="3333" pattern="\d{4,5}"
+                           required title="4 or 5 numbers"
+                            placeholder="3333"/>
+                </div>
+                <div class="input-group col-lg-offset-6">
+                    <input class="btn btn-success min-label-width margin-top-30" type="submit" value="Enroll"/>
+                </div>
+            </form>
+        </div>
+        <script src="js/bootstrap.min.js"></script>
+    </body>
 </html>
