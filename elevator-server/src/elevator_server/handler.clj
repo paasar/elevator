@@ -5,6 +5,7 @@
                                                 set-game-state
                                                 stop-game
                                                 run-game
+                                                running?
                                                 create-new-player-state
                                                 create-and-add-player
                                                 delete-player-by-ip]]
@@ -51,6 +52,10 @@
 
   (GET "/state" [] (generate-string (v/game-state->view-data (c/get-game-state))))
   (GET "/state/internal" [] (json/generate-string (c/get-game-state)))
+  (GET "/state/admin" [] (let [player-keys (keys (c/get-game-state))
+                               running (c/running?)]
+                           (json/generate-string {"players" player-keys
+                                                   "running" running})))
 
   (GET "/admin" [] (file "admin.html"))
   (GET "/start" [] (do

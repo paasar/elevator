@@ -1,14 +1,28 @@
-<html>
+<html data-ng-app="renderAdminApp">
     <head>
         <title>Admin console</title>
+        <script src="lib/angular.min.js"></script>
+        <script src="lib/angular-resource.min.js"></script>
+        <script src="js/controllers.js"></script>
+        <script src="js/services.js"></script>
     </head>
-    <body>
-    <a href="stop">Stop game</a>
-    <a href="start">Run game</a>
+    <body data-ng-controller="AdminRenderController">
+        <div class="run-state">
+            Game is running: {{state.running}}
+            <br/>
+            <a href="/stop">Stop game</a>
+            <br/>
+            <a href="/start">Run game</a>
+        </div>
 
-    <div class="player-listing">
-        TODO
-    </div>
-
+        <div class="player-listing">
+            <h3>Players:</h3>
+            <div class="player" data-ng-repeat="player in state.players">
+                <span class="player-name">{{player.name}}</span>
+                <span class="player-ip">{{player.ip}}</span>
+                <span class="player-port">{{player.port}}</span>
+                <a href="/player/{{player.ip}}" class="player-delete">Delete</a></div>
+            </div>
+        </div>
     </body>
 </html>

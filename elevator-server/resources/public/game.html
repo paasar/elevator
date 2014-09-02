@@ -1,4 +1,4 @@
-<html data-ng-app="renderApp">
+<html data-ng-app="renderGameApp">
     <head>
         <title>Elevators!</title>
         <script src="lib/angular.min.js"></script>
@@ -9,7 +9,7 @@
         <link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
     </head>
-    <body data-ng-controller="RenderController">
+    <body data-ng-controller="GameRenderController">
         <div class="player-state" data-ng-repeat="state in states">
             <div class="header white-metal">
                 <div class="team-name">{{state.client.name}}</div>

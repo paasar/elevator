@@ -6,3 +6,10 @@ stateService.factory('GameState', ['$resource',
             query: {method:'GET', params:{}, isArray:true}
         });
     }]);
+
+stateService.factory('GameInternalState', ['$resource',
+    function($resource) {
+        return $resource('/state/admin', {}, {
+            query: {method:'GET', params:{}}
+        });
+    }]);
