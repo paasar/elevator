@@ -30,10 +30,11 @@
         (if modified-game-state
           (do
             (c/set-game-state modified-game-state)
-            ;TODO redirect to game view
-            "Created")
-          ;TODO redirect back to player creation
-          "Creation failed"))))
+            (log/infof "Player created")
+            (redirect "/game"))
+          (do
+            (log/infof "Player creation failed")
+            (redirect "/"))))))
 
   ;TODO delete with ip & port
   (DELETE "/player/:ip" [ip]
