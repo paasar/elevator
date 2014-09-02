@@ -21,7 +21,8 @@
                 <span class="player-name">{{player.name}}</span>
                 <span class="player-ip">{{player.ip}}</span>
                 <span class="player-port">{{player.port}}</span>
-                <a href="/player/{{player.ip}}/{{player.port}}" class="player-delete">Delete</a></div>
+                <div class="player-delete"
+                   data-ng-click="deletePlayer(player.ip,player.port)">Delete</div>
             </div>
         </div>
     </body>

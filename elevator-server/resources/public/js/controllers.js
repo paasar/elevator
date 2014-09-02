@@ -19,8 +19,14 @@ renderGameApp.controller('GameRenderController', ['$scope', '$timeout', 'GameSta
 
 var renderAdminApp = angular.module('renderAdminApp', ['stateService']);
 
-renderAdminApp.controller('AdminRenderController', ['$scope', '$timeout', 'GameInternalState', '$q', function ($scope, $timeout, GameInternalState, $q) {
+renderAdminApp.controller('AdminRenderController', ['$scope', '$timeout', 'GameInternalState', '$q', '$http',
+        function ($scope, $timeout, GameInternalState, $q, $http) {
     $scope.state = GameInternalState.query();
+
+    $scope.deletePlayer = function(ip, port) {
+        console.log("deleting player: " + ip + " " + port +"!");
+        $http.delete("/player/" + ip + "/" + port);
+    };
 
     var updateState = function () {
         var newState = GameInternalState.query();
