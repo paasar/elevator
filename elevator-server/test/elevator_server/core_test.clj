@@ -20,6 +20,9 @@
   (-> (json/parse-string (slurp "resources/test/public-player-state.json") true)
     (assoc-in [:client :name] name)))
 
+(defn keys-contain-name? [coll name]
+  ((complement nil?) (some #(= name %) (map :name (keys coll)))))
+
 (deftest state-manipulation
   (testing "create new player state"
     (let [new-state (create-new-player-state)]
@@ -108,13 +111,15 @@
   (testing "deleting a player"
     (let [ip-a "10.0.0.1"
           default-port "3333"
+          team-a "a"
           team-b "b"
           team-a2 "a2"
           game-state-before (-> {}
-                              (create-and-add-player "a" ip-a default-port)
+                              (create-and-add-player team-a ip-a default-port)
                               (create-and-add-player team-b "10.0.0.2" default-port)
                               (create-and-add-player team-a2 ip-a "3334"))
-          game-state-after (delete-player-by-ip game-state-before ip-a default-port)]
+          game-state-after (delete-player-by-ip-and-port game-state-before ip-a default-port)]
       (is (= 2 (count game-state-after)))
-      (is (= team-b (:name (first (keys game-state-after)))))
-      (is (= team-a2 (:name (first (keys game-state-after))))))))
+      (is (= false (keys-contain-name? game-state-after team-a)))
+      (is (= true (keys-contain-name? game-state-after team-b)))
+      (is (= true (keys-contain-name? game-state-after team-a2))))))

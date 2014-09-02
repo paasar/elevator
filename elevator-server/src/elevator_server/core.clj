@@ -4,7 +4,8 @@
             [elevator-server.elevator-state :refer [update-elevator-state]]
             [elevator-server.util :refer [empty-if-nil]]
             [elevator-server.request-generator :refer [generate-requests]]
-            [elevator-server.constants :refer [*number-of-floors* *capacity* *impatience-start* *max-wait-time*]]))
+            [elevator-server.constants :refer [*number-of-floors* *capacity* *impatience-start* *max-wait-time*]]
+            [clojure.tools.logging :as log]))
 
 ; game-state is a map of player-state maps
 ; the keys are also a maps like this {:name "team-1" :ip "127.0.0.1" :port "3333"}
@@ -84,16 +85,17 @@
         game-state-with-player-added (merge cur-game-state new-player-state)]
     game-state-with-player-added))
 
-(defn find-player-state-key-by-value [cur-game-state sub-key value]
+(defn find-player-state-key-by-ip-and-port [cur-game-state ip port]
   (let [cur-keys (keys cur-game-state)]
-    (first (filter #(= value (sub-key %)) cur-keys))))
+    (first (filter #(and (= ip (:ip %)) (= port (:port %))) cur-keys))))
 
-;TODO handle error cases like not found with ip
-(defn delete-player-by-ip [cur-game-state ip port]
-  (let [player-key (find-player-state-key-by-value cur-game-state :ip ip)]
+(defn delete-player-by-ip-and-port [cur-game-state ip port]
+  (let [player-key (find-player-state-key-by-ip-and-port cur-game-state ip port)]
     (if player-key
       (dissoc cur-game-state player-key)
-      cur-game-state)))
+      (do
+        (log/infof "Could not find player with given parameters.")
+        nil))))
 
 (defn add-requests [player-state new-requests]
   (assoc-in player-state

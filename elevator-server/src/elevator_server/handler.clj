@@ -8,7 +8,7 @@
                                                 running?
                                                 create-new-player-state
                                                 create-and-add-player
-                                                delete-player-by-ip]]
+                                                delete-player-by-ip-and-port]]
             [compojure.handler :as handler]
             [compojure.route :as route]
             [elevator-server.view :as v :refer [game-state->view-data]]
@@ -37,11 +37,10 @@
             (log/infof "Player creation failed")
             (redirect "/"))))))
 
-  ;TODO delete with ip & port
-  (DELETE "/player/:ip" [ip]
+  (DELETE "/player/:ip/:port" [ip port]
     (do
-      (log/infof "Deleting player with IP %s" ip)
-      (let [modified-game-state (c/delete-player-by-ip (c/get-game-state) ip)]
+      (log/infof "Deleting player with IP %s and port %s" ip port)
+      (let [modified-game-state (c/delete-player-by-ip-and-port (c/get-game-state) ip port)]
         (if modified-game-state
           (do
             (c/set-game-state modified-game-state)
