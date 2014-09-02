@@ -174,11 +174,11 @@
 
   (testing "embarking adds new rider only up to capacity"
     (let [before-update (-> (create-state-with-defined-elevator :embarking 2 2)
-                            (assoc-in [:elevator :to-requests] [3 3 3 3])
+                            (assoc-in [:elevator :to-requests] [3 3 3 3 3])
                             (assoc :from-requests [{:from 2 :to 1} {:from 2 :to 4}]))
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
-      (is (= [3 3 3 3 1] (:to-requests elevator)))
+      (is (= [3 3 3 3 3 1] (:to-requests elevator)))
       (is (= [{:from 2 :to 4}] (:from-requests after-update)))))
 
   ;TODO impatients embark first

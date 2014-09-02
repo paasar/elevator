@@ -7,7 +7,7 @@
         "current-floor": 1,
         "going-to": 1,
         "state": "waiting",
-        "capacity": 5
+        "capacity": 6
     },
     "floors": 5,
     "from-requests": [

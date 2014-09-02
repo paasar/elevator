@@ -89,7 +89,7 @@
     (first (filter #(= value (sub-key %)) cur-keys))))
 
 ;TODO handle error cases like not found with ip
-(defn delete-player-by-ip [cur-game-state ip]
+(defn delete-player-by-ip [cur-game-state ip port]
   (let [player-key (find-player-state-key-by-value cur-game-state :ip ip)]
     (if player-key
       (dissoc cur-game-state player-key)

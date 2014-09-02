@@ -107,10 +107,14 @@
 
   (testing "deleting a player"
     (let [ip-a "10.0.0.1"
+          default-port "3333"
           team-b "b"
+          team-a2 "a2"
           game-state-before (-> {}
-                                (create-and-add-player "a" ip-a "3333")
-                                (create-and-add-player team-b "10.0.0.2" "3333"))
-          game-state-after (delete-player-by-ip game-state-before ip-a)]
-      (is (= 1 (count game-state-after)))
-      (is (= team-b (:name (first (keys game-state-after))))))))
+                              (create-and-add-player "a" ip-a default-port)
+                              (create-and-add-player team-b "10.0.0.2" default-port)
+                              (create-and-add-player team-a2 ip-a "3334"))
+          game-state-after (delete-player-by-ip game-state-before ip-a default-port)]
+      (is (= 2 (count game-state-after)))
+      (is (= team-b (:name (first (keys game-state-after)))))
+      (is (= team-a2 (:name (first (keys game-state-after))))))))
