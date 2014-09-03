@@ -1,0 +1,19 @@
+body {
+    font-family: Electrolize, 'Black Ops One', sans-serif;
+}
+
+.left {
+    float: left;
+}
+
+.margin-10 {
+    margin: 10px;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
+.not {
+    background-color: #FF0000;
+}

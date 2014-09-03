@@ -23,6 +23,16 @@ renderAdminApp.controller('AdminRenderController', ['$scope', '$timeout', 'GameI
         function ($scope, $timeout, GameInternalState, $q, $http) {
     $scope.state = GameInternalState.query();
 
+    $scope.stop = function() {
+        console.log("Calling pause.");
+        $http.get("/stop");
+    };
+
+    $scope.start = function() {
+        console.log("Calling continue.");
+        $http.get("/start")
+    };
+
     $scope.deletePlayer = function(ip, port) {
         console.log("deleting player: " + ip + " " + port +"!");
         $http.delete("/player/" + ip + "/" + port);

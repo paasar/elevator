@@ -5,24 +5,32 @@
         <script src="lib/angular-resource.min.js"></script>
         <script src="js/controllers.js"></script>
         <script src="js/services.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/admin.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
     </head>
     <body data-ng-controller="AdminRenderController">
-        <div class="run-state">
-            Game is running: {{state.running}}
-            <br/>
-            <a href="/stop">Stop game</a>
-            <br/>
-            <a href="/start">Run game</a>
-        </div>
+        <div class="control-panel margin-10">
+            <div class="run-panel">
+                <div class="run-state margin-bottom-10">
+                    Game is <span data-ng-class="{'label label-danger' : !state.running}">{{state.running ? '' : 'not '}}running</span>
+                </div>
+                <div class="btn btn-danger" data-ng-click="stop()" data-ng-if="state.running">Stop game</div>
+                <div class="btn btn-success" data-ng-click="start()" data-ng-if="!state.running">Run game</div>
+            </div>
 
-        <div class="player-listing">
-            <h3>Players:</h3>
-            <div class="player" data-ng-repeat="player in state.players">
-                <span class="player-name">{{player.name}}</span>
-                <span class="player-ip">{{player.ip}}</span>
-                <span class="player-port">{{player.port}}</span>
-                <div class="player-delete"
-                   data-ng-click="deletePlayer(player.ip,player.port)">Delete</div>
+            <div class="player-listing">
+                <h3>Players:</h3>
+                <div class="player" data-ng-repeat="player in state.players">
+                    <div class="player-details left margin-10">
+                        <span class="player-name">{{player.name}}</span>
+                        <span class="player-ip">{{player.ip}}</span>
+                        <span class="player-port">{{player.port}}</span>
+                    </div>
+                    <div class="player-delete left btn btn-danger"
+                       data-ng-click="deletePlayer(player.ip,player.port)">Delete</div>
+                </div>
             </div>
         </div>
     </body>
