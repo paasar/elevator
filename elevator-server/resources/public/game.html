@@ -5,11 +5,12 @@
         <script src="lib/angular-resource.min.js"></script>
         <script src="js/controllers.js"></script>
         <script src="js/services.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/elevator.css"/>
+        <link rel="stylesheet" type="text/css" href="css/game.css"/>
         <link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
     </head>
     <body data-ng-controller="GameRenderController">
+        <h2 data-ng-show="!states.length">Waiting for players</h2>
         <div class="player-state" data-ng-repeat="state in states">
             <div class="header white-metal">
                 <div class="team-name">{{state.client.name}}</div>

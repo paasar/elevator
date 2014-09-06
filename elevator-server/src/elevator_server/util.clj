@@ -1,5 +1,6 @@
 (ns elevator-server.util
-  (:require [elevator-server.constants :refer [*number-of-floors*]]))
+  (:require [elevator-server.constants :refer [*number-of-floors*]]
+            [clojure.string :refer [blank?]]))
 
 (defn empty-if-nil [val]
   (if (nil? val)
@@ -13,3 +14,6 @@
     (> target *number-of-floors*)
       *number-of-floors*
     :else target))
+
+(defn empty-str? [s]
+  (or (blank? s) (= s "null")))

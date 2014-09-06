@@ -3,6 +3,11 @@ body {
     font-family: Electrolize, 'Black Ops One', sans-serif;
 }
 
+h2 {
+    color: #FFFFFF;
+    text-align: center;
+}
+
 div {
     padding: 2px;
 }

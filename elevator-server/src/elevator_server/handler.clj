@@ -9,6 +9,7 @@
                                                 create-new-player-state
                                                 create-and-add-player
                                                 delete-player-by-ip-and-port]]
+            [elevator-server.util :refer [empty-str?]]
             [compojure.handler :as handler]
             [compojure.route :as route]
             [elevator-server.view :as v :refer [game-state->view-data]]
@@ -19,23 +20,28 @@
 (defn file [path]
   (resource-response path {:root "public"}))
 
+(defn player-creation-failed []
+  (do
+    (log/infof "Player creation failed")
+    (redirect "/")))
+
 (defroutes app-routes
   (GET "/" [] (file "player-creation.html"))
-  (POST "/player" {ip :remote-addr
-                   {team-name :team-name
+  (POST "/player" {{team-name :team-name
+                    ip :ip-address
                     port :port} :params}
-    ;TODO validate input
-    (do
-      (log/infof "Create player with: %s %s %s" team-name ip port)
-      (let [modified-game-state (c/create-and-add-player (c/get-game-state) team-name ip port)]
-        (if modified-game-state
-          (do
-            (c/set-game-state modified-game-state)
-            (log/infof "Player created")
-            (redirect "/game"))
-          (do
-            (log/infof "Player creation failed")
-            (redirect "/"))))))
+    (if (or (empty-str? team-name) (empty-str? ip) (empty-str? port))
+      ;TODO more info to player
+      (player-creation-failed)
+      (do
+        (log/infof "Create player with: %s %s %s" team-name ip port)
+        (let [modified-game-state (c/create-and-add-player (c/get-game-state) team-name ip port)]
+          (if modified-game-state
+            (do
+              (c/set-game-state modified-game-state)
+              (log/infof "Player created")
+              (redirect "/game"))
+            (player-creation-failed))))))
 
   (DELETE "/player/:ip/:port" [ip port]
     (do
