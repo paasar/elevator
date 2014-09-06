@@ -34,6 +34,25 @@
     {"players" player-keys
      "running" (running?)}))
 
+; Gotos are elevators' going-to values that are updated
+; by a scheduled job polling clients.
+; This map (where key is player-key (same as in game-state))
+; is then looked up during each game state advancement step.
+(def gotos (atom {}))
+
+(defn get-gotos [] @gotos)
+
+(defn get-goto [player-key]
+  (let [goto-in-map (get (get-gotos) player-key)]
+    (if (nil? goto-in-map)
+      1
+      goto-in-map)))
+
+(defn update-gotos [update-fun] (swap! gotos update-fun))
+
+(defn update-goto [player-key new-goto]
+  (update-gotos #(assoc % player-key new-goto)))
+
 (defn set-floor-amount [player-state]
   (assoc-in player-state [:floors] *number-of-floors*))
 
@@ -124,17 +143,21 @@
 (defn increment-tick [player-state]
   (update-in player-state [:tick] inc))
 
-(defn advance-player-state [player-state new-requests]
+(defn update-player-going-to [player-state player-key]
+  (assoc-in player-state [:elevator :going-to] (get-goto player-key)))
+
+(defn advance-player-state [player-key player-state new-requests]
   (-> player-state
     (increment-tick)
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
     (update-elevator-state)
-    (add-requests new-requests)))
+    (add-requests new-requests)
+    (update-player-going-to player-key)))
 
 (defn advance-player-states [cur-state new-requests]
   (into {} (map (fn [[player-key player-state]]
-                  [player-key (advance-player-state player-state new-requests)])
+                  [player-key (advance-player-state player-key player-state new-requests)])
                 cur-state)))
 
 (defn advance-game-state [state]
@@ -144,3 +167,6 @@
           new-from-requests (generate-requests *number-of-floors* current-tick)]
       (advance-player-states state new-from-requests))
     state))
+
+(defn log-game-state []
+  (log/debugf ":%s: %s" (:tick (first (vals (get-game-state)))) (str (get-game-state))))

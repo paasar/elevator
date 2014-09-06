@@ -5,7 +5,7 @@
 (deftest single-request-generation
   (testing "generate single request"
     (let [floors 5
-          generated-request (generate-request floors)
+          generated-request (generate-random-request floors)
           from (:from generated-request)
           to (:to generated-request)]
       (is (not (nil? from)))

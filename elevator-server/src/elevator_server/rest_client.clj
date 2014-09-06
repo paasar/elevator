@@ -1,6 +1,6 @@
 (ns elevator-server.rest-client
   (:use [clojure.tools.logging])
-  (:require [elevator-server.core :refer [transform-player-state-to-public update-game-state]]
+  (:require [elevator-server.core :refer [transform-player-state-to-public update-goto]]
             [elevator-server.util :refer [keep-floor-target-inside-boundaries]]
             [clj-http.client :as client]
             [cheshire.core :as json]
@@ -18,8 +18,8 @@
           ;TODO timeout error handling?
           (client/post address {:body (json/generate-string public-player-state)
                                 :content-type :json
-                                :socket-timeout 3000
-                                :conn-timeout 3000
+                                :socket-timeout 1000
+                                :conn-timeout 1000
                                 :accept :json})
           (catch Exception e
             (do
@@ -37,16 +37,12 @@
 (defn poll-client [player-key player-state]
     (poll-for-action player-key (transform-player-state-to-public player-key player-state)))
 
-(defn get-elevator-target-floor-from-player [player-key player-state]
+(defn request-and-update-target-floor [[player-key player-state]]
   (let [new-wanted-target-floor (poll-client player-key player-state)
         new-target-floor (keep-floor-target-inside-boundaries new-wanted-target-floor)]
-    (assoc-in player-state [:elevator :going-to] new-target-floor)))
-
-(defn request-and-update-target-floor [[player-key player-state]]
-  (let [updated-state (get-elevator-target-floor-from-player player-key player-state)]
     (do
-      (log/debugf "Polling player %s" player-key)
-      (update-game-state #(assoc % player-key updated-state)))))
+      (log/debugf "Polled player %s for new target %s" player-key new-target-floor)
+      (update-goto player-key new-target-floor))))
 
 (defn update-all-elevator-target-floors [game-state]
   (let [player-keys-and-states (seq game-state)
