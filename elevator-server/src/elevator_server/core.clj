@@ -29,6 +29,11 @@
 
 (defn running? [] @running)
 
+(defn get-game-state-for-admin []
+  (let [player-keys (keys (get-game-state))]
+    {"players" player-keys
+     "running" (running?)}))
+
 (defn set-floor-amount [player-state]
   (assoc-in player-state [:floors] *number-of-floors*))
 

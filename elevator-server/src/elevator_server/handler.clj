@@ -3,6 +3,7 @@
         ring.util.response)
   (:require [elevator-server.core :as c :refer [get-game-state
                                                 set-game-state
+                                                get-game-state-for-admin
                                                 stop-game
                                                 run-game
                                                 running?
@@ -57,10 +58,7 @@
 
   (GET "/state" [] (generate-string (v/game-state->view-data (c/get-game-state))))
   (GET "/state/internal" [] (json/generate-string (c/get-game-state)))
-  (GET "/state/admin" [] (let [player-keys (keys (c/get-game-state))
-                               running (c/running?)]
-                           (json/generate-string {"players" player-keys
-                                                   "running" running})))
+  (GET "/state/admin" [] (json/generate-string (c/get-game-state-for-admin)))
 
   (GET "/admin" [] (file "admin.html"))
   (GET "/start" [] (do
@@ -75,8 +73,8 @@
 
 (def app
   (do
-;    (c/set-game-state {})
-    ;TODO in final product state data is created when player is added
-    (c/set-game-state (c/create-new-player "A-team" "127.0.0.1" "3333"))
+    (c/set-game-state {})
+    ;TODO developer help: create one player on launch
+;    (c/set-game-state (c/create-new-player "A-team" "127.0.0.1" "3333"))
     (scheduler/start-jobs)
     (handler/site app-routes)))
