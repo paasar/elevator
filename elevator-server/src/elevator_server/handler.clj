@@ -69,6 +69,8 @@
 
 (def app
   (do
-    (c/set-game-state (c/create-new-player "A-team" "127.0.0.1" "3333"));TODO in final product state data is created when player is added
+;    (c/set-game-state {})
+    ;TODO in final product state data is created when player is added
+    (c/set-game-state (c/create-new-player "A-team" "127.0.0.1" "3333"))
     (scheduler/start-jobs)
     (handler/site app-routes)))

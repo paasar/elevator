@@ -6,7 +6,7 @@
                  [cheshire "5.3.1"]
                  [org.clojure/tools.logging "0.2.6"]
                  [org.slf4j/slf4j-log4j12 "1.7.5"]]
-  :plugins [[lein-ring "0.8.10"]]
+  :plugins [[lein-ring "0.8.11"]]
   :ring {:handler elevator.handler/app :port 3333}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
