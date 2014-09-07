@@ -24,20 +24,19 @@ var router = express.Router();
          "unhappy": 0},
    "tick": 3}
  */
-var decideWhichFloorToGo = function(req) {
-  var state = req.body;
+var decideWhichFloorToGo = function(state) {
   console.log("PlayerState:");
   console.log(state);
 
-  var currentFloor = state.currentFloor;
+  var currentFloor = state.elevator.currentFloor;
   var currentTarget = state.elevator.goingTo;
   var topFloor = state.floors;
 
-  if (currentFloor != currentTarget) {
+  if (currentFloor !== currentTarget) {
     console.log("I want to go to " + currentTarget + "!");
     return currentTarget;
   } else {
-    if (currentFloor == 1) {
+    if (currentFloor === 1) {
       return topFloor;
     } else {
       var oneDown = currentFloor - 1;
@@ -54,7 +53,8 @@ router.get('/', function(req, res) {
 
 /* POST */
 router.post('/', function(req, res) {
-  res.send({"go-to": decideWhichFloorToGo(req)});
+  var state = req.body;
+  res.send({"go-to": decideWhichFloorToGo(state)});
 });
 
 
