@@ -9,12 +9,12 @@
 ;        {"toRequests": [1, 3, 5, 5],
 ;         "currentFloor": 1,
 ;         "goingTo": 1,
-;         "state": WAITING,
-;         "capacity": 1},
+;         "state": "WAITING",
+;         "capacity": 6},
 ;   "floors": 5,
 ;   "fromRequests":
-;     [  {"floor": 1, "impatient": true, "direction": UP}
-;     ,  {"floor": 2, "impatient": false, "direction": DOWN}
+;     [  {"floor": 1, "impatient": true, "direction": "UP"}
+;     ,  {"floor": 2, "impatient": false, "direction": "DOWN"}
 ;     ],
 ;   "tally":
 ;        {"happy": 0,

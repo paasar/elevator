@@ -5,7 +5,7 @@
             [compojure.route :as route]
             [cheshire.core :as json]))
 
-(def default-message "I'm a little elevator. Please POST state here to get where I want to go.")
+(def default-message "I'm a little Clojure elevator. Please POST state here to get where I want to go.")
 
 (defn parse-request-json [body]
   (json/parse-string (slurp body) true))

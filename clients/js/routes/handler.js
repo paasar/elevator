@@ -12,12 +12,12 @@ var router = express.Router();
         {"toRequests": [1, 3, 5, 5],
          "currentFloor": 1,
          "goingTo": 1,
-         "state": WAITING,
-         "capacity": 1},
+         "state": "WAITING",
+         "capacity": 6},
    "floors": 5,
    "fromRequests":
-     [  {"floor": 1, "impatient": true, "direction": UP}
-     ,  {"floor": 2, "impatient": false, "direction": DOWN}
+     [  {"floor": 1, "impatient": true, "direction": "UP"}
+     ,  {"floor": 2, "impatient": false, "direction": "DOWN"}
      ],
    "tally":
         {"happy": 0,
@@ -48,7 +48,7 @@ var decideWhichFloorToGo = function(state) {
 
 /* GET */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Elevator logic', message: "I'm a little elevator. Please POST state here to get where I want to go." });
+  res.render('index', { title: 'Elevator logic', message: "I'm a little JavaScript elevator. Please POST state here to get where I want to go." });
 });
 
 /* POST */

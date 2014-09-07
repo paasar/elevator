@@ -20,7 +20,7 @@ public class DefaultHandler {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
-        return "I'm a little elevator. Please POST state here to get where I want to go.";
+        return "I'm a little Java elevator. Please POST state here to get where I want to go.";
     }
 
     @POST
