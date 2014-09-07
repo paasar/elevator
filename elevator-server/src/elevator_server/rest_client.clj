@@ -29,7 +29,7 @@
 
 (defn poll-for-action [player-key public-player-state]
   (let [result-body (do-post player-key public-player-state)
-        current-floor (get-in public-player-state [:elevator :current-floor])]
+        current-floor (get-in public-player-state [:elevator :currentFloor])]
     (if (nil? result-body)
           current-floor
           (:go-to result-body))))
