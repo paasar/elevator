@@ -1,0 +1,1 @@
+mvn clean jetty:run -Djetty.port=3333
