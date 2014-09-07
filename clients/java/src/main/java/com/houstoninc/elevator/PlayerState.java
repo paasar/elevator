@@ -13,7 +13,7 @@ public class PlayerState {
     Elevator elevator;
     @JsonProperty
     Integer floors;
-    @JsonProperty("from-requests")
+    @JsonProperty
     List<FromRequest> fromRequests;
     @JsonProperty
     Tally tally;
@@ -22,15 +22,15 @@ public class PlayerState {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Elevator {
-        @JsonProperty("to-requests")
+        @JsonProperty
         List<Integer> toRequests;
-        @JsonProperty("current-floor")
+        @JsonProperty
         Integer currentFloor;
-        @JsonProperty("going-to")
+        @JsonProperty
         Integer goingTo;
-        @JsonProperty("state")
+        @JsonProperty
         State state;
-        @JsonProperty("capacity")
+        @JsonProperty
         Integer capacity;
 
         public String toString() {
@@ -67,9 +67,7 @@ public class PlayerState {
 
         public String toString() {
             return String.format(
-                    "\t{\"floor\": %s,\n" +
-                    "\t\t \"impatient\": %s,\n" +
-                    "\t\t \"direction\": %s}\n\t",
+                    "\t{\"floor\": %s, \"impatient\": %s, \"direction\": %s}\n\t",
                     floor,
                     impatient,
                     direction);

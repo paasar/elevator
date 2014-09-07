@@ -13,12 +13,8 @@
 ;         "capacity": 1},
 ;   "floors": 5,
 ;   "fromRequests":
-;     [  {"floor": 1,
-;         "impatient": true,
-;         "direction": UP}
-;     ,  {"floor": 2,
-;         "impatient": false,
-;         "direction": DOWN}
+;     [  {"floor": 1, "impatient": true, "direction": UP}
+;     ,  {"floor": 2, "impatient": false, "direction": DOWN}
 ;     ],
 ;   "tally":
 ;        {"happy": 0,
@@ -36,7 +32,7 @@
     (inc current-floor)))
 
 (defn one-up-and-from-top-to-bottom [state]
-  (let [current-floor (get-in state [:elevator :current-floor])
+  (let [current-floor (get-in state [:elevator :currentFloor])
         top-floor (get state :floors)
         next-in-rotation (get-next-in-rotation current-floor top-floor)
         current-target @target]

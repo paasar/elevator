@@ -2,21 +2,21 @@
     "client": {
         "name": "team-1"
     },
-    "elevator": {
-        "to-requests": [3, 2],
-        "current-floor": 1,
-        "going-to": 1,
-        "state": "WAITING",
-        "capacity": 6
-    },
-    "floors": 5,
-    "from-requests": [
+    "fromRequests": [
         {
             "floor": 5,
             "direction": "DOWN",
             "impatient": false
         }
     ],
+    "elevator": {
+        "toRequests": [3, 2],
+        "currentFloor": 1,
+        "goingTo": 1,
+        "state": "WAITING",
+        "capacity": 6
+    },
+    "floors": 5,
     "tally": {
         "happy": 0,
         "unhappy": 0

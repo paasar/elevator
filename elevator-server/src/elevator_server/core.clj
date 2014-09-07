@@ -70,17 +70,32 @@
 (defn is-impatient? [waited]
   (>= waited *impatience-start*))
 
+;TODO these transforms could be in own file
 (defn transform-from-request-to-public [request]
   {:floor (:from request)
    :direction (get-direction request)
    :impatient (is-impatient? (:waited request))})
 
+(defn transform-key-to [elevator from-key to-key]
+  (-> elevator
+    (assoc to-key (from-key elevator))
+    (dissoc from-key)))
+
+(defn transform-elevator-to-public [elevator]
+  "Change the keys from dash format to camel case."
+  (-> elevator
+    (transform-key-to :to-requests :toRequests)
+    (transform-key-to :current-floor :currentFloor)
+    (transform-key-to :going-to :goingTo)
+    (update-in [:state] upper-case)))
+
 (defn transform-player-state-to-public [player-key player-state]
   "Remove those parts of information that are not supposed to be seen by the players."
   (-> player-state
-    (assoc :client {:name (:name player-key)})
-    (update-in [:from-requests] #(map transform-from-request-to-public %))
-    (update-in [:elevator :state] upper-case)))
+    (update-in [:elevator] transform-elevator-to-public)
+    (assoc :fromRequests (vec (map transform-from-request-to-public (:from-requests player-state))))
+    (dissoc :from-requests)
+    (assoc :client {:name (:name player-key)})))
 
 (defn transform-game-state-to-public [state]
   (map (fn [[player-key player-state]] (transform-player-state-to-public player-key player-state)) state))
