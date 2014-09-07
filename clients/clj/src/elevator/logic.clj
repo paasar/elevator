@@ -2,6 +2,29 @@
   (require [cheshire.core :as json]
            [clojure.tools.logging :as log]))
 
+; The actual logic that decides where to go next.
+;
+; PlayerState example:
+;   {"elevator":
+;        {"toRequests": [1, 3, 5, 5],
+;         "currentFloor": 1,
+;         "goingTo": 1,
+;         "state": WAITING,
+;         "capacity": 1},
+;   "floors": 5,
+;   "fromRequests":
+;     [  {"floor": 1,
+;         "impatient": true,
+;         "direction": UP}
+;     ,  {"floor": 2,
+;         "impatient": false,
+;         "direction": DOWN}
+;     ],
+;   "tally":
+;        {"happy": 0,
+;         "unhappy": 0},
+;   "tick": 3}
+
 (def target (atom 1))
 
 (defn format-response [floor-to-go]
