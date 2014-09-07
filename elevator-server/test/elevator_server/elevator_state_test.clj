@@ -29,6 +29,10 @@
     (is (= :waiting (get-next-elevator-state 1 1 :embarking true true)))
     (is (= :waiting (get-next-elevator-state 1 1 :embarking false true)))
     (is (= :waiting (get-next-elevator-state 1 1 :embarking true false))))
+  (testing "ascending to descending"
+    (is (= :descending (get-next-elevator-state 4 3 :ascending false false))))
+  (testing "descending to ascending"
+    (is (= :ascending (get-next-elevator-state 3 4 :descending false false))))
 
   (testing "setting elevator to go up"
     (let [before-update (create-new-player-state)
@@ -36,7 +40,7 @@
           elevator (:elevator after-update)]
       (is (= 1 (:current-floor elevator)))
       (is (= 2 (:going-to elevator)))
-      (is (= :ascending (:state elevator)))))
+      (is (= :ascending (get-state-as-keyword elevator)))))
 
   (testing "setting elevator to go down"
     (let [before-update (create-state-with-defined-elevator :waiting 2 2)
@@ -44,7 +48,7 @@
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
       (is (= 1 (:going-to elevator)))
-      (is (= :descending (:state elevator))))))
+      (is (= :descending (get-state-as-keyword elevator))))))
 
 (deftest ascending
   (testing "move elevator up, not reaching target"
@@ -52,14 +56,14 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :ascending (:state elevator)))))
+      (is (= :ascending (get-state-as-keyword elevator)))))
 
   (testing "move elevator up, reaching target, no riders, no newcomers"
     (let [before-update (create-state-with-defined-elevator :ascending 2 3)
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 3 (:current-floor elevator)))
-      (is (= :waiting (:state elevator)))))
+      (is (= :waiting (get-state-as-keyword elevator)))))
 
   (testing "move elevator up, reaching target, riders"
     (let [before-update (-> (create-state-with-defined-elevator :ascending 1 2)
@@ -67,7 +71,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :disembarking (:state elevator)))
+      (is (= :disembarking (get-state-as-keyword elevator)))
       (is (= [2] (:to-requests elevator)))))
 
   (testing "move elevator up, reaching target, no riders, newcomers"
@@ -76,7 +80,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :embarking (:state elevator)))
+      (is (= :embarking (get-state-as-keyword elevator)))
       (is (= [] (:to-requests elevator))))))
 
 (deftest descending
@@ -85,14 +89,14 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :descending (:state elevator)))))
+      (is (= :descending (get-state-as-keyword elevator)))))
 
   (testing "move elevator down, reaching target, no riders, no newcomers"
     (let [before-update (create-state-with-defined-elevator :descending 2 1)
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 1 (:current-floor elevator)))
-      (is (= :waiting (:state elevator)))))
+      (is (= :waiting (get-state-as-keyword elevator)))))
 
   (testing "move elevator down, reaching target, riders"
     (let [before-update (-> (create-state-with-defined-elevator :descending 3 2)
@@ -100,7 +104,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :disembarking (:state elevator)))
+      (is (= :disembarking (get-state-as-keyword elevator)))
       (is (= [2] (:to-requests elevator)))))
 
   (testing "move elevator down, reaching target, no riders, newcomers"
@@ -109,7 +113,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :embarking (:state elevator)))
+      (is (= :embarking (get-state-as-keyword elevator)))
       (is (= [] (:to-requests elevator))))))
 
 (deftest waiting
@@ -118,7 +122,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 1 (:current-floor elevator)))
-      (is (= :waiting (:state elevator))))))
+      (is (= :waiting (get-state-as-keyword elevator))))))
 
 (deftest disembarking
   (testing "elevator disembarking to embarking"
@@ -128,7 +132,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :embarking (:state elevator)))
+      (is (= :embarking (get-state-as-keyword elevator)))
       (is (empty? (:to-requests elevator)))
       (is (= 1 (count (:from-requests after-update))))
       (is (= 1 (get-in after-update [:tally :happy])))))
@@ -139,7 +143,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :waiting (:state elevator)))
+      (is (= :waiting (get-state-as-keyword elevator)))
       (is (empty? (:to-requests elevator)))
       (is (= 1 (get-in after-update [:tally :happy])))))
 
@@ -159,7 +163,7 @@
           after-update (update-elevator-state before-update)
           elevator (:elevator after-update)]
       (is (= 2 (:current-floor elevator)))
-      (is (= :waiting (:state elevator)))
+      (is (= :waiting (get-state-as-keyword elevator)))
       (is (= 1 (count (:to-requests elevator))))
       (is (empty? (:from-requests after-update)))))
 

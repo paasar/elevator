@@ -5,7 +5,8 @@
             [elevator-server.util :refer [empty-if-nil]]
             [elevator-server.request-generator :refer [generate-requests]]
             [elevator-server.constants :refer [*number-of-floors* *capacity* *impatience-start* *max-wait-time*]]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [clojure.string :refer [upper-case]]))
 
 ; game-state is a map of player-state maps
 ; the keys are also a maps like this {:name "team-1" :ip "127.0.0.1" :port "3333"}
@@ -63,8 +64,8 @@
   (let [from (:from request)
         to (:to request)]
     (if (< from to)
-      "up"
-      "down")))
+      "UP"
+      "DOWN")))
 
 (defn is-impatient? [waited]
   (>= waited *impatience-start*))
@@ -78,8 +79,8 @@
   "Remove those parts of information that are not supposed to be seen by the players."
   (-> player-state
     (assoc :client {:name (:name player-key)})
-    (dissoc-in [:tick]);TODO don't remove from result
-    (update-in [:from-requests] #(map transform-from-request-to-public %))))
+    (update-in [:from-requests] #(map transform-from-request-to-public %))
+    (update-in [:elevator :state] upper-case)))
 
 (defn transform-game-state-to-public [state]
   (map (fn [[player-key player-state]] (transform-player-state-to-public player-key player-state)) state))
@@ -151,9 +152,9 @@
     (increment-tick)
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
+    (update-player-going-to player-key)
     (update-elevator-state)
-    (add-requests new-requests)
-    (update-player-going-to player-key)))
+    (add-requests new-requests)))
 
 (defn advance-player-states [cur-state new-requests]
   (into {} (map (fn [[player-key player-state]]

@@ -1,6 +1,12 @@
 (ns elevator-server.elevator-state
   (:require [elevator-server.util :refer [empty-if-nil keep-floor-target-inside-boundaries]]))
 
+(defn get-state-as-keyword [elevator]
+  (keyword (:state elevator)))
+
+(defn set-elevator-state [player-state new-state]
+  (assoc-in player-state [:elevator :state] (name new-state)))
+
 (defn waiting-ascending-or-descending [target-floor current-floor]
   (if (= target-floor current-floor)
     :waiting
@@ -17,12 +23,16 @@
     (= :embarking current-state)
       (waiting-ascending-or-descending target-floor current-floor)
     (or (= :ascending current-state) (= :descending current-state))
-      (if (= target-floor current-floor)
-        (cond
-          has-riders :disembarking
-          has-newcomers :embarking
-          :else :waiting)
-        current-state)
+      (cond
+        (< target-floor current-floor)
+          :descending
+        (> target-floor current-floor)
+          :ascending
+        :else
+          (cond
+            has-riders :disembarking
+            has-newcomers :embarking
+            :else :waiting))
     :else (waiting-ascending-or-descending target-floor current-floor)))
 
 (defn set-elevator-target-floor [player-state target-floor]
@@ -61,21 +71,21 @@
       (embark player-state current-floor)
     :else player-state))
 
-(defn set-elevator-state [player-state target-floor]
+(defn resolve-new-elevator-state [player-state target-floor]
   (let [elevator (:elevator player-state)
         current-floor (:current-floor elevator)
         has-riders (not (empty? (:to-requests elevator)))
         has-newcomers (not (empty? (:from-requests player-state)))
-        old-state (:state elevator)
+        old-state (get-state-as-keyword elevator)
         new-state (get-next-elevator-state current-floor target-floor old-state has-riders has-newcomers)]
     (-> player-state
-      (assoc-in [:elevator :state] new-state)
+      (set-elevator-state new-state)
       (disembark-embark old-state current-floor))))
 
 (defn set-new-target-floor [player-state target-floor]
   (-> player-state
     (set-elevator-target-floor target-floor)
-    (set-elevator-state target-floor)))
+    (resolve-new-elevator-state target-floor)))
 
 (defn get-floor-in-next-step [current-floor state]
   (cond
@@ -87,7 +97,7 @@
   (let [elevator (:elevator player-state)
         new-current-floor (get-floor-in-next-step
                             (:current-floor elevator)
-                            (:state elevator))]
+                            (get-state-as-keyword elevator))]
     (-> player-state
       (set-elevator-current-floor new-current-floor)
-      (set-elevator-state (:going-to elevator)))))
+      (resolve-new-elevator-state (:going-to elevator)))))

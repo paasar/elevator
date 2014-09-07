@@ -49,11 +49,11 @@
 
   (testing "transform patient request"
     (let [transformed-state (transform-from-request-to-public patient-request)]
-      (is (= {:floor 5 :direction "down" :impatient false} transformed-state))))
+      (is (= {:floor 5 :direction "DOWN" :impatient false} transformed-state))))
 
   (testing "transform impatient request"
     (let [transformed-state (transform-from-request-to-public impatient-request)]
-      (is (= {:floor 5 :direction "down" :impatient true} transformed-state))))
+      (is (= {:floor 5 :direction "DOWN" :impatient true} transformed-state))))
 
   (testing "increment wait time"
     (let [result (increment-wait-time patient-request)]

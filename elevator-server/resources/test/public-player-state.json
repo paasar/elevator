@@ -6,19 +6,20 @@
         "to-requests": [3, 2],
         "current-floor": 1,
         "going-to": 1,
-        "state": "waiting",
+        "state": "WAITING",
         "capacity": 6
     },
     "floors": 5,
     "from-requests": [
         {
             "floor": 5,
-            "direction": "down",
+            "direction": "DOWN",
             "impatient": false
         }
     ],
     "tally": {
         "happy": 0,
         "unhappy": 0
-    }
+    },
+    "tick": 0
 }
