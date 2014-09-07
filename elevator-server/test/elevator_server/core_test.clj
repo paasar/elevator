@@ -5,7 +5,7 @@
             [cheshire.core :as json]))
 
 (def patient-request {:from 5 :to 3 :waited 1})
-(def impatient-request {:from 5 :to 3 :waited 6})
+(def impatient-request {:from 5 :to 3 :waited 11})
 
 (def player-key-1 {:name "team-1" :ip "127.0.0.1" :port "3333"})
 (def player-key-2 {:name "team-2" :ip "127.0.0.2" :port "3334"})
