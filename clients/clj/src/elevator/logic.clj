@@ -4,7 +4,7 @@
 
 ; The actual logic that decides where to go next.
 ;
-; PlayerState example:
+; state example:
 ;   {"elevator":
 ;        {"toRequests": [1, 3, 5, 5],
 ;         "currentFloor": 1,
