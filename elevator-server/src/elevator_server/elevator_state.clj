@@ -53,7 +53,7 @@
   (let [request-groups (group-by #(= current-floor (:from %)) (get-in player-state [:from-requests]))
         elevator (:elevator player-state)
         space-available (- (:capacity elevator) (count (:to-requests elevator)))
-        embarkers (empty-if-nil (get request-groups true))
+        embarkers (sort-by :waited > (empty-if-nil (get request-groups true)))
         embarkers-that-fit (take space-available embarkers)
         embarkers-that-do-not-fit (drop space-available embarkers)
         new-rider-targets (map :to embarkers-that-fit)
