@@ -21,33 +21,28 @@
 ;         "unhappy": 0},
 ;   "tick": 3}
 
-(def target (atom 1))
-
 (defn format-response [floor-to-go]
   (json/generate-string {:go-to floor-to-go}))
 
-(defn get-next-in-rotation [current-floor top-floor]
-  (if (= current-floor top-floor)
-    1
-    (inc current-floor)))
+(defn get-next-in-rotation [current-floor current-target top-floor]
+  (if (= current-floor current-target)
+    (if (= current-floor 1)
+      top-floor
+      (dec current-floor))
+    current-target))
 
-(defn one-up-and-from-top-to-bottom [state]
-  (let [current-floor (get-in state [:elevator :currentFloor])
-        top-floor (get state :floors)
-        next-in-rotation (get-next-in-rotation current-floor top-floor)
-        current-target @target]
-    (if (= current-floor current-target)
-      (do
-        (log/infof "I want to go to %s." next-in-rotation)
-        (reset! target next-in-rotation)
-        next-in-rotation)
-      (do
-        (log/infof "I still want to go to %s." current-target)
-        current-target))))
+(defn to-top-or-one-down [state]
+  (let [elevator (:elevator state )
+        current-floor (:currentFloor elevator)
+        current-target (:goingTo elevator)
+        top-floor (:floors state)]
+     (get-next-in-rotation current-floor current-target top-floor)))
 
 (defn decide-floor-to-go [state]
   (do
     (log/infof "Server is asking where to go.")
-    (log/debugf "State:\n%s" state)
-    (format-response
-      (one-up-and-from-top-to-bottom state))))
+    (log/debugf "PlayerState:\n%s" (json/generate-string state {:pretty true}))
+    (let [go-to (to-top-or-one-down state)]
+      (do
+        (log/infof "I want to go to %s" go-to)
+        (format-response go-to)))))
