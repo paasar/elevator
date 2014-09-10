@@ -27,12 +27,12 @@
   (json/generate-string {:go-to floor}))
 
 (deftest test-app-post
-  (testing "from one to two"
+  (testing "from bottom to top"
     (let [response (app (create-post-request 1 1))]
       (is (= (:body response) (go-to-response 3)))))
-  (testing "from two to top"
+  (testing "from two to one"
     (let [response (app (create-post-request 2 1))]
       (is (= (:body response) (go-to-response 1)))))
-  (testing "from top to bottom"
+  (testing "from top to two"
     (let [response (app (create-post-request 3 2))]
       (is (= (:body response) (go-to-response 2))))))
