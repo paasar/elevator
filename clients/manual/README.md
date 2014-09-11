@@ -1,4 +1,4 @@
-# manual control for a elevator competition
+# Manually controlled client for the elevator competition
 
 By Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
 
