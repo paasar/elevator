@@ -1,7 +1,5 @@
 # Manually controlled client for the elevator competition
 
-By Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
-
 ## Prerequisites
 
 You will need [Leiningen][1] 1.7.0 or above installed.
@@ -17,5 +15,7 @@ To start a web server for the application, run:
 TODO: create runnable uberjar
 
 ## License
+
+Created by Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
 
 CC BY-NC

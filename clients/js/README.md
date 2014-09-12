@@ -1,7 +1,5 @@
 # Elevator competition client template made with JavaScript
 
-By Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
-
 ## Prerequisites
 
 You will need node.js
@@ -21,5 +19,7 @@ To start a web server for the application, run:
     grunt
 
 ## License
+
+Created by Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
 
 CC BY-NC

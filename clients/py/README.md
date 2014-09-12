@@ -1,7 +1,5 @@
 # Elevator competition client template made with Python
 
-By Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
-
 ## Prerequisites
 
 You will need web.py
@@ -17,5 +15,7 @@ To start a web server for the application, run:
     python client.py 3333
 
 ## License
+
+Created by Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
 
 CC BY-NC

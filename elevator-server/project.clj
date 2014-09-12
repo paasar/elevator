@@ -1,5 +1,5 @@
 (defproject elevator-server "0.1.0-SNAPSHOT"
-  :description "Extreme startup coding competition. Create elevator logic. This is the server project that runs the competition."
+  :description "Extreme startup coding competition. This is the server project that runs the competition."
   :url "http://houston-inc.com"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
