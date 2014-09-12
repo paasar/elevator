@@ -1,6 +1,6 @@
 (defproject manual "0.1.0-SNAPSHOT"
   :description "Elevator control panel for manual guidance"
-  :url "http://houston-inc.com"
+  :url "http://www.houston-inc.com"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [compojure "1.1.8"]
                  [cheshire "5.3.1"]]
