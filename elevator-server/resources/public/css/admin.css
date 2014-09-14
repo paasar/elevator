@@ -6,12 +6,20 @@ body {
     float: left;
 }
 
+.gray {
+    color: #AAAAAA;
+}
+
 .margin-10 {
     margin: 10px;
 }
 
 .margin-bottom-10 {
     margin-bottom: 10px;
+}
+
+.margin-top-30 {
+    margin-top: 30px;
 }
 
 .not {

@@ -22,6 +22,7 @@
 
             <div class="player-listing">
                 <h3>Players:</h3>
+                <div class="gray" data-ng-show="!states.length">Waiting for players.</div>
                 <div class="player clearfix" data-ng-repeat="player in state.players">
                     <div class="player-details left margin-10">
                         <span class="player-name">{{player.name}}</span>
@@ -34,6 +35,7 @@
                 </div>
             </div>
 
+            <div class="game-view-link margin-10 margin-top-30"><a href="/game" target="_blank">Open game view in new tab</a></div>
             <!-- TODO reset game state and scores-->
         </div>
     </body>
