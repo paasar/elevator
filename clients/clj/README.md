@@ -14,6 +14,10 @@ To start a web server for the application, run:
 
     lein ring server-headless
 
+Default port is 3333 and it is set in ./project.clj
+To use different port from command line, run:
+    lein ring server-headless 3334
+
 ## License
 
 Created by Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
