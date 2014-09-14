@@ -18,6 +18,9 @@ To start a web server for the application, run:
 
     grunt
 
+To use different than the default port (3333) from commandline, run:
+    PORT=3334 grunt
+
 ## License
 
 Created by Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi
