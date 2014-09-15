@@ -6,6 +6,13 @@ You will need node.js
 
 http://nodejs.org/
 
+and grunt
+
+    npm install -g grunt-cli
+
+Run init in project root
+    npm install
+
 Project created with Yeoman
 
 http://yeoman.io/
