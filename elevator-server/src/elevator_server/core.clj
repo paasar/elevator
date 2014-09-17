@@ -183,6 +183,3 @@
           new-from-requests (generate-requests *number-of-floors* current-tick)]
       (advance-player-states state new-from-requests))
     state))
-
-(defn log-game-state []
-  (log/debugf ":%s: %s" (:tick (first (vals (get-game-state)))) (str (get-game-state))))
