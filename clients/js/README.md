@@ -17,7 +17,7 @@ Project created with Yeoman
 
 http://yeoman.io/
 
-Actual logic is in ./logic/logic.js
+Actual logic is in `./logic/logic.js`
 
 ## Running
 
@@ -25,8 +25,9 @@ To start a web server for the application, run:
 
     grunt
 
-Default port is 3333 and it is set in ./bin/www
+Default port is `3333` and it is set in `./bin/www`
 To use different port from command line, run:
+
     PORT=3334 grunt
 
 ## License

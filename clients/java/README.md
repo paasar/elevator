@@ -6,7 +6,7 @@ You will need Maven
 
 http://maven.apache.org/
 
-Actual logic is in ./src/main/java/com/houstoninc/elevator/Logic.java
+Actual logic is in `./src/main/java/com/houstoninc/elevator/Logic.java`
 
 ## Running
 

@@ -6,7 +6,7 @@ You will need web.py
 
     sudo easy_install web.py
 
-Actual logic is in ./logic.py
+Actual logic is in `./logic.py`
 
 ## Running
 
