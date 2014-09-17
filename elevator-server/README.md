@@ -20,15 +20,15 @@ And are run from elevator-server root directory with command
 Implementation can be found under ./src/elevator_server/
 HTML, properties and json templates/examples can be found under ./resources
 
-constants.clj - general constants like maximum number of floors.
-core.clj - main logic of manipulating game state and the like.
-elevator_state.clj - elevator state manipulation functions
-handler.clj - URL-mappings
-request_generator.clj - logic for creating elevator requests in floors
-rest_client.clj - client polling functionality
-scheduler.clj - scheduled tasks for advancing game state and polling clients
-util.clj - some helper functions
-view.clj - internal state data transformations into form used by the game view page
+* constants.clj - general constants like maximum number of floors.
+* core.clj - main logic of manipulating game state and the like.
+* elevator_state.clj - elevator state manipulation functions
+* handler.clj - URL-mappings
+* request_generator.clj - logic for creating elevator requests in floors
+* rest_client.clj - client polling functionality
+* scheduler.clj - scheduled tasks for advancing game state and polling clients
+* util.clj - some helper functions
+* view.clj - internal state data transformations into form used by the game view page
 
 ## Running
 

@@ -15,10 +15,10 @@ See server and client readme files for more detailed information.
 You will need Leiningen to run the server.
 
 For client programs following programs are needed:
-Clojure: Leiningen
-Java: maven
-JavaScript: node.js
-Python: web.py
+* Clojure: Leiningen
+* Java: maven
+* JavaScript: node.js
+* Python: web.py
 
 There is also a Swing GUI based client for manual elevator guidance.
 
