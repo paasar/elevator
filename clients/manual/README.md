@@ -12,7 +12,12 @@ To start a web server for the application, run:
 
     lein ring server-headless
 
-TODO: create runnable uberjar
+Runnable (uber)jar can be found in dist/elevator-control.jar
+Run it with dist/run.sh or dist/run.bat or
+    java -jar elevator-control.jar
+
+After modifying source you can create a new uberjar with
+    lein ring uberjar
 
 ## License
 
