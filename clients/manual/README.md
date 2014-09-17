@@ -21,6 +21,7 @@ Run it with `dist/run.sh` or `dist/run.bat` or
     java -jar elevator-control.jar
 
 After modifying source you can create a new uberjar with
+
     lein ring uberjar
 
 ## License
