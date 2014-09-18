@@ -1,6 +1,7 @@
 (ns elevator.logic
   (require [cheshire.core :as json]
            [clojure.tools.logging :as log]))
+(import 'java.lang.Math)
 
 ; The actual logic that decides where to go next.
 ;
@@ -24,25 +25,35 @@
 (defn format-response [floor-to-go]
   (json/generate-string {:go-to floor-to-go}))
 
-(defn get-next-in-rotation [current-floor current-target top-floor]
-  (if (= current-floor current-target)
-    (if (= current-floor 1)
-      top-floor
-      (dec current-floor))
-    current-target))
+(defn get-most-urgent-or-middle [sorted-by-most-requests top-floor]
+  (if-let [floor-with-most-request (first sorted-by-most-requests)]
+    (key floor-with-most-request)
+    (int (Math/ceil (/ top-floor 2)))))
 
-(defn to-top-or-one-down [state]
-  (let [elevator (:elevator state )
+(defn sort-descending [grouper coll]
+  (reverse (sort-by #(count (val %)) (group-by grouper coll))))
+
+(defn hal-9000 [state]
+  (let [elevator (:elevator state)
         current-floor (:currentFloor elevator)
         current-target (:goingTo elevator)
-        top-floor (:floors state)]
-     (get-next-in-rotation current-floor current-target top-floor)))
+        top-floor (:floors state)
+        to-reqs (:toRequests elevator)
+        to-reqs-sorted (sort-descending identity to-reqs)
+        from-reqs-sorted (sort-descending :floor (:fromRequests state))]
+    (do
+;      (log/infof (str to-reqs-sorted))
+;      (log/infof (str from-reqs-sorted))
+      (if (empty? to-reqs)
+        (get-most-urgent-or-middle from-reqs-sorted top-floor)
+        ;TODO stop in floors between here and there
+        (key (first to-reqs-sorted))))))
 
 (defn decide-floor-to-go [state]
   (do
     (log/infof "Server is asking where to go.")
     (log/debugf "PlayerState:\n%s" (json/generate-string state {:pretty true}))
-    (let [go-to (to-top-or-one-down state)]
+    (let [go-to (hal-9000 state)]
       (do
         (log/infof "I want to go to %s" go-to)
         (format-response go-to)))))
