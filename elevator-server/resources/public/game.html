@@ -11,7 +11,11 @@
     </head>
     <body data-ng-controller="GameRenderController">
         <h2 data-ng-show="!states.length">Waiting for players</h2>
-        <div class="player-state" data-ng-repeat="state in states">
+        <div class="search-panel">
+            <label for="search">Filter</label>
+            <input id="search" type="text" data-ng-model="search.client.name" />
+        </div>
+        <div class="player-state" data-ng-repeat="state in states | filter:search">
             <div class="header white-metal">
                 <div class="team-name">{{state.client.name}}</div>
                 <div class="tally">

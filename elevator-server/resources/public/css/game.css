@@ -386,3 +386,10 @@ div {
     background-image: -ms-linear-gradient(bottom, #E0F0FC 0%, #EDFEFF 35%, #EDFFFF 63%, #F9F9FC 83%, #EAF3FC 100%);
     background-image: linear-gradient(to bottom, #E0F0FC 0%, #EDFEFF 35%, #EDFFFF 63%, #F9F9FC 83%, #EAF3FC 100%);
 }
+
+.search-panel {
+    background-color: #888888;
+    width: 200px;
+    padding: 5px;
+    border: solid 2px #000000;
+}
