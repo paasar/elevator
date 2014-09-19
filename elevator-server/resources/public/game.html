@@ -11,7 +11,9 @@
     </head>
     <body data-ng-controller="GameRenderController">
         <h2 data-ng-show="!states.length">Waiting for players</h2>
-        <div class="search-panel">
+        <div class="search-panel" data-ng-class="{show: hover}"
+                                  data-ng-mouseenter="hover = true"
+                                  data-ng-mouseleave="hover = false">
             <label for="search">Filter</label>
             <input id="search" type="text" data-ng-model="search.client.name" />
         </div>
