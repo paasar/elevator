@@ -33,6 +33,9 @@
 (defn sort-descending [grouper coll]
   (reverse (sort-by #(count (val %)) (group-by grouper coll))))
 
+(defn get-next-floor-between-current-and-target [current target to-requests]
+  target);TODO ...
+
 (defn hal-9000 [state]
   (let [elevator (:elevator state)
         current-floor (:currentFloor elevator)
@@ -46,8 +49,13 @@
 ;      (log/infof (str from-reqs-sorted))
       (if (empty? to-reqs)
         (get-most-urgent-or-middle from-reqs-sorted top-floor)
-        ;TODO stop in floors between here and there
-        (key (first to-reqs-sorted))))))
+        ;TODO stop in floors between here and there if there are requests
+        (let [target-floor-with-most-passengers (key (first to-reqs-sorted))
+              next-floor-between-current-and-target (get-next-floor-between-current-and-target
+                                                      current-floor
+                                                      target-floor-with-most-passengers
+                                                      (vals to-reqs-sorted))]
+          target-floor-with-most-passengers)))))
 
 (defn decide-floor-to-go [state]
   (do
