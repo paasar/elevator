@@ -13,20 +13,20 @@
             </div>
             <form action="/player" method="post">
                 <div class="input-group col-lg-10 col-lg-offset-1">
-                    <label class="input-group-addon min-label-width" name="team-name-label">Team name</label>
-                    <input class="form-control" name="team-name" type="text" pattern=".{2,}"
+                    <label class="input-group-addon min-label-width" for="team-name">Team name</label>
+                    <input class="form-control" id="team-name" name="team-name" type="text" pattern=".{2,}"
                            required title="4 characters minimum" placeholder="A-team"/>
                 </div>
 
                 <div class="input-group col-lg-10 col-lg-offset-1 margin-top-5">
-                    <label class="input-group-addon min-label-width" name="ip-address-label">IP address</label>
-                    <input class="form-control" name="ip-address" type="text" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+                    <label class="input-group-addon min-label-width" for="ip-address">IP address</label>
+                    <input class="form-control" id="ip-address" name="ip-address" type="text" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
                            required title="IPv4 address of your server" placeholder="10.0.0.1"/>
                 </div>
 
                 <div class="input-group col-lg-10 col-lg-offset-1 margin-top-5">
-                    <label class="input-group-addon min-label-width" name="port-label">Port</label>
-                    <input class="form-control" name="port" type="text" value="3333" pattern="\d{4,5}"
+                    <label class="input-group-addon min-label-width" for="port">Port</label>
+                    <input class="form-control" id="port" name="port" type="text" value="3333" pattern="\d{4,5}"
                            required title="4 or 5 numbers" placeholder="3333"/>
                 </div>
                 <div class="input-group col-lg-offset-6">
