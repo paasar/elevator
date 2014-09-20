@@ -1,6 +1,5 @@
 """
  The actual logic that decides where to go next.
- Stateless approach is recommended.
 
  PlayerState example:
    {"elevator":

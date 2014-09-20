@@ -1,8 +1,6 @@
 /**
  * The actual logic that decides where to go next.
  *
- * Stateless approach is recommended.
- *
  * PlayerState example:
    {"elevator":
         {"toRequests": [1, 3, 5, 5],
