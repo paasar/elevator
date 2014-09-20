@@ -123,3 +123,24 @@
       (is (= false (keys-contain-name? game-state-after team-a)))
       (is (= true (keys-contain-name? game-state-after team-b)))
       (is (= true (keys-contain-name? game-state-after team-a2))))))
+
+(deftest game-state-manipulation
+  (testing "resetting retains players"
+    (let [team-a "team-a"
+          ip-a "ip-a"
+          port-a "port-a"
+          key-a {:name team-a :ip ip-a :port port-a}
+          team-b "team-b"
+          ip-b "ip-b"
+          port-b "port-b"
+          key-b {:name team-b :ip ip-b :port port-b}
+          game-state-before (-> {}
+                              (create-and-add-player team-a ip-a port-a)
+                              (create-and-add-player team-b ip-b port-b)
+                              (advance-game-state)
+                              (advance-game-state))
+          game-state-after (reset-game-state game-state-before)]
+      (is (contains? game-state-after key-a))
+      (is (contains? game-state-after key-b))
+      (is (= 0 (:tick (get game-state-after key-a))))
+      (is (= 0 (:tick (get game-state-after key-b)))))))

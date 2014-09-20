@@ -33,6 +33,11 @@ renderAdminApp.controller('AdminRenderController', ['$scope', '$timeout', 'GameI
         $http.get("/start")
     };
 
+    $scope.reset = function() {
+        console.log("Calling reset.");
+        $http.get("/reset")
+    };
+
     $scope.deletePlayer = function(ip, port) {
         console.log("deleting player: " + ip + " " + port +"!");
         $http.delete("/player/" + ip + "/" + port);

@@ -183,3 +183,17 @@
           new-from-requests (generate-requests *number-of-floors* current-tick)]
       (advance-player-states state new-from-requests))
     state))
+
+(defn reset-game-state [state]
+  (loop [keys (keys state)
+         new-state {}]
+    (let [current-key (first keys)]
+      (if (nil? current-key)
+        new-state
+        (recur
+          (rest keys)
+          (create-and-add-player
+            new-state
+            (:name current-key)
+            (:ip current-key)
+            (:port current-key)))))))

@@ -4,6 +4,7 @@
   (:require [elevator-server.core :as c :refer [get-game-state
                                                 set-game-state
                                                 get-game-state-for-admin
+                                                reset-game-state
                                                 stop-game
                                                 run-game
                                                 running?
@@ -61,12 +62,18 @@
   (GET "/state/admin" [] (json/generate-string (c/get-game-state-for-admin)))
 
   (GET "/admin" [] (file "admin.html"))
-  (GET "/start" [] (do
-                     (c/run-game)
-                     "Started"))
-  (GET "/stop" [] (do
-                    (c/stop-game)
-                    "Stopped"))
+  (GET "/start" []
+    (do
+      (c/run-game)
+      "Started"))
+  (GET "/stop" []
+    (do
+      (c/stop-game)
+      "Stopped"))
+  (GET "/reset" []
+    (do
+      (c/set-game-state (c/reset-game-state (c/get-game-state)))
+      "Game reset"))
 
   (route/resources "/")
   (route/not-found "Not Found"))
