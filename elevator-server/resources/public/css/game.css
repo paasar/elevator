@@ -388,13 +388,22 @@ div {
 }
 
 .search-panel {
-    background-color: #888888;
-    width: 200px;
-    padding: 5px;
-    border: solid 2px #000000;
+    color: #FFFFFF;
+    background-color: #000000;
+    padding: 7px;
     position: absolute;
     top: -25px;
     left: 10%;
+
+    -webkit-border-radius: 2px;
+    -webkit-border-bottom-right-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius: 2px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-radius: 2px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 .show {
     top: 0px;
