@@ -30,12 +30,14 @@
 (defn poll-for-action [player-key public-player-state]
   (let [result-body (do-post player-key public-player-state)
         current-floor (get-in public-player-state [:elevator :currentFloor])]
-    (if (nil? result-body)
-          current-floor
-          (:go-to result-body))))
+    (if (or (nil? result-body) (nil? (:go-to result-body)))
+      (do
+        (log/infof "Player %s returned null as a new target. Result body was: %s" player-key result-body)
+        current-floor)
+      (:go-to result-body))))
 
 (defn poll-client [player-key player-state]
-    (poll-for-action player-key (transform-player-state-to-public player-key player-state)))
+  (poll-for-action player-key (transform-player-state-to-public player-key player-state)))
 
 (defn request-and-update-target-floor [[player-key player-state]]
   (let [new-wanted-target-floor (poll-client player-key player-state)
