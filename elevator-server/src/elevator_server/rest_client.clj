@@ -1,7 +1,7 @@
 (ns elevator-server.rest-client
   (:use [clojure.tools.logging])
   (:require [elevator-server.core :refer [transform-player-state-to-public update-goto]]
-            [elevator-server.util :refer [keep-floor-target-inside-boundaries]]
+            [elevator-server.util :refer [keep-floor-target-inside-boundaries not-nil?]]
             [clj-http.client :as client]
             [cheshire.core :as json]
             [clojure.tools.logging :as log]))
@@ -10,7 +10,13 @@
 (def ^ExecutorService poller-thread-pool (Executors/newCachedThreadPool))
 
 (defn parse-body [response]
-  (json/parse-string (:body response) true))
+  (let [response-body (:body response)]
+    (try
+      (json/parse-string response-body true)
+      (catch Exception e
+        (do
+          (log/errorf "Response JSON parsing failed: %s" (.getMessage e))
+          nil)))))
 
 (defn do-post [player-key public-player-state]
   (let [address (str "http://" (:ip player-key) ":" (:port player-key))]
@@ -23,18 +29,19 @@
                                 :accept :json})
           (catch Exception e
             (do
-              (error (str (.getMessage e) ": Failed to get answer from: " player-key))
+              (log/errorf "%s: Failed to get answer from: %s" (.getMessage e) player-key)
               nil)))
         (parse-body))))
 
 (defn poll-for-action [player-key public-player-state]
   (let [result-body (do-post player-key public-player-state)
+        new-go-to (:go-to result-body)
         current-floor (get-in public-player-state [:elevator :currentFloor])]
-    (if (or (nil? result-body) (nil? (:go-to result-body)))
+    (if (and (not-nil? result-body) (not-nil? new-go-to) (integer? new-go-to))
+      new-go-to
       (do
-        (log/infof "Player %s returned null as a new target. Result body was: %s" player-key result-body)
-        current-floor)
-      (:go-to result-body))))
+        (log/warnf "Player %s returned malformed response. Response body was: %s" player-key result-body)
+        current-floor))))
 
 (defn poll-client [player-key player-state]
   (poll-for-action player-key (transform-player-state-to-public player-key player-state)))

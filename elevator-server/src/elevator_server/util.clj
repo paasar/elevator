@@ -17,3 +17,5 @@
 
 (defn empty-str? [s]
   (or (blank? s) (= s "null")))
+
+(def not-nil? (complement nil?))
