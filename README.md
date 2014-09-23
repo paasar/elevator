@@ -1,7 +1,7 @@
 # Extreme startup coding competition - Elevator logic
 
 Ever waited too long for an elevator to come?
-Now is your chance to prove how to program an elevator that is always in the correct place.
+Now is your chance to prove that you can program an elevator that is always in the correct place.
 
 This project offers a server and a few client templates.
 
