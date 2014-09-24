@@ -22,13 +22,10 @@
 ;         "unhappy": 0},
 ;   "tick": 3}
 
+(def not-empty? (complement empty?))
+
 (defn format-response [floor-to-go]
   (json/generate-string {:go-to floor-to-go}))
-
-(defn get-most-urgent-or-middle [sorted-by-most-requests top-floor]
-  (if-let [floor-with-most-request (first sorted-by-most-requests)]
-    (key floor-with-most-request)
-    (int (Math/ceil (/ top-floor 2)))))
 
 (defn sort-descending [grouper coll]
   (reverse (sort-by #(count (val %)) (group-by grouper coll))))
@@ -40,14 +37,25 @@
 
 (defn get-next-floor-to-stop [current target to-requests]
   (do
-    ;(log/infof (str to-requests))
+    (log/infof "c %s t %s tr %s" current target to-requests)
     (let [stops (filter #(and (> % current) (< % target)) to-requests)
           increment (reverse-or-not current target)
-          next-stop (first (reverse (sort stops)))]
-      ;TODO if there is room and from-requests going same direction between here and target, stop by there
-      (if (nil? next-stop)
-        target
-        next-stop))))
+          next-stop (first (increment (sort stops)))]
+        next-stop)))
+
+(defn go-to-middle [top-floor]
+  (int (Math/ceil (/ top-floor 2))))
+
+(defn middle-it-is [top-floor]
+  (do
+    (log/infof "No to or from reqs. Going to middle.")
+    (go-to-middle top-floor)))
+
+(defn get-first-in-from-reqs [from-reqs-sorted]
+  (do
+    (log/infof "No to-reqs. Taking first from from-reqs-sorted %s" from-reqs-sorted))
+  ;TODO get closest floor if more than one with most requests
+  (key (first from-reqs-sorted)))
 
 (defn hal-9000 [state]
   (let [elevator (:elevator state)
@@ -58,20 +66,26 @@
         to-reqs-sorted (sort-descending identity to-reqs)
         from-reqs-sorted (sort-descending :floor (:fromRequests state))]
     (do
-;      (log/infof (str to-reqs-sorted))
-;      (log/infof (str from-reqs-sorted))
-      (if (empty? to-reqs)
-        (get-most-urgent-or-middle from-reqs-sorted top-floor)
-        (let [target-floor-with-most-passengers (key (first to-reqs-sorted))
-              next-floor-to-stop (get-next-floor-to-stop  current-floor
-                                                          target-floor-with-most-passengers
-                                                          (keys to-reqs-sorted))]
-          next-floor-to-stop)))))
+      (log/infof "I'm currently in %s" current-floor))
+    (cond
+      (not-empty? to-reqs)
+        (do
+          (log/infof "I have to-reqs %s" to-reqs)
+          (if (some #(= current-floor %) to-reqs)
+            (do
+              (log/infof "Drop off people to current-floor")
+              current-floor)
+            (do
+              (log/infof "No to-reqs in current-floor. Go to first (%s) in to-reqs-sorted %s " (key (first to-reqs-sorted)) to-reqs-sorted)
+              ;TODO get closest floor if more than one with most requests
+              (key (first to-reqs-sorted)))))
+      (not-empty? from-reqs-sorted) (get-first-in-from-reqs from-reqs-sorted)
+      :else (middle-it-is top-floor))))
 
 (defn decide-floor-to-go [state]
   (do
-    (log/infof "Server is asking where to go.")
-    (log/debugf "PlayerState:\n%s" (json/generate-string state {:pretty true}))
+    (log/infof "Server is asking where to go (at %s going to %s (%s))." (:currentFloor (:elevator state)) (:goingTo (:elevator state)) (:state (:elevator state)))
+;    (log/debugf "PlayerState:\n%s" (json/generate-string state {:pretty true}))
     (let [go-to (hal-9000 state)]
       (do
         (log/infof "I want to go to %s" go-to)
