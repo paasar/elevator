@@ -4,12 +4,12 @@
 
 ; The actual logic that decides where to go next.
 ;
-; state example:
+; Player state example:
 ;   {"elevator":
 ;        {"toRequests": [1, 3, 5, 5],
 ;         "currentFloor": 1,
 ;         "goingTo": 1,
-;         "state": "WAITING",
+;         "state": "EMBARKING",
 ;         "capacity": 6},
 ;   "floors": 5,
 ;   "fromRequests":
@@ -20,6 +20,8 @@
 ;        {"happy": 0,
 ;         "unhappy": 0},
 ;   "tick": 3}
+;
+; Elevator state can be: EMBARKING, DISEMBARKING, ASCENDING or DESCENDING
 
 (defn format-response [floor-to-go]
   (json/generate-string {:go-to floor-to-go}))
