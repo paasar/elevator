@@ -41,9 +41,8 @@
                             <div class="going-to-wrapper" data-ng-show="floor.elevator.goingTo">
                                 <div class="going-to" data-ng-if="floor.elevator.state == 'ascending'">&#11014;&nbsp;{{floor.elevator.goingTo}}&nbsp;&#11014;</div>
                                 <div class="going-to" data-ng-if="floor.elevator.state == 'descending'">&#11015;&nbsp;{{floor.elevator.goingTo}}&nbsp;&#11015;</div>
-                                <div class="going-to" data-ng-if="floor.elevator.state == 'embarking'">&lt;-&lt;-</div>
                                 <div class="going-to" data-ng-if="floor.elevator.state == 'disembarking'">-&gt;-&gt;</div>
-                                <div class="going-to" data-ng-if="floor.elevator.state == 'waiting'">{{floor.elevator.goingTo}}</div>
+                                <div class="going-to" data-ng-if="floor.elevator.state == 'embarking'">{{floor.elevator.goingTo}}</div>
                             </div>
                             <div class="elevator">
                                 <div class="spot" data-ng-repeat="spot in floor.elevator.riders track by $index">
