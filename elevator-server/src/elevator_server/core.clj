@@ -1,7 +1,7 @@
 (ns elevator-server.core
   (:require [cheshire.core :as json]
             [clojure.core.incubator :refer [dissoc-in]]
-            [elevator-server.elevator-state :refer [update-elevator-state]]
+            [elevator-server.elevator-state :refer [set-elevator-target-floor update-elevator-state]]
             [elevator-server.util :refer [empty-if-nil]]
             [elevator-server.request-generator :refer [generate-requests]]
             [elevator-server.constants :refer [*number-of-floors* *capacity* *impatience-start* *max-wait-time*]]
@@ -159,15 +159,12 @@
 (defn increment-tick [player-state]
   (update-in player-state [:tick] inc))
 
-(defn update-player-going-to [player-state player-key]
-  (assoc-in player-state [:elevator :going-to] (get-goto player-key)))
-
 (defn advance-player-state [player-key player-state new-requests]
   (-> player-state
     (increment-tick)
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
-    (update-player-going-to player-key)
+    (set-elevator-target-floor (get-goto player-key))
     (update-elevator-state)
     (add-requests new-requests)))
 

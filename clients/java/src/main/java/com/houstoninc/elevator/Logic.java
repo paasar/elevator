@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
         {"toRequests": [1, 3, 5, 5],
          "currentFloor": 1,
          "goingTo": 1,
-         "state": "WAITING",
+         "state": "EMBARKING",
          "capacity": 6},
    "floors": 5,
    "fromRequests":
@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
         {"happy": 0,
          "unhappy": 0},
    "tick": 3}
+
+ * Elevator state can be: EMBARKING, DISEMBARKING, ASCENDING or DESCENDING
  */
 public class Logic {
 

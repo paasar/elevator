@@ -19,3 +19,8 @@
   (or (blank? s) (= s "null")))
 
 (def not-nil? (complement nil?))
+
+(def not-empty? (complement empty?))
+
+(defn in? [what coll]
+  (not-nil? (some #(= % what) coll)))

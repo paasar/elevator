@@ -13,7 +13,7 @@
         "toRequests": [3, 2],
         "currentFloor": 1,
         "goingTo": 1,
-        "state": "WAITING",
+        "state": "EMBARKING",
         "capacity": 6
     },
     "floors": 5,

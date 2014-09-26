@@ -1,5 +1,9 @@
 (ns elevator-server.elevator-state
-  (:require [elevator-server.util :refer [empty-if-nil keep-floor-target-inside-boundaries]]))
+  (:require [elevator-server.util :refer [empty-if-nil
+                                          keep-floor-target-inside-boundaries
+                                          not-empty?
+                                          not-nil?
+                                          in?]]))
 
 (defn get-state-as-keyword [elevator]
   (keyword (:state elevator)))
@@ -7,33 +11,50 @@
 (defn set-elevator-state [player-state new-state]
   (assoc-in player-state [:elevator :state] (name new-state)))
 
-(defn waiting-ascending-or-descending [target-floor current-floor]
-  (if (= target-floor current-floor)
-    :waiting
-    (if (> target-floor current-floor)
-      :ascending
-      :descending)))
-
-(defn get-next-elevator-state [current-floor target-floor current-state has-riders has-newcomers]
+(defn get-up-down-or-same [current-floor target-floor]
   (cond
-    (= :disembarking current-state)
-      (if has-newcomers
-        :embarking
-        (waiting-ascending-or-descending target-floor current-floor))
-    (= :embarking current-state)
-      (waiting-ascending-or-descending target-floor current-floor)
-    (or (= :ascending current-state) (= :descending current-state))
-      (cond
-        (< target-floor current-floor)
-          :descending
-        (> target-floor current-floor)
-          :ascending
-        :else
-          (cond
-            has-riders :disembarking
-            has-newcomers :embarking
-            :else :waiting))
-    :else (waiting-ascending-or-descending target-floor current-floor)))
+    (> target-floor current-floor) :up
+    (< target-floor current-floor) :down
+    :else :same))
+
+(def state-transformations
+  {
+   ;target is same floor
+   [:embarking :same false] :embarking
+   [:embarking :same true] :disembarking
+   [:disembarking :same false] :embarking
+   [:disembarking :same true] :embarking
+   [:ascending :same false] :embarking
+   [:ascending :same true] :disembarking
+   [:descending :same false] :embarking
+   [:descending :same true] :disembarking
+   ;target is lower
+   [:embarking :down false] :descending
+   [:embarking :down true] :descending
+   [:disembarking :down false] :descending
+   [:disembarking :down true] :embarking
+   [:descending :down false] :descending
+   [:descending :down true] :descending
+   [:ascending :down false] :embarking
+   [:ascending :down true] :disembarking
+   ;target is higher
+   [:embarking :up false] :ascending
+   [:embarking :up true] :ascending
+   [:disembarking :up false] :ascending
+   [:disembarking :up true] :embarking
+   [:descending :up false] :embarking
+   [:descending :up true] :disembarking
+   [:ascending :up false] :ascending
+   [:ascending :up true] :ascending})
+
+(defn get-next-elevator-state [current-floor target-floor current-state has-riders-for-current-floor]
+  {:pre [(integer? current-floor)
+         (integer? target-floor)
+         (in? current-state [:embarking :disembarking :ascending :descending])
+         (in? has-riders-for-current-floor [true false])]
+   :post [(not-nil? %)]}
+  (let [up-down-or-same (get-up-down-or-same current-floor target-floor)]
+    (get state-transformations [current-state up-down-or-same has-riders-for-current-floor])))
 
 (defn set-elevator-target-floor [player-state target-floor]
   (assoc-in player-state [:elevator :going-to] target-floor))
@@ -58,34 +79,33 @@
         embarkers-that-do-not-fit (drop space-available embarkers)
         new-rider-targets (map :to embarkers-that-fit)
         in-other-floors (empty-if-nil (get request-groups false))
-        new-requests (into in-other-floors embarkers-that-do-not-fit)]
+        updated-from-requests (into in-other-floors embarkers-that-do-not-fit)]
     (-> player-state
       (update-in [:elevator :to-requests] into new-rider-targets)
-      (assoc :from-requests new-requests))))
+      (assoc :from-requests updated-from-requests))))
 
 (defn disembark-embark [player-state current-state current-floor]
   (cond
     (= current-state :disembarking)
       (disembark player-state current-floor)
-    (or (= current-state :embarking) (= current-state :waiting))
+    (or (= current-state :embarking))
       (embark player-state current-floor)
     :else player-state))
 
 (defn resolve-new-elevator-state [player-state target-floor]
   (let [elevator (:elevator player-state)
         current-floor (:current-floor elevator)
-        has-riders (not (empty? (:to-requests elevator)))
-        has-newcomers (not (empty? (:from-requests player-state)))
+        to-requests (:to-requests elevator)
         old-state (get-state-as-keyword elevator)
-        new-state (get-next-elevator-state current-floor target-floor old-state has-riders has-newcomers)]
+        has-riders-for-current-floor (in? current-floor to-requests)
+        new-state (get-next-elevator-state
+                    current-floor
+                    target-floor
+                    old-state
+                    has-riders-for-current-floor)]
     (-> player-state
       (set-elevator-state new-state)
       (disembark-embark old-state current-floor))))
-
-(defn set-new-target-floor [player-state target-floor]
-  (-> player-state
-    (set-elevator-target-floor target-floor)
-    (resolve-new-elevator-state target-floor)))
 
 (defn get-floor-in-next-step [current-floor state]
   (cond
