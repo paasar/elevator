@@ -84,40 +84,34 @@
       (update-in [:elevator :to-requests] into new-rider-targets)
       (assoc :from-requests updated-from-requests))))
 
-(defn disembark-embark [player-state current-state current-floor]
-  (cond
-    (= current-state :disembarking)
-      (disembark player-state current-floor)
-    (or (= current-state :embarking))
-      (embark player-state current-floor)
-    :else player-state))
-
-(defn resolve-new-elevator-state [player-state target-floor]
-  (let [elevator (:elevator player-state)
-        current-floor (:current-floor elevator)
-        to-requests (:to-requests elevator)
-        old-state (get-state-as-keyword elevator)
-        has-riders-for-current-floor (in? current-floor to-requests)
-        new-state (get-next-elevator-state
-                    current-floor
-                    target-floor
-                    old-state
-                    has-riders-for-current-floor)]
-    (-> player-state
-      (set-elevator-state new-state)
-      (disembark-embark old-state current-floor))))
-
 (defn get-floor-in-next-step [current-floor state]
   (cond
     (= :ascending state) (keep-floor-target-inside-boundaries (inc current-floor))
     (= :descending state) (keep-floor-target-inside-boundaries (dec current-floor))
     :else current-floor))
 
+(defn move-disembark-or-embark [player-state]
+  (let [elevator (:elevator player-state)
+        current-floor (:current-floor elevator)
+        current-state (get-state-as-keyword elevator)]
+    (cond
+      (= current-state :disembarking)
+        (disembark player-state current-floor)
+      (or (= current-state :embarking))
+        (embark player-state current-floor)
+      :else
+        (set-elevator-current-floor player-state (get-floor-in-next-step current-floor current-state)))))
+
 (defn update-elevator-state [player-state]
   (let [elevator (:elevator player-state)
-        new-current-floor (get-floor-in-next-step
-                            (:current-floor elevator)
-                            (get-state-as-keyword elevator))]
-    (-> player-state
-      (set-elevator-current-floor new-current-floor)
-      (resolve-new-elevator-state (:going-to elevator)))))
+        current-floor (:current-floor elevator)
+        target-floor (:going-to elevator)
+        old-state (get-state-as-keyword elevator)
+        to-requests (:to-requests elevator)
+        has-riders-for-current-floor (in? current-floor to-requests)
+        new-state (get-next-elevator-state
+                    current-floor
+                    target-floor
+                    old-state
+                    has-riders-for-current-floor)]
+      (set-elevator-state player-state new-state)))
