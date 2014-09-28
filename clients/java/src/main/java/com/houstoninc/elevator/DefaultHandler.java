@@ -1,5 +1,6 @@
 package com.houstoninc.elevator;
 
+import com.houstoninc.elevator.model.PlayerState;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

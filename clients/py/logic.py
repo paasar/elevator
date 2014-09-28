@@ -19,21 +19,23 @@
    "tick": 3}
 
 Elevator state can be: EMBARKING, DISEMBARKING, ASCENDING or DESCENDING
+EMBARKING can be considered also as idle.
 """
 
-def decide_which_floor_to_go(state):
-  elevator = state['elevator']
+def decide_which_floor_to_go(player_state):
+  elevator = player_state['elevator']
+  state = elevator['state']
   current_floor = elevator['currentFloor']
   current_target = elevator['goingTo']
-  top_floor = state['floors']
+  top_floor = player_state['floors']
 
-  if (current_floor != current_target):
-    print "I want to go to " + str(current_target) + "!"
-    return current_target
-  else:
+  if (current_floor == current_target and state == "EMBARKING"):
     if (current_floor == 1):
       return top_floor
     else:
       one_down = current_floor - 1
       print "Going down (" + str(one_down) + ")!"
       return one_down
+  else:
+    print "I want to go to " + str(current_target) + "!"
+    return current_target
