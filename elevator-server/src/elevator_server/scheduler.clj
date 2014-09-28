@@ -6,15 +6,17 @@
             [clojurewerkz.quartzite.triggers :as t]
             [clojurewerkz.quartzite.jobs :as j]
             [clojurewerkz.quartzite.jobs :refer [defjob]]
-            [clojurewerkz.quartzite.schedule.calendar-interval :refer [schedule with-interval-in-seconds]]))
+            [clojurewerkz.quartzite.schedule.calendar-interval :refer [schedule with-interval-in-seconds]]
+            [clojure.tools.logging :as log]))
 
 (defjob game-advancing-job [ctx]
   (do
+    (log/debugf "Calling players")
+    (update-all-elevator-target-floors (get-game-state))
+    (log/debugf "Called players -> Advancing game state")
     (update-game-state #(advance-game-state %))
+    (log/debugf "Game state advanced")
     (log-game-state-to-file (get-game-state))))
-
-(defjob client-poller-job [ctx]
-  (update-all-elevator-target-floors (get-game-state)))
 
 (defn start-job [job-function job-identity trigger-identity interval]
   (qs/initialize)
@@ -31,5 +33,4 @@
 
 (defn start-jobs []
   (do
-    (start-job game-advancing-job "jobs.advance-game-state" "game advance trigger" 1)
-    (start-job client-poller-job "jobs.client-poller" "client poller trigger" 1)))
+    (start-job game-advancing-job "jobs.advance-game-state" "game advance trigger" 1)))

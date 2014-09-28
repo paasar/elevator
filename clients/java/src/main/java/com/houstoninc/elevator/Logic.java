@@ -1,5 +1,8 @@
 package com.houstoninc.elevator;
 
+import com.houstoninc.elevator.model.Elevator;
+import com.houstoninc.elevator.model.PlayerState;
+import com.houstoninc.elevator.model.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,20 +27,20 @@ import org.slf4j.LoggerFactory;
    "tick": 3}
 
  * Elevator state can be: EMBARKING, DISEMBARKING, ASCENDING or DESCENDING
+ * EMBARKING can be considered also as idle.
  */
 public class Logic {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Logic.class);
 
-    public int decideWhichFloorToGo(PlayerState state) {
-        int currentFloor = state.elevator.currentFloor;
-        int topFloor = state.floors;
-        int currentTarget = state.elevator.goingTo;
+    public int decideWhichFloorToGo(PlayerState playerState) {
+        Elevator elevator = playerState.elevator;
+        State state = elevator.state;
+        int currentFloor = elevator.currentFloor;
+        int currentTarget = elevator.goingTo;
+        int topFloor = playerState.floors;
 
-        if (currentFloor != currentTarget) {
-            LOGGER.info("I want to go to {}!", currentTarget);
-            return currentTarget;
-        } else {
+        if (currentFloor == currentTarget && state == State.EMBARKING) {
             if (currentFloor == 1) {
                 return topFloor;
             } else {
@@ -45,6 +48,9 @@ public class Logic {
                 LOGGER.info("Going down ({})!", oneDown);
                 return oneDown;
             }
+        } else {
+            LOGGER.info("I want to go to {}!", currentTarget);
+            return currentTarget;
         }
     }
 }

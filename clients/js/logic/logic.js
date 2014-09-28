@@ -19,20 +19,20 @@
    "tick": 3}
 
  * Elevator state can be: EMBARKING, DISEMBARKING, ASCENDING or DESCENDING
+ * EMBARKING can be considered also as idle.
  */
 var logic = {
-  decideWhichFloorToGo : function(state) {
+  decideWhichFloorToGo : function(playerState) {
     console.log("PlayerState:");
-    console.log(state);
+    console.log(playerState);
 
-    var currentFloor = state.elevator.currentFloor;
-    var currentTarget = state.elevator.goingTo;
-    var topFloor = state.floors;
+    var elevator = playerState.elevator;
+    var state = elevator.state;
+    var currentFloor = elevator.currentFloor;
+    var currentTarget = elevator.goingTo;
+    var topFloor = playerState.floors;
 
-    if (currentFloor !== currentTarget) {
-      console.log("I want to go to " + currentTarget + "!");
-      return currentTarget;
-    } else {
+    if (currentFloor === currentTarget && state === "EMBARKING") {
       if (currentFloor === 1) {
         return topFloor;
       } else {
@@ -40,6 +40,9 @@ var logic = {
         console.log("Going down (" + oneDown + ")!");
         return oneDown;
       }
+    } else {
+      console.log("I want to go to " + currentTarget + "!");
+      return currentTarget;
     }
   }
 }

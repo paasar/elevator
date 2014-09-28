@@ -23,12 +23,14 @@
 ;   "tick": 3}
 ;
 ; Elevator state can be: EMBARKING, DISEMBARKING, ASCENDING or DESCENDING
+; EMBARKING can be considered also as idle.
 
 (def not-empty? (complement empty?))
 
 (defn format-response [floor-to-go]
   (json/generate-string {:go-to floor-to-go}))
 
+<<<<<<< HEAD
 (defn sort-descending [grouper coll]
   (reverse (sort-by #(count (val %)) (group-by grouper coll))))
 
@@ -84,11 +86,17 @@
       (not-empty? from-reqs-sorted) (get-first-in-from-reqs from-reqs-sorted)
       :else (middle-it-is top-floor))))
 
-(defn decide-floor-to-go [state]
+(defn decide-floor-to-go [player-state]
   (do
+<<<<<<< HEAD
     (log/infof "Server is asking where to go (at %s going to %s (%s))." (:currentFloor (:elevator state)) (:goingTo (:elevator state)) (:state (:elevator state)))
 ;    (log/debugf "PlayerState:\n%s" (json/generate-string state {:pretty true}))
     (let [go-to (hal-9000 state)]
+=======
+    (log/infof "Server is asking where to go.")
+    (log/debugf "PlayerState:\n%s" (json/generate-string player-state {:pretty true}))
+    (let [go-to (to-top-or-one-down player-state)]
+>>>>>>> master
       (do
         (log/infof "I want to go to %s" go-to)
         (format-response go-to)))))
