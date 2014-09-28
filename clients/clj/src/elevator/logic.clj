@@ -30,7 +30,6 @@
 (defn format-response [floor-to-go]
   (json/generate-string {:go-to floor-to-go}))
 
-<<<<<<< HEAD
 (defn sort-descending [grouper coll]
   (reverse (sort-by #(count (val %)) (group-by grouper coll))))
 
@@ -61,14 +60,14 @@
   ;TODO get closest floor if more than one with most requests
   (key (first from-reqs-sorted)))
 
-(defn hal-9000 [state]
-  (let [elevator (:elevator state)
+(defn hal-9000 [player-state]
+  (let [elevator (:elevator player-state)
         current-floor (:currentFloor elevator)
         current-target (:goingTo elevator)
-        top-floor (:floors state)
+        top-floor (:floors player-state)
         to-reqs (:toRequests elevator)
         to-reqs-sorted (sort-descending identity to-reqs)
-        from-reqs-sorted (sort-descending :floor (:fromRequests state))]
+        from-reqs-sorted (sort-descending :floor (:fromRequests player-state))]
     (do
       (log/infof "I'm currently in %s" current-floor))
     (cond
@@ -88,15 +87,12 @@
 
 (defn decide-floor-to-go [player-state]
   (do
-<<<<<<< HEAD
-    (log/infof "Server is asking where to go (at %s going to %s (%s))." (:currentFloor (:elevator state)) (:goingTo (:elevator state)) (:state (:elevator state)))
+    (log/infof "Server is asking where to go (at %s going to %s (%s))."
+      (:currentFloor (:elevator player-state))
+      (:goingTo (:elevator player-state))
+      (:state (:elevator player-state)))
 ;    (log/debugf "PlayerState:\n%s" (json/generate-string state {:pretty true}))
-    (let [go-to (hal-9000 state)]
-=======
-    (log/infof "Server is asking where to go.")
-    (log/debugf "PlayerState:\n%s" (json/generate-string player-state {:pretty true}))
-    (let [go-to (to-top-or-one-down player-state)]
->>>>>>> master
+    (let [go-to (hal-9000 player-state)]
       (do
         (log/infof "I want to go to %s" go-to)
         (format-response go-to)))))
