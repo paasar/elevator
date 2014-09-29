@@ -27,6 +27,18 @@
 
 (def not-empty? (complement empty?))
 
+(defn abs [n]
+  (if (neg? n)
+    (- n)
+    n))
+
+(defn sort-by-distance [coll target]
+  (let [distances (map (comp abs #(- target %)) coll)
+        zipped (map vector coll distances)
+        sorted-by-distance (sort-by (fn [[_ distance]] distance) zipped)
+        actual-floor-sorted-by-distance (map first sorted-by-distance)]
+    actual-floor-sorted-by-distance))
+
 (defn format-response [floor-to-go]
   (json/generate-string {:go-to floor-to-go}))
 
@@ -70,20 +82,25 @@
         from-reqs-sorted (sort-descending :floor (:fromRequests player-state))]
     (do
       (log/infof "I'm currently in %s" current-floor))
-    (cond
-      (not-empty? to-reqs)
-        (do
-          (log/infof "I have to-reqs %s" to-reqs)
-          (if (some #(= current-floor %) to-reqs)
-            (do
-              (log/infof "Drop off people to current-floor")
-              current-floor)
-            (do
-              (log/infof "No to-reqs in current-floor. Go to first (%s) in to-reqs-sorted %s " (key (first to-reqs-sorted)) to-reqs-sorted)
-              ;TODO get closest floor if more than one with most requests
-              (key (first to-reqs-sorted)))))
-      (not-empty? from-reqs-sorted) (get-first-in-from-reqs from-reqs-sorted)
-      :else (middle-it-is top-floor))))
+      (cond
+        (not-empty? to-reqs)
+          (do
+            (log/infof "I have to-reqs %s" to-reqs)
+            (if (some #(= current-floor %) to-reqs)
+              (do
+                (log/infof "Drop off people to current-floor")
+                current-floor)
+              (do
+                (log/infof "No to-reqs in current-floor.")
+                (let [highest-numer-of-to-reqs (count (second (first to-reqs-sorted)))
+                      floors-with-highest-amount-of-reqs (keys (filter #(= highest-numer-of-to-reqs (count (second %))) to-reqs-sorted))
+                      nearest (first (sort-by-distance floors-with-highest-amount-of-reqs current-floor))]
+                  (do
+                    (log/infof "Highest num of reqs %s. floors-with-highest %s" highest-numer-of-to-reqs floors-with-highest-amount-of-reqs)
+                    (log/infof "Go to nearest (%s) in to-reqs-sorted %s" nearest to-reqs-sorted)
+                    nearest)))))
+        (not-empty? from-reqs-sorted) (get-first-in-from-reqs from-reqs-sorted)
+        :else (middle-it-is top-floor))))
 
 (defn decide-floor-to-go [player-state]
   (do
