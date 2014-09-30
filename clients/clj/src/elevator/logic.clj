@@ -74,21 +74,25 @@
 
 (defn hal-9000 [player-state]
   (let [elevator (:elevator player-state)
+        capacity (:capacity elevator)
         current-floor (:currentFloor elevator)
         current-target (:goingTo elevator)
         top-floor (:floors player-state)
         to-reqs (:toRequests elevator)
         to-reqs-sorted (sort-descending identity to-reqs)
-        from-reqs-sorted (sort-descending :floor (:fromRequests player-state))]
+        from-reqs (:fromRequests player-state)
+        from-reqs-sorted (sort-descending :floor from-reqs)]
     (do
       (log/infof "I'm currently in %s" current-floor))
       (cond
         (not-empty? to-reqs)
           (do
-            (log/infof "I have to-reqs %s" to-reqs)
-            (if (some #(= current-floor %) to-reqs)
+            (log/infof "I have to-reqs %s or space for more" to-reqs)
+            (if (or (some #(= current-floor %) to-reqs)
+                    (and (> capacity (count to-reqs))
+                         (not-empty? (filter #(= (:floor %) current-floor) from-reqs))))
               (do
-                (log/infof "Drop off people to current-floor")
+                (log/infof "Drop off people to current-floor or take new passengers")
                 current-floor)
               (do
                 (log/infof "No to-reqs in current-floor.")
