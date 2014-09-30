@@ -2,6 +2,7 @@
   (:require [elevator-server.core :refer [get-game-state update-game-state advance-game-state]]
             [elevator-server.rest-client :refer [update-all-elevator-target-floors]]
             [elevator-server.state-logger :refer [log-game-state-to-file]]
+            [elevator-server.constants :refer [*step-interval-secs*]]
             [clojurewerkz.quartzite.scheduler :as qs]
             [clojurewerkz.quartzite.triggers :as t]
             [clojurewerkz.quartzite.jobs :as j]
@@ -33,4 +34,4 @@
 
 (defn start-jobs []
   (do
-    (start-job game-advancing-job "jobs.advance-game-state" "game advance trigger" 1)))
+    (start-job game-advancing-job "jobs.advance-game-state" "game advance trigger" *step-interval-secs*)))

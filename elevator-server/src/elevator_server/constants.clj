@@ -9,6 +9,8 @@
 
 (def ^:dynamic *capacity* (inc *number-of-floors*))
 
-(def ^:dynamic *impatience-start* (+ 5 *number-of-floors*))
+(def ^:dynamic *impatience-start* (+ 3 *number-of-floors*))
 
 (def ^:dynamic *max-wait-time* (* 2 *impatience-start*))
+
+(def ^:dynamic *step-interval-secs* 1)
