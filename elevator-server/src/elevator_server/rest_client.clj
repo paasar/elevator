@@ -2,6 +2,7 @@
   (:use [clojure.tools.logging])
   (:require [elevator-server.core :refer [transform-player-state-to-public update-goto]]
             [elevator-server.util :refer [keep-floor-target-inside-boundaries not-nil?]]
+            [elevator-server.constants :refer [*socket-timeout* *connection-timeout*]]
             [clj-http.client :as client]
             [cheshire.core :as json]
             [clojure.tools.logging :as log]))
@@ -24,8 +25,8 @@
           ;TODO timeout error handling?
           (client/post address {:body (json/generate-string public-player-state)
                                 :content-type :json
-                                :socket-timeout 1000
-                                :conn-timeout 1000
+                                :socket-timeout *socket-timeout*
+                                :conn-timeout *connection-timeout*
                                 :accept :json})
           (catch Exception e
             (do

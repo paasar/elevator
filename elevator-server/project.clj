@@ -12,7 +12,7 @@
                  [org.clojure/tools.logging "0.2.6"]
                  [org.slf4j/slf4j-log4j12 "1.7.5"]]
   :plugins [[lein-ring "0.8.11"]]
-  :ring {:handler elevator-server.handler/app}
+  :ring {:handler elevator-server.handler/app :port 3000}
   :profiles
       {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                             [ring-mock "0.1.5"]]}})
