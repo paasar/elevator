@@ -13,4 +13,8 @@
 
 (def ^:dynamic *max-wait-time* (* 2 *impatience-start*))
 
-(def ^:dynamic *step-interval-secs* 1)
+(def ^:dynamic *step-interval-secs* 2)
+
+(def ^:dynamic *socket-timeout* 1500)
+
+(def ^:dynamic *connection-timeout* *socket-timeout*)
