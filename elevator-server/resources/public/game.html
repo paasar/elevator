@@ -17,6 +17,8 @@
                                   data-ng-mouseleave="hover = false">
             <label for="search">Filter</label>
             <input id="search" type="text" data-ng-model="search.client.name" />
+            <label for="sort-by-score">Sort by score</label>
+            <input id="sort-by-score" type="checkbox" data-ng-click="toggleSort()" />
         </div>
         <div class="player-state" data-ng-repeat="state in states | nameFilter:search">
             <div class="header white-metal">
