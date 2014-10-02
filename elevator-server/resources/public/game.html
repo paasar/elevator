@@ -5,6 +5,7 @@
         <script src="lib/angular-resource.min.js"></script>
         <script src="js/controllers.js"></script>
         <script src="js/services.js"></script>
+        <script src="js/filters.js"></script>
         <link rel="stylesheet" type="text/css" href="css/game.css"/>
         <link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
@@ -17,7 +18,7 @@
             <label for="search">Filter</label>
             <input id="search" type="text" data-ng-model="search.client.name" />
         </div>
-        <div class="player-state" data-ng-repeat="state in states | filter:search">
+        <div class="player-state" data-ng-repeat="state in states | nameFilter:search">
             <div class="header white-metal">
                 <div class="team-name">{{state.client.name}}</div>
                 <div class="tally">

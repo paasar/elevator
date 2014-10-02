@@ -1,4 +1,4 @@
-var renderGameApp = angular.module('renderGameApp', ['stateService']);
+var renderGameApp = angular.module('renderGameApp', ['stateService', 'gameFilters']);
 
 renderGameApp.controller('GameRenderController', ['$scope', '$timeout', 'GameState', '$q', function ($scope, $timeout, GameState, $q) {
     $scope.states = GameState.query();
