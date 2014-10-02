@@ -1,20 +1,35 @@
-var renderGameApp = angular.module('renderGameApp', ['stateService']);
+var renderGameApp = angular.module('renderGameApp', ['stateService', 'gameFilters']);
 
-renderGameApp.controller('GameRenderController', ['$scope', '$timeout', 'GameState', '$q', function ($scope, $timeout, GameState, $q) {
-    $scope.states = GameState.query();
+renderGameApp.controller('GameRenderController', ['$scope', '$timeout', 'GameState', '$q', '$filter',
+    function ($scope, $timeout, GameState, $q, $filter) {
+        $scope.states = GameState.query();
 
-    var updateState = function () {
-         var newStates = GameState.query();
-        // Wait for the response to prevent blinking.
-        $q.all([
-            newStates.$promise
-        ]).then(function() {
-            $scope.states = newStates;
-        });
+        $scope.sort = false;
+        $scope.toggleSort = function() {
+            $scope.sort = !$scope.sort;
+        };
+
+        var overallScorePredicate = function(state) {
+            return state.tally.overall;
+        };
+
+        var updateState = function () {
+             var newStates = GameState.query();
+            // Wait for the response to prevent blinking.
+            $q.all([
+                newStates.$promise
+            ]).then(function() {
+                if ($scope.sort) {
+                    var orderBy = $filter('orderBy');
+                    $scope.states = orderBy(newStates, overallScorePredicate, true);
+                } else {
+                    $scope.states = newStates;
+                }
+            });
+            $timeout(function() {updateState();}, 1000);
+
+        };
         $timeout(function() {updateState();}, 1000);
-
-    };
-    $timeout(function() {updateState();}, 1000);
 }]);
 
 var renderAdminApp = angular.module('renderAdminApp', ['stateService']);
