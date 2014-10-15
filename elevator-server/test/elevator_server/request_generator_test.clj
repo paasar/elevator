@@ -12,4 +12,8 @@
       (is (not (nil? to)))
       (is (not (= from to)))
       (is (and (> from 0) (<= from floors)))
-      (is (and (> to 0) (<= to floors))))))
+      (is (and (> to 0) (<= to floors)))))
+
+  (testing "mitigates out of boundaries start floor"
+    (is (= 5 (:from (generate-random-request-from 5 6))))
+    (is (= 1 (:from (generate-random-request-from 5 0))))))

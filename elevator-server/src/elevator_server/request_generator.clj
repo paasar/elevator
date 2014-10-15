@@ -1,14 +1,16 @@
-(ns elevator-server.request-generator)
+(ns elevator-server.request-generator
+  (:require [elevator-server.util :refer [keep-floor-inside-boundaries]]))
 
 (import '(java.lang Math))
 
-(defn generate-random-request-from [highest-floor current-floor]
+(defn generate-random-request-from [highest-floor given-from-floor]
   {:pre [(integer? highest-floor)
-         (integer? current-floor)]}
+         (integer? given-from-floor)]}
   (let [highest-floor-plus-one (inc highest-floor)
+        from-floor (keep-floor-inside-boundaries given-from-floor)
         possible-floors (vec (disj (set (range 1 highest-floor-plus-one))
-                               current-floor))]
-    {:from (int current-floor)
+                               from-floor))]
+    {:from (int from-floor)
      :to (int (rand-nth possible-floors))
      :waited 0}))
 
