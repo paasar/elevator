@@ -18,3 +18,5 @@
 (def ^:dynamic *socket-timeout* 1500)
 
 (def ^:dynamic *connection-timeout* *socket-timeout*)
+
+(def ^:dynamic *happy-unhappy-ratio* 2)
