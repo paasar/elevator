@@ -1,11 +1,11 @@
 # Extreme startup coding competition - Elevator logic
 
-Ever waited too long for an elevator to come?
+Have you ever waited too long for an elevator to come?
 Now is your chance to prove that you can program an elevator that is always in the correct place.
 
-This project offers a server and a few client templates.
+This project offers a game server programmed in Clojure and a few client templates in different programming languages.
 
-Clients are REST servers which are polled by the server for their next desired action.
+Clients are basic REST servers. They are polled by the server for their next desired action or target floor.
 Communication data format is JSON.
 
 See server and client readme files for more detailed information.
@@ -21,6 +21,9 @@ For client programs following programs are needed:
 * Python: web.py
 
 There is also a Swing GUI based client for manual elevator guidance.
+
+## Known issues
+* A firewall can prevent communication between the server and a client. Make sure firewall is properly configured before starting.
 
 ## License
 
