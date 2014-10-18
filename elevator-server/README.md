@@ -41,6 +41,13 @@ http://localhost:3000/      - Player signup form
 http://localhost:3000/game  - Game view
 http://localhost:3000/admin - Admin console
 
+## Ideas for improvement
+* Test connection to players in admin page. Do a get request by pushing a button.
+* Better game state logging. In current format the log is pretty hard to parse afterwards.
+* People in floors respects the direction of the elevator. How to do this as elevator can go either way after embarking?
+* Run simulations to find better request generation algorithm and/or other game parameters for more fun experience. Currently there are too long pauses and maybe a bit too big request waves from time to time.
+* More than one elevator per player?
+
 ## License
 
 Created by Ari Paasonen, ari (dot) paasonen (at) raah (dot) fi

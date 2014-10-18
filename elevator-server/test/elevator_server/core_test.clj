@@ -1,7 +1,7 @@
 (ns elevator-server.core-test
   (:require [clojure.test :refer :all]
             [elevator-server.core :refer :all]
-            [elevator-server.constants :refer [*number-of-floors* *max-wait-time*]]
+            [elevator-server.constants :refer [*number-of-floors* *max-wait-time* *happy-unhappy-ratio*]]
             [cheshire.core :as json]))
 
 (def patient-request {:from 5 :to 3 :waited 1})
@@ -76,11 +76,20 @@
       (is (= 2 (count (:from-requests state-after-second-step))))
       (is (= 0 (count-test-requests state-after-second-step)))))
 
-  (testing "unhappy tally is incremented"
-    (let [start-player-state (add-requests (create-new-player-state)
-                                           [{:from 'test :to 3 :waited *max-wait-time*}])
+  (testing "unhappy tally is incremented when overall does not go under 0"
+    (let [start-player-state (-> (create-new-player-state)
+                                 (assoc-in [:tally :happy] (+ *happy-unhappy-ratio* 1))
+                                 (add-requests [{:from 'test :to 3 :waited *max-wait-time*}]))
           state-after-step (advance-player-state {} start-player-state [patient-request])]
-      (is (= 1 (get-in state-after-step [:tally :unhappy]))))))
+      (is (= 1 (get-in state-after-step [:tally :unhappy])))))
+
+  (testing "score (happy and unhappy) is reset to zero if it goes negative"
+    (let [start-player-state (-> (create-new-player-state)
+                                 (assoc-in [:tally :happy] 1)
+                                 (add-requests [{:from 'test :to 3 :waited *max-wait-time*}]))
+          state-after-step (advance-player-state {} start-player-state [patient-request])]
+      (is (= 0 (get-in state-after-step [:tally :happy])))
+      (is (= 0 (get-in state-after-step [:tally :unhappy]))))))
 
 (deftest adding-requests
   (testing "advancing state adds same request to all player states"

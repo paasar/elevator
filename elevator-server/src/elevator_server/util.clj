@@ -7,7 +7,7 @@
     []
     val))
 
-(defn keep-floor-target-inside-boundaries [target]
+(defn keep-floor-inside-boundaries [target]
   (cond
     (< target 1)
       1

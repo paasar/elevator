@@ -1,14 +1,12 @@
 (ns elevator-server.view
   (:require [clojure.core.incubator :refer [dissoc-in]]
             [elevator-server.util :refer [empty-if-nil]]
-            [elevator-server.constants :refer [*impatience-start*]]))
-
-(def happy-unhappy-ratio 2)
+            [elevator-server.constants :refer [*impatience-start* *happy-unhappy-ratio*]]))
 
 (defn add-overall-score [tally]
   (let [happy (:happy tally)
         unhappy (:unhappy tally)]
-  (assoc tally :overall (- happy (* happy-unhappy-ratio unhappy)))))
+  (assoc tally :overall (- happy (* *happy-unhappy-ratio* unhappy)))))
 
 (defn create-elevator-for-view [elevator]
   (let [to-requests (:to-requests elevator)

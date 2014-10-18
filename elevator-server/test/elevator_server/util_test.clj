@@ -4,13 +4,13 @@
 
 (deftest keep-floor-target-within-boundaries
   (testing "min"
-    (let [result (keep-floor-target-inside-boundaries 0)]
+    (let [result (keep-floor-inside-boundaries 0)]
       (is (= 1 result))))
 
   (testing "middle"
-    (let [result (keep-floor-target-inside-boundaries 2)]
+    (let [result (keep-floor-inside-boundaries 2)]
       (is (= 2 result))))
 
   (testing "max"
-    (let [result (keep-floor-target-inside-boundaries 6)]
+    (let [result (keep-floor-inside-boundaries 6)]
       (is (= 5 result)))))

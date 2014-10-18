@@ -6,7 +6,11 @@
                                                     move-disembark-or-embark]]
             [elevator-server.util :refer [empty-if-nil]]
             [elevator-server.request-generator :refer [generate-requests]]
-            [elevator-server.constants :refer [*number-of-floors* *capacity* *impatience-start* *max-wait-time*]]
+            [elevator-server.constants :refer [*number-of-floors*
+                                               *capacity*
+                                               *impatience-start*
+                                               *max-wait-time*
+                                               *happy-unhappy-ratio*]]
             [clojure.tools.logging :as log]
             [clojure.string :refer [upper-case]]))
 
@@ -158,6 +162,15 @@
       (assoc :from-requests happy-group)
       (update-in [:tally :unhappy] + (count unhappy-group)))))
 
+(defn reset-score-if-negative [player-state]
+  (let [tally (:tally player-state)
+        happy (:happy tally)
+        unhappy (:unhappy tally)
+        score (- happy (* unhappy *happy-unhappy-ratio*))]
+    (if (< score 0)
+      (assoc player-state :tally {:happy 0 :unhappy 0})
+      player-state)))
+
 (defn increment-tick [player-state]
   (update-in player-state [:tick] inc))
 
@@ -168,6 +181,7 @@
     (move-disembark-or-embark)
     (increment-wait-times)
     (remove-requests-that-have-waited-too-long-and-update-unhappy-tally)
+    (reset-score-if-negative)
     (add-requests new-requests)
     (increment-tick)))
 

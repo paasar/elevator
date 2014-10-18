@@ -1,7 +1,7 @@
 (ns elevator-server.rest-client
   (:use [clojure.tools.logging])
   (:require [elevator-server.core :refer [transform-player-state-to-public update-goto]]
-            [elevator-server.util :refer [keep-floor-target-inside-boundaries not-nil?]]
+            [elevator-server.util :refer [keep-floor-inside-boundaries not-nil?]]
             [elevator-server.constants :refer [*socket-timeout* *connection-timeout*]]
             [clj-http.client :as client]
             [cheshire.core :as json]
@@ -49,7 +49,7 @@
 
 (defn request-and-update-target-floor [[player-key player-state]]
   (let [new-wanted-target-floor (poll-client player-key player-state)
-        new-target-floor (keep-floor-target-inside-boundaries new-wanted-target-floor)]
+        new-target-floor (keep-floor-inside-boundaries new-wanted-target-floor)]
     (do
       (log/debugf "Polled player %s for new target %s" player-key new-target-floor)
       (update-goto player-key new-target-floor))))

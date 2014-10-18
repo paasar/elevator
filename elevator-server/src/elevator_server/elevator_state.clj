@@ -1,6 +1,6 @@
 (ns elevator-server.elevator-state
   (:require [elevator-server.util :refer [empty-if-nil
-                                          keep-floor-target-inside-boundaries
+                                          keep-floor-inside-boundaries
                                           not-empty?
                                           not-nil?
                                           in?]]))
@@ -86,8 +86,8 @@
 
 (defn get-floor-in-next-step [current-floor state]
   (cond
-    (= :ascending state) (keep-floor-target-inside-boundaries (inc current-floor))
-    (= :descending state) (keep-floor-target-inside-boundaries (dec current-floor))
+    (= :ascending state) (keep-floor-inside-boundaries (inc current-floor))
+    (= :descending state) (keep-floor-inside-boundaries (dec current-floor))
     :else current-floor))
 
 (defn move-disembark-or-embark [player-state]
